@@ -1,0 +1,80 @@
+[
+    {
+        "lectureId": 1,
+        "uid": 3, //과목 개설한 강사의 uid
+        "title": "미드 야스오 완전정복",
+        "level": "초급",
+        "champion": [
+            "야스오",
+            "탈론",
+            "샤코",
+            "이블린"
+        ],
+        "line": "MID",
+        "description": "야스오의 모든 것을 알려드립니다. 기본기부터 실전까지 체계적으로 가르쳐드립니다.",
+        "curriculum": {
+            "1": "시야의 기본",
+            "2": "라인관리"
+        },
+        "time": 3,
+        "price": 30000,
+        "createdAt": "2025-03-01T10:00:00" //리뷰 정보는 reviews에서 참조
+    },
+    {
+        "lectureId": 2,
+        "instructorId": 3,
+        "instructorName": "페이커",
+        "badgeType": "PRO",
+        "instructorGrade": "전령",
+        "instructorCsScore": 320,
+        "title": "미드 라이너 운영 마스터",
+        "level": "ADVANCED",
+        "champion": "아지르",
+        "line": "MID",
+        "teachingMethod": "디스코드 화면공유 + 복기",
+        "description": "고티어 미드 운영을 배우고 싶다면 이 강의를 들으세요.",
+        "curriculum": "1회차: 웨이브 관리\n2회차: 시야 장악\n3회차: 오브젝트 연계\n4회차: 실전 복기",
+        "lectureCount": 4,
+        "price": 50000,
+        "lectureStatus": "ACTIVE",
+        "createdAt": "2025-03-05T10:00:00"
+    },
+    {
+        "lectureId": 3,
+        "instructorId": 4,
+        "instructorName": "침착맨",
+        "badgeType": "STREAMER",
+        "instructorGrade": "드래곤",
+        "instructorCsScore": 210,
+        "title": "즐겜러를 위한 탑 입문",
+        "level": "BEGINNER",
+        "champion": "가렌",
+        "line": "TOP",
+        "teachingMethod": "디스코드 음성",
+        "description": "롤을 즐기면서 실력도 올리고 싶은 분들을 위한 강의입니다.",
+        "curriculum": "1회차: 탑 기본 개념\n2회차: 가렌 운영법",
+        "lectureCount": 2,
+        "price": 15000,
+        "lectureStatus": "ACTIVE",
+        "createdAt": "2025-03-10T10:00:00"
+    },
+    {
+        "lectureId": 4,
+        "instructorId": 4,
+        "instructorName": "침착맨",
+        "badgeType": "STREAMER",
+        "instructorGrade": "드래곤",
+        "instructorCsScore": 210,
+        "title": "서폿 포지셔닝 완전 이해",
+        "level": "INTERMEDIATE",
+        "champion": "쓰레쉬",
+        "line": "SUPPORT",
+        "teachingMethod": "디스코드 화면공유",
+        "description": "서폿의 포지셔닝과 시야 장악을 배워보세요.",
+        "curriculum": "1회차: 포지셔닝 기초\n2회차: 훅 타이밍\n3회차: 시야 배치",
+        "lectureCount": 3,
+        "price": 25000,
+        "lectureStatus": "ACTIVE",
+        "createdAt": "2025-03-15T10:00:00"
+    }
+]

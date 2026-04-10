@@ -1,3 +1,5 @@
+.env
+
 # Logs
 logs
 *.log
@@ -22,12 +24,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-src/data/members.json
-src/data/blacklist.json
-src/data/duos.json
-src/data/enrollments.json
-src/data/gachas.json
-src/data/lectures.json
-src/data/members.json
-src/data/reviews.json

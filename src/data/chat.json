@@ -1,0 +1,29 @@
+[
+    {
+        "type": "duo | lecture",
+        "refId": 1, //강의 또는 듀오의 고유 ID값
+        "roomId": 4,
+        "participants": [
+            "uid1",
+            "uid2"
+        ],
+        "participantInfo": {
+            "uid1": {
+                "nickname": "김프로",
+                "role": "student | intructor"
+            },
+            "uid2": {
+                "nickname": "박프로",
+                "role": "host | guest"
+            }
+        },
+        "createdAt": "2024-11-20T15:43:17.33",
+        "lastMessage": null,
+        "lastMessageAt": null,
+        "status": "전 | 중 | 후",
+        "unreadCount": {
+            "uid1": 2,
+            "uid2": 0
+        }
+    }
+]

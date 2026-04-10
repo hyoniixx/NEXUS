@@ -1,0 +1,11 @@
+[
+    {
+        "blacklistId": 1,
+        "memberId": 6,
+        "memberName": "블랙유저",
+        "reason": "PENALTY_5",
+        "registeredBy": "SYSTEM",
+        "adminId": null,
+        "createdAt": "2025-03-30T10:00:00"
+    }
+]

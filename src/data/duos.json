@@ -1,0 +1,21 @@
+[
+    {
+        "duoId": 1,
+        "writer": {
+            "uid": 1,
+            "userName": "김수강",
+            "profileImage": null,
+            "gameName": "hide on bush",
+            "gameTag": "#KR1",
+            "tier": "master",
+            "line": "mid"
+        },
+        "wishDuo": {
+            "tier": "challenger",
+            "line": "jungle"
+        },
+        "content": "보이스톡 필수입니다. 시간은 9시",
+        "createdAt": "2025-04-02T15:00:00",
+        "isMatched": false
+    }
+]

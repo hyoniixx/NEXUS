@@ -1,0 +1,28 @@
+[
+    {
+        "enrollmentId": 1,
+        "lectureId": 1,
+        "lectureTitle": "미드 야스오 완전정복",
+        "instructorId": 3,
+        "instructorName": "페이커",
+        "studentId": 1,
+        "studentName": "김수강",
+        "paymentStatus": "PAID",
+        "enrolledAt": "2025-03-20T10:00:00",
+        "refundedAt": null,
+        "hasReview": false
+    },
+    {
+        "enrollmentId": 2,
+        "lectureId": 3,
+        "lectureTitle": "즐겜러를 위한 탑 입문",
+        "instructorId": 4,
+        "instructorName": "침착맨",
+        "studentId": 1,
+        "studentName": "김수강",
+        "paymentStatus": "PAID",
+        "enrolledAt": "2025-03-25T10:00:00",
+        "refundedAt": null,
+        "hasReview": true
+    }
+]

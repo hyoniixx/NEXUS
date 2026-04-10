@@ -1,0 +1,20 @@
+[
+    {
+        "gachaId": 1,
+        "memberId": 1,
+        "gachaGrade": "COMMON",
+        "rewardType": "CS 점수 +5점",
+        "used": true,
+        "createdAt": "2025-03-15T10:00:00",
+        "usedAt": "2025-03-15T10:05:00"
+    },
+    {
+        "gachaId": 2,
+        "memberId": 1,
+        "gachaGrade": "RARE",
+        "rewardType": "수강료 15% 할인쿠폰",
+        "used": false,
+        "createdAt": "2025-04-01T10:00:00",
+        "usedAt": null
+    }
+]

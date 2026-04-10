@@ -1,0 +1,61 @@
+[
+    {
+        "uid": 1,
+        "userId": "student01",
+        "userName": "김수강",
+        "email": "student01@gmail.com",
+        "birthDate": "2000-01-01",
+        "profileImage": null,
+        "role": "STUDENT",
+        "isBlacklist": false,
+        "csScore": 45,
+        "csScoreMax": 45,
+        "csGrade": 1,
+        "lectures": [
+            {
+                "id": 1,
+                "status": "수강중",
+                "isReview": true
+            },
+            {
+                "id": 2,
+                "status": "수강완료",
+                "isReview": false
+            }
+        ],
+        "wish": [
+            1,
+            2
+        ]
+    },
+    {
+        "uid": 3,
+        "userId": "instructor01",
+        "userName": "페이커",
+        "email": "faker@gmail.com",
+        "birthDate": "1996-05-07",
+        "profileImage": null,
+        "role": "INSTRUCTOR",
+        "isBlacklist": false,
+        "csScore": 320,
+        "csScoreMax": 320,
+        "csGrade": 9,
+        "tierImage": null,
+        "badgeImage": null,
+        "isPro": true,
+        "isStreamer": true
+    },
+    {
+        "memberId": 5,
+        "userId": "admin01",
+        "userName": "관리자",
+        "email": "admin@gmail.com",
+        "birthDate": "1990-01-01",
+        "profileImage": null,
+        "role": "ADMIN",
+        "memberStatus": "ACTIVE",
+        "csScore": 10000,
+        "csScoreMax": 10000,
+        "csGrade": 9
+    }
+]

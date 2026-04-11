@@ -12,7 +12,7 @@ function NexusMainGuest() {
                         <path d="M1.99854 10.667V12.0003" stroke="#3B82F6" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                         <path d="M2.66536 11.334H1.33203" stroke="#3B82F6" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                        롤 전문 코칭 플랫폼
+                        <p>롤 전문 코칭 플랫폼</p>
                     </div>
                     <div>NEXUS</div>
                     <p>프로게이머와 스트리머에게 직접 배우는</p>

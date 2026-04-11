@@ -2,9 +2,9 @@ import React from 'react'
 
 function NexusMainStudent() {
     return (
-        <div>
-
-        </div>
+        <>
+            <div className='main-hello'></div>
+        </>
     )
 }
 

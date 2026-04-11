@@ -1,0 +1,137 @@
+.lecture-list-page {
+  min-height: 100vh;
+  background-color: #0a0e27;
+  padding-top: 96px;
+  padding-bottom: 80px;
+}
+
+.lecture-list-inner {
+  width: 1248px;
+  margin: 0 auto;
+}
+
+.lecture-list-title {
+  color: #e8eaf0;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lecture-list-description {
+  color: #94a3b8;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.lecture-list-search-input {
+  width: 100%;
+  height: 49px;
+  background: #1a1f3a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 0 16px;
+  color: #e8eaf0;
+  font-size: 16px;
+  box-sizing: border-box;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.lecture-list-search-input::placeholder {
+  color: rgba(232, 234, 240, 0.5);
+}
+
+.lecture-list-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.lecture-list-filter-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lecture-list-select {
+  height: 41px;
+  border-radius: 8px;
+  background-color: #1a1f3a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #e8eaf0;
+  font-size: 14px;
+  padding: 0 36px 0 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+  line-height: 41px;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23E8EAF0' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+
+.lecture-list-select:focus {
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+.lecture-list-sort {
+  width: 149px;
+}
+
+.lecture-list-level {
+  width: 90px;
+}
+
+.lecture-list-champion {
+  width: 192px;
+}
+
+.lecture-list-line {
+  width: 106px;
+}
+
+.lecture-list-filter-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-button {
+  height: 41px;
+  padding: 0 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: transparent;
+  color: #e8eaf0;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-button-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: block;
+}
+
+.filter-button.active {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.12);
+}
+
+.lecture-list-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}

@@ -1,12 +1,11 @@
-import NexusMainGuest from "./pages/NexusMainGuest"
+import NexusMainGuest from "./pages/NexusMainGuest";
 
 function App() {
-
   return (
     <>
       <NexusMainGuest />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

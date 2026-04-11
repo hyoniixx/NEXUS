@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./LectureList.css";
 import LectureItem from "../../components/lecture/LectureItem";
 import champions from "../../data/champions";
@@ -12,6 +12,11 @@ function LectureList() {
   const [championType, setChampionType] = useState("all");
   const [line, setLine] = useState("all");
   const [badgeFilter, setBadgeFilter] = useState("all");
+
+  const [isChampionOpen, setIsChampionOpen] = useState(false);
+  const [championKeyword, setChampionKeyword] = useState("");
+
+  const championDropdownRef = useRef(null);
 
   const [lectures, setLectures] = useState([
     {
@@ -147,6 +152,45 @@ function LectureList() {
     setBadgeFilter((prev) => (prev === type ? "all" : type));
   };
 
+  const filteredChampionList = useMemo(() => {
+    const keyword = championKeyword.trim().toLowerCase();
+
+    if (!keyword) return champions;
+
+    return champions.filter((champion) =>
+      champion.toLowerCase().includes(keyword),
+    );
+  }, [championKeyword]);
+
+  const handleChampionSelect = (champion) => {
+    setChampionType(champion);
+    setChampionKeyword("");
+    setIsChampionOpen(false);
+  };
+
+  const handleChampionReset = () => {
+    setChampionType("all");
+    setChampionKeyword("");
+    setIsChampionOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        championDropdownRef.current &&
+        !championDropdownRef.current.contains(e.target)
+      ) {
+        setIsChampionOpen(false);
+        setChampionKeyword("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const filteredLectures = lectures
     .filter((lecture) => {
       const keyword = search.trim().toLowerCase();
@@ -216,18 +260,66 @@ function LectureList() {
               <option value="심화">심화</option>
             </select>
 
-            <select
-              value={championType}
-              onChange={(e) => setChampionType(e.target.value)}
-              className="lecture-list-select lecture-list-champion"
+            <div
+              className="lecture-list-champion-dropdown"
+              ref={championDropdownRef}
             >
-              <option value="all">챔피언 선택</option>
-              {champions.map((champion) => (
-                <option key={champion} value={champion}>
-                  {champion}
-                </option>
-              ))}
-            </select>
+              <button
+                type="button"
+                className={`lecture-list-select lecture-list-champion-button ${
+                  isChampionOpen ? "open" : ""
+                }`}
+                onClick={() => setIsChampionOpen((prev) => !prev)}
+              >
+                <span>
+                  {championType === "all" ? "챔피언 선택" : championType}
+                </span>
+                <span className="lecture-list-champion-arrow">▼</span>
+              </button>
+
+              {isChampionOpen && (
+                <div className="lecture-list-champion-menu">
+                  <input
+                    type="text"
+                    placeholder="챔피언 검색"
+                    className="lecture-list-champion-search"
+                    value={championKeyword}
+                    onChange={(e) => setChampionKeyword(e.target.value)}
+                  />
+
+                  <button
+                    type="button"
+                    className={`lecture-list-champion-option all ${
+                      championType === "all" ? "selected" : ""
+                    }`}
+                    onClick={handleChampionReset}
+                  >
+                    전체 보기
+                  </button>
+
+                  <div className="lecture-list-champion-options">
+                    {filteredChampionList.length > 0 ? (
+                      filteredChampionList.map((champion) => (
+                        <button
+                          type="button"
+                          key={champion}
+                          className={`lecture-list-champion-option ${
+                            championType === champion ? "selected" : ""
+                          }`}
+                          onClick={() => handleChampionSelect(champion)}
+                        >
+                          {champion}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="lecture-list-champion-empty">
+                        검색 결과가 없습니다
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <select
               value={line}

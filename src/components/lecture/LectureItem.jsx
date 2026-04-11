@@ -1,11 +1,73 @@
-import React from 'react'
+import React from "react";
+import "./LectureItem.css";
+import proBadge from "../../assets/probadge.png";
+import strmBadge from "../../assets/strmbadge.png";
+import likeEmpty from "../../assets/like_empty_badge.png";
+import likeFilled from "../../assets/like_filled_badge.png";
 
-function LectureItem() {
-    return (
-        <div>
+function LectureItem({ lecture, onToggleLike }) {
+  if (!lecture) return null;
 
+  const badgeImage = lecture.badgeType === "PRO" ? proBadge : strmBadge;
+  const avatarText = lecture.instructorName?.charAt(0).toUpperCase() || "N";
+
+  return (
+    <article className="lecture-item-card">
+      <div className="lecture-item-header">
+        <div className="lecture-item-instructor-box">
+          <div className="lecture-item-avatar">{avatarText}</div>
+
+          <div className="lecture-item-instructor-info">
+            <span className="lecture-item-instructor-name">
+              {lecture.instructorName}
+            </span>
+            <img
+              src={badgeImage}
+              alt="뱃지"
+              className="lecture-item-badge-img"
+            />
+          </div>
         </div>
-    )
+
+        <button
+          type="button"
+          className="lecture-item-like-button"
+          onClick={() => onToggleLike(lecture.id)}
+        >
+          <img
+            src={lecture.isLiked ? likeFilled : likeEmpty}
+            alt="찜"
+            className="lecture-item-like-icon"
+          />
+        </button>
+      </div>
+
+      <h3 className="lecture-item-title">{lecture.title}</h3>
+
+      <div className="lecture-item-tag-row">
+        <span className="lecture-item-tag lecture-item-tag-line">
+          {lecture.line}
+        </span>
+        <span className="lecture-item-tag lecture-item-tag-level">
+          {lecture.level}
+        </span>
+      </div>
+
+      <div className="lecture-item-divider"></div>
+
+      <div className="lecture-item-footer">
+        <div className="lecture-item-rating-box">
+          <span className="lecture-item-rating-star">★</span>
+          <span className="lecture-item-rating-score">{lecture.rating}</span>
+          <span className="lecture-item-rating-count">
+            ({lecture.reviewCount})
+          </span>
+        </div>
+
+        <p className="lecture-item-price">{lecture.price.toLocaleString()}원</p>
+      </div>
+    </article>
+  );
 }
 
-export default LectureItem
+export default LectureItem;

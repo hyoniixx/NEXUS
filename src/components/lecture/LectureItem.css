@@ -1,0 +1,142 @@
+.lecture-item-card {
+  width: 100%;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.lecture-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lecture-item-instructor-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lecture-item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lecture-item-instructor-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lecture-item-instructor-name {
+  color: #e8eaf0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lecture-item-badge-img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.lecture-item-like-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lecture-item-like-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  transition: 0.2s ease;
+}
+
+.lecture-item-title {
+  color: #e8eaf0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.lecture-item-tag-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lecture-item-tag {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.lecture-item-tag-line {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.lecture-item-tag-level {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.lecture-item-divider {
+  height: 1px;
+  background: rgba(148, 163, 184, 0.2);
+  margin-bottom: 16px;
+}
+
+.lecture-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lecture-item-rating-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lecture-item-rating-star {
+  color: #e8eaf0;
+  font-size: 14px;
+}
+
+.lecture-item-rating-score {
+  color: #e8eaf0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.lecture-item-rating-count {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.lecture-item-price {
+  color: #e8eaf0;
+  font-size: 18px;
+  font-weight: 700;
+}

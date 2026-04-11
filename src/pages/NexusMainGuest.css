@@ -1,0 +1,266 @@
+/* * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.main-guest-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1445px;
+    height: 450px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.20) 0%,
+            rgba(139, 92, 246, 0.20) 50%,
+            rgba(99, 102, 241, 0.20) 100%)
+}
+
+.main-guest-topbox {
+    width: 896px;
+    height: 290px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 19px
+}
+
+.main-guest-topbox * {
+    text-align: center;
+} */
+
+
+/* ===== 공통 변수 ===== */
+:root {
+    --gradient-main: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%);
+    --bg-main: #0A0E27;
+    --bg-card: #111827;
+    --text-primary: #E8EAF0;
+    --text-secondary: #94A3B8;
+    --border-color: rgba(148, 163, 184, 0.2);
+}
+
+.main {
+    background-color: #0A0E27;
+}
+
+/* ===== TOP 섹션 ===== */
+.main-guest-top {
+    position: relative;
+    width: 100%;
+    height: 515px;
+    /* 64px 헤더 + 450px 섹션 */
+    background: linear-gradient(135deg,
+            rgba(59, 130, 246, 0.2) 0%,
+            rgba(139, 92, 246, 0.2) 50%,
+            rgba(99, 102, 241, 0.2) 100%);
+}
+
+.main-guest-topbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    width: 896px;
+    margin: 0 auto;
+    padding-top: 80px;
+}
+
+/* 뱃지 */
+.main-guest-topbox>div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 0.67px solid rgba(59, 130, 246, 0.2);
+    border-radius: 9999px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.main-guest-topbox>div:first-child img {
+    width: 16px;
+    height: 16px;
+}
+
+/* NEXUS 타이틀 */
+.main-guest-topbox>div:nth-child(2) {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 60px;
+    text-align: center;
+    background: var(--gradient-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
+}
+
+/* 설명 텍스트 */
+.main-guest-topbox p {
+    margin: 0;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* 버튼 영역 */
+.main-guest-topbox>div:last-child {
+    margin-top: 36px;
+}
+
+/* 시작하기 버튼 */
+.main-guest-topbox button:first-child {
+    background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.main-guest-topbox button:first-child:hover {
+    opacity: 0.85;
+}
+
+/* 로그인 버튼 */
+.main-guest-topbox button:last-child {
+    background: transparent;
+    color: var(--text-primary);
+    border: 0.67px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.main-guest-topbox button:last-child:hover {
+    border-color: rgba(148, 163, 184, 0.6);
+}
+
+/* ===== BOTTOM 섹션 ===== */
+.main-guest-bottom {
+    width: 100%;
+    background: var(--bg-main);
+    padding: 80px 0 100px;
+    box-sizing: border-box;
+}
+
+/* 카드 3개 묶음 */
+.main-guest-bottom>div:first-child {
+    width: 1248px;
+    margin: 0 auto;
+}
+
+/* 카드 개별 */
+.main-guest-bottom>div:first-child>div {
+    background: var(--bg-card) !important;
+    border: 0.67px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 24px !important;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* 카드 아이콘 박스 (임시 - 나중에 실제 아이콘으로 교체) */
+.main-guest-bottom>div:first-child>div::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.main-guest-bottom>div:first-child>div:nth-child(1)::before {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.main-guest-bottom>div:first-child>div:nth-child(2)::before {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.main-guest-bottom>div:first-child>div:nth-child(3)::before {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+/* 카드 텍스트 */
+.card-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--text-primary);
+    margin: 0 0 12px 0;
+}
+
+.card-desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* CTA 섹션 */
+.main-guest-bottom>div:last-child {
+    width: 896px;
+    margin: 160px auto 0;
+    background: linear-gradient(90deg,
+            rgba(59, 130, 246, 0.1) 0%,
+            rgba(139, 92, 246, 0.1) 50%,
+            rgba(99, 102, 241, 0.1) 100%) !important;
+    border: 0.67px solid rgba(59, 130, 246, 0.2) !important;
+    border-radius: 16px !important;
+    box-sizing: border-box;
+}
+
+.main-guest-bottom>div:last-child h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.main-guest-bottom>div:last-child p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.main-guest-bottom>div:last-child button {
+    background: #3B82F6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.main-guest-bottom>div:last-child button:hover {
+    opacity: 0.85;
+}

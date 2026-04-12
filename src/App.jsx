@@ -1,13 +1,13 @@
 import "./App.css";
 import Header from "./layout/Header";
-import LectureList from "./pages/lecture/LectureList";
+import NexusMainStudent from "./pages/main/NexusMainStudent";
 
 function App() {
   return (
     <>
       <Header />
       <main>
-        <LectureList />
+        <NexusMainStudent />
       </main>
     </>
   );

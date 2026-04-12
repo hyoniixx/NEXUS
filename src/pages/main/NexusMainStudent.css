@@ -215,7 +215,7 @@
 
 .main-bottom {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 612px 612px;
     gap: 24px;
 }
 

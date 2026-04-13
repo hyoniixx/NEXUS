@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Gacha() {
+function Blacklist() {
     return (
         <div>
-            gachagacha
+            Blacklist
         </div>
     )
 }
 
-export default Gacha
+export default Blacklist

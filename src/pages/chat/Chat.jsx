@@ -1,5 +1,8 @@
 import Modal from '../../components/common/Modal';
 import useModal from '../../hooks/useModal';
+import Chating from './Chating';
+import ChatList from './ChatList';
+import './Chat.css'
 
 
 function Chat() {
@@ -14,11 +17,11 @@ function Chat() {
         <div className='c-chat'>
             <main className='c-chat-main'>
                 <button><img />뒤로 가기</button>
-
-
-
+                <section className='c-chat-chatsection'>
+                    <ChatList />
+                    <Chating />
+                </section>
             </main>
-            <button onClick={openModal}>모달 열기</button>
             <Modal
                 isModal={isModal}
                 closeModal={closeModal}

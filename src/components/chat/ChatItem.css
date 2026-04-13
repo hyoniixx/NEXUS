@@ -1,0 +1,36 @@
+.c-chat-blue {
+    border-radius: 8px;
+    padding: 12px;
+    background: #3B82F6;
+    max-width: 400px;
+    align-self: flex-end;
+}
+
+.c-chat-black {
+    border-radius: 8px;
+    padding: 12px;
+    background: #1E293B;
+    max-width: 400px;
+    align-self: flex-start;
+}
+
+.c-chat-text {
+    margin-bottom: 4px;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    /* 142.857% */
+}
+
+.c-chat-date {
+    color: rgba(255, 255, 255, 0.70);
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* 133.333% */
+}

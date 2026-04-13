@@ -1,0 +1,339 @@
+/*학생 마이페이지 속성*/
+.main-student-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 32px 86px 0px 86px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+/*user님 환영합니다*/
+.main-hello {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.main-hello h1 {
+    color: white;
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.main-hello p {
+    color: #94A3B8
+}
+
+
+
+
+/* 유저 정보, 마이페이지로 이동, 나의 강의 관리*/
+/*유저 정보*/
+.main-myInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 24px
+}
+
+.main-myInfo-profile {
+    width: 400px;
+    height: 165px;
+    /* ❕ 156 → 165 (피그마 스펙 165.37px) */
+    border-radius: 12px;
+    border: 0.701px solid rgba(59, 130, 246, 0.20);
+    background: #111827;
+    padding: 24.695px 24.695px 0.701px 24.695px;
+    box-sizing: border-box;
+    /* ❕ 추가 - 피그마는 border-box 기준, 없으면 padding이 바깥으로 더해져서 크기 틀어짐 */
+}
+
+.main-myInfo-profile-top {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.main-myInfo-profile p {
+    color: #3B82F6;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.profileImg {
+    width: 80px;
+    height: 80px;
+    background-color: white;
+    border-radius: 16px;
+}
+
+
+
+
+/*마이페이지, 내강의관리, 듀오관리 -> 컴포넌트화 예정*/
+.main-myInfoCards {
+    display: flex;
+    flex-direction: row;
+    gap: 16px
+}
+
+.main-myInfo-myProfile,
+.main-myInfo-lecture,
+.main-myInfo-duo {
+    width: 264px;
+    height: 165px;
+    /* ❕ 156 → 165 (피그마 스펙 165.37px) */
+    border-radius: 12px;
+    border: 0.701px solid rgba(59, 130, 246, 0.20);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.10) 0%, rgba(59, 130, 246, 0.05) 100%);
+    padding: 24.7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    /* ❕ 추가 - 피그마는 border-box 기준, 없으면 padding이 바깥으로 더해져서 크기 틀어짐 */
+}
+
+
+
+
+/*내등급*/
+.main-status {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    /* ❕ 32 → 24 (피그마 스펙 gap 23.99px) */
+}
+
+.main-statusNow,
+.main-statusNext {
+    width: 612px;
+    height: 155px;
+    border-radius: 12px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    padding: 24.7px 24.7px 0px 24.7px;
+    box-sizing: border-box;
+    /* ❕ 추가 - 피그마는 border-box 기준, 없으면 padding이 바깥으로 더해져서 크기 틀어짐 */
+}
+
+/*현재등급*/
+.main-statusNow {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.main-statusNow-top {
+    display: flex;
+    flex-direction: row;
+    gap: 8px
+}
+
+.main-statusNow-bottom {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.main-statusNow-bottom-img {
+    width: 36px;
+    height: 40px;
+    background-color: white;
+}
+
+.main-statusNow-bottom-level-gauge {
+    width: 435px;
+    height: 8px;
+    display: grid;
+    margin-top: 8px;
+    margin-bottom: 3px;
+}
+
+.gauge-now {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.gauge-full {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/*강의실 페이지에서 만든 컴포넌트 따오기*/
+.main-lectureRecommend {
+    display: flex;
+    flex-direction: column;
+    gap: 16px
+}
+
+.main-lectureRecommend h2 {
+    color: #E8EAF0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.main-lectureItems {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.main-myInfoCards>div>p {
+    color: #E8EAF0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.main-myInfoCard-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.20);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lectureItem {
+    width: 400px;
+    height: 256px;
+    border-radius: 15px;
+    border: 1px solid white;
+    color: white;
+    text-align: center;
+    line-height: 256px;
+}
+
+
+/*맨아래*/
+
+.main-bottom {
+    display: grid;
+    grid-template-columns: 612px 612px;
+    gap: 24px;
+}
+
+/*duo*/
+
+.main-bottom-duo,
+.main-bottom-lecture {
+    border-radius: 12px;
+    border: 0.7px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    height: 183.773px;
+    padding: 24.7px 24.7px 0px 24.7px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.main-bottom-duo-head,
+.main-bottom-lecture-head {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+}
+
+.main-bottom-duo-head>h2,
+.main-bottom-lecture-head>h2 {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.duoCard {
+    display: grid;
+    grid-template-columns: 40px 1fr 90px;
+    align-items: center;
+    gap: 12px;
+    height: 64px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.50);
+}
+
+.duoProfile {
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center;
+    line-height: 30px;
+}
+
+.duoContent {
+    width: 307px;
+}
+
+.duoContent>h3 {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.duoContent>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.star {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2px;
+}
+
+/*lecture*/
+
+.lectureCard {
+    height: 88px;
+    padding: 17px;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.50);
+    gap: 8.6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lectureContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.lectureContent>h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.lectureStatus {
+    width: 52px;
+    height: 24px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.10);
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    color: #3B82F6;
+}
+
+.lectureInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    color: #94A3B8;
+}
+
+.toLink {
+    color: #3B82F6;
+}

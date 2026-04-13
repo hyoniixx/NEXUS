@@ -1,6 +1,7 @@
 import NexusMainGuest from "./pages/NexusMainGuest";
 import "./App.css";
 import Header from "./layout/Header";
+import NexusMainStudent from "./pages/main/NexusMainStudent";
 
 function App() {
   return (

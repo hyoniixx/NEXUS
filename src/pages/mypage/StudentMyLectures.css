@@ -1,0 +1,77 @@
+.student-my-lectures-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+}
+
+.student-my-lectures-inner {
+  width: 1248px;
+  padding-top: 96px;
+}
+
+.student-my-lectures-title {
+  color: #e8eaf0;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.student-my-lectures-description {
+  color: #94a3b8;
+  font-size: 16px;
+  margin-bottom: 32px;
+}
+
+.student-my-lectures-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.student-my-lectures-select {
+  width: 145px;
+  height: 40px;
+  background: #1a1f3a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #e8eaf0;
+  font-size: 14px;
+
+  padding: 0 40px 0 16px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  line-height: 40px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23E8EAF0' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+}
+
+.student-my-lectures-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.student-my-lectures-divider {
+  color: #94a3b8;
+}
+
+.student-my-lectures-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}

@@ -1,0 +1,21 @@
+.c-chat {
+    padding: 0 149.84px;
+}
+
+.c-chat-main {
+    width: 100%;
+    display: flex;
+}
+
+.c-chat-list-ct {
+    border-radius: 12px;
+    border: 0.716px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    height: 500px;
+}
+
+.c-chat-chatting-ct {
+    border-radius: 12px;
+    border: 0.716px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+}

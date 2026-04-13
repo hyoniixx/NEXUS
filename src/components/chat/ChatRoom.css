@@ -1,0 +1,53 @@
+.c-chatroom-ct {
+    height: 100px;
+    border-bottom: 0.716px solid rgba(148, 163, 184, 0.20);
+    padding: 16px;
+    position: relative;
+}
+
+.c-chatroom-name {
+    color: #E8EAF0;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.c-chatroom-content {
+    color: #94A3B8;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 5.55px 0 3.98px 0;
+}
+
+.c-chatroom-date {
+    color: #94A3B8;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+.c-chatroom-unread {
+    border-radius: 50%;
+    background: #EF4444;
+    display: flex;
+    width: 19.991px;
+    height: 19.991px;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}

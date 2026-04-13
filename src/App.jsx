@@ -1,15 +1,11 @@
 import "./App.css";
-import Header from "./layout/Header";
-import Chat from "./pages/chat/Chat";
-import LectureList from "./pages/lecture/LectureList";
+import { RouterProvider } from "react-router-dom";
+import { NexusRouter } from './routes/NexusRouter.jsx'
 
 function App() {
   return (
     <>
-      <Header />
-      <main className="main">
-        <Chat />
-      </main>
+      <RouterProvider router={NexusRouter} />
     </>
   );
 }

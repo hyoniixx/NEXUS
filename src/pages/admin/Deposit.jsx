@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Gacha() {
+function Deposit() {
     return (
         <div>
-            gachagacha
+            입금
         </div>
     )
 }
 
-export default Gacha
+export default Deposit

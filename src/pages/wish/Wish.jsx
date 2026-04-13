@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Gacha() {
+function Wish() {
     return (
         <div>
-            gachagacha
+
         </div>
     )
 }
 
-export default Gacha
+export default Wish

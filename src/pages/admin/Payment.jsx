@@ -1,11 +1,11 @@
 import React from 'react'
 
-function MyStudents() {
+function Payment() {
     return (
         <div>
-
+            정산
         </div>
     )
 }
 
-export default MyStudents
+export default Payment

@@ -81,9 +81,7 @@
     gap: 16px
 }
 
-.main-myInfo-myProfile,
-.main-myInfo-lecture,
-.main-myInfo-duo {
+.main-myInfo-card {
     width: 264px;
     height: 165px;
     /* ❕ 156 → 165 (피그마 스펙 165.37px) */

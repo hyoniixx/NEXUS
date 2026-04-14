@@ -34,7 +34,7 @@ function MainMyInfoCards({ type }) {
             link = 'mypage';
     }
     return (
-        <div className='main-myInfo-cards' onClick={() => navigate(`/${link}`)}>
+        <div className='main-myInfo-card' onClick={() => navigate(`/${link}`)}>
             <div className='main-myInfoCard-icon'>
                 <img src={image} alt="" width='24px' height='24px' />
             </div>

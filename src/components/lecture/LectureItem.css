@@ -14,6 +14,11 @@
   min-height: 229px;
 }
 
+.lecture-item-card-wish {
+  width: 400px;
+  min-height: 229px;
+}
+
 .lecture-item-header {
   display: flex;
   justify-content: space-between;

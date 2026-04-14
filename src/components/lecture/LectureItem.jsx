@@ -11,6 +11,7 @@ function LectureItem({
   cardType = "default",
   onToggleLike,
   onChatClick,
+  onRemoveWish,
 }) {
   if (!lecture) return null;
 
@@ -25,10 +26,58 @@ function LectureItem({
   const reviewStatusText =
     lecture.reviewStatus === "done" ? "후기 작성 완료" : "후기 미작성";
 
+  const renderTopRightButton = () => {
+    if (cardType === "wish") {
+      return (
+        <button
+          type="button"
+          className="lecture-item-like-button"
+          onClick={() => onRemoveWish && onRemoveWish(lecture.id)}
+        >
+          <img
+            src={likeFilled}
+            alt="찜 삭제"
+            className="lecture-item-like-icon"
+          />
+        </button>
+      );
+    }
+
+    if (cardType === "myLecture") {
+      return (
+        <button
+          type="button"
+          className="lecture-item-msg-btn"
+          onClick={() => onChatClick && onChatClick(lecture.id)}
+        >
+          <img src={msgIcon} alt="메시지" className="lecture-item-msg-icon" />
+        </button>
+      );
+    }
+
+    return (
+      <button
+        type="button"
+        className="lecture-item-like-button"
+        onClick={() => onToggleLike && onToggleLike(lecture.id)}
+      >
+        <img
+          src={lecture.isLiked ? likeFilled : likeEmpty}
+          alt="찜"
+          className="lecture-item-like-icon"
+        />
+      </button>
+    );
+  };
+
   return (
     <article
       className={`lecture-item-card ${
-        cardType === "myLecture" ? "lecture-item-card-my" : ""
+        cardType === "myLecture"
+          ? "lecture-item-card-my"
+          : cardType === "wish"
+            ? "lecture-item-card-wish"
+            : ""
       }`}
     >
       <div className="lecture-item-header">
@@ -48,27 +97,7 @@ function LectureItem({
           </div>
         </div>
 
-        {cardType === "default" ? (
-          <button
-            type="button"
-            className="lecture-item-like-button"
-            onClick={() => onToggleLike && onToggleLike(lecture.id)}
-          >
-            <img
-              src={lecture.isLiked ? likeFilled : likeEmpty}
-              alt="찜"
-              className="lecture-item-like-icon"
-            />
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="lecture-item-msg-btn"
-            onClick={() => onChatClick && onChatClick(lecture.id)}
-          >
-            <img src={msgIcon} alt="메시지" className="lecture-item-msg-icon" />
-          </button>
-        )}
+        {renderTopRightButton()}
       </div>
 
       <h3 className="lecture-item-title">{lecture.title}</h3>
@@ -93,7 +122,7 @@ function LectureItem({
 
       <div className="lecture-item-footer">
         <div className="lecture-item-rating-box">
-          <span className="lecture-item-rating-star">★</span>
+          <span className="lecture-item-rating-star">☆</span>
           <span className="lecture-item-rating-score">{lecture.rating}</span>
           <span className="lecture-item-rating-count">
             ({lecture.reviewCount})

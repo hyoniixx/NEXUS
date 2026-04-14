@@ -122,7 +122,8 @@
 }
 
 /*현재등급*/
-.main-statusNow {
+.main-statusNow,
+.main-statusNext {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -217,48 +218,156 @@
     display: grid;
     grid-template-columns: 612px 612px;
     gap: 24px;
+    margin-bottom: 10px;
 }
 
-/*duo*/
 
-.main-bottom-duo,
-.main-bottom-lecture {
+.main-bottom-reviews,
+.main-bottom-students {
     border-radius: 12px;
     border: 0.7px solid rgba(148, 163, 184, 0.20);
     background: #111827;
-    height: 183.773px;
-    padding: 24.7px 24.7px 0px 24.7px;
+    padding: 24.7px 24.7px 24.7px 24.7px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
-.main-bottom-duo-head,
-.main-bottom-lecture-head {
+/*review*/
+
+.main-bottom-reviews-head,
+.main-bottom-students-head {
     display: grid;
-    grid-template-columns: 1fr 120px;
+    grid-template-columns: 1fr 30px;
 }
 
-.main-bottom-duo-head>h2,
-.main-bottom-lecture-head>h2 {
+.main-bottom-reviews-head>h2,
+.main-bottom-students-head>h2 {
     color: #E8EAF0;
     font-size: 20px;
     font-weight: 700;
 }
 
-.duoCard {
+.main-bottom-reviews-dashboard {
     display: grid;
-    grid-template-columns: 40px 1fr 90px;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 70px;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.50);
+}
+
+.main-bottom-reviews-dashboard * {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-bottom-reviews-dashboard p {
+    font-size: 14px;
+    color: #94A3B8;
+    font-weight: 400;
+}
+
+.main-bottom-reviews-dashboard h6 {
+    font-size: 16px;
+    color: #E8EAF0;
+    font-weight: 700;
+}
+
+.reviewCard {
+    display: grid;
+    grid-template-rows: 36px 1fr;
+    gap: 8px;
+    width: 562px;
+    height: 117px;
+    border-radius: 8px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: rgba(30, 41, 59, 0.50);
+    padding: 16.7px 16.7px 0px 16.7px
+}
+
+.reviewCard:hover {
+    cursor: pointer;
+}
+
+.reviewCard-top {
+    display: grid;
+    grid-template-columns: 32px 1fr 120px;
+    gap: 8px
+}
+
+.review-profile {
+    width: 32px;
+    height: 32px;
+    border-radius: 32px;
+}
+
+.reviewer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.reviewer>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.reviewer>h6 {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.review-star {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2px;
+    justify-content: right;
+}
+
+.review-star * {
+    font-size: 20px;
+    color: #3B82F6;
+    line-height: 100%;
+    align-items: center;
+}
+
+.review-content>p {
+    color: #94A3B8;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/*students*/
+
+.students-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.studentCard {
+    display: grid;
+    grid-template-columns: 40px 1fr 60px;
     align-items: center;
     gap: 12px;
-    height: 64px;
+    height: 88px;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 8px;
     background: rgba(30, 41, 59, 0.50);
 }
 
-.duoProfile {
+.studentCard:hover {
+    cursor: pointer;
+}
+
+
+.studentProfile {
     width: 40px;
     height: 40px;
     border-radius: 40px;
@@ -268,72 +377,38 @@
     line-height: 30px;
 }
 
-.duoContent {
+.studentContent {
     width: 307px;
 }
 
-.duoContent>h3 {
+.studentContent>h3 {
     color: #E8EAF0;
     font-size: 16px;
     font-weight: 600;
 }
 
-.duoContent>p {
+.studentContent>p {
     color: #94A3B8;
     font-size: 12px;
     font-weight: 400;
     margin-top: 5px;
 }
 
-.star {
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 2px;
-}
-
-/*lecture*/
-
-.lectureCard {
-    height: 88px;
-    padding: 17px;
-    border-radius: 8px;
-    background: rgba(30, 41, 59, 0.50);
-    gap: 8.6px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.lectureContent {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.lectureContent>h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: white;
-}
-
-.lectureStatus {
+.studentStatus {
+    font-size: 12px;
     width: 52px;
     height: 24px;
     border-radius: 6px;
-    background: rgba(59, 130, 246, 0.10);
-    font-size: 12px;
-    line-height: 24px;
     text-align: center;
-    color: #3B82F6;
+    line-height: 24px;
 }
 
-.lectureInfo {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    color: #94A3B8;
-}
+
 
 .toLink {
     color: #3B82F6;
+}
+
+.toLink:hover {
+    cursor: pointer;
 }

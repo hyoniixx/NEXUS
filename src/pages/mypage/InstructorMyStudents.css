@@ -1,0 +1,57 @@
+.instructor-my-students-page {
+  width: 100%;
+}
+
+.instructor-my-students-filter-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.instructor-my-students-filter-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.instructor-my-students-select {
+  width: 129px;
+  height: 40px;
+  padding: 0 40px 0 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background-color: #1a1f3a;
+  color: #e8eaf0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23E8EAF0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.instructor-my-students-select option {
+  background: #1a1f3a;
+  color: #e8eaf0;
+}
+
+.instructor-my-students-count {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.instructor-my-students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

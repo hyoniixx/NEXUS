@@ -81,9 +81,7 @@
     gap: 16px
 }
 
-.main-myInfo-myProfile,
-.main-myInfo-lecture,
-.main-myInfo-duo {
+.main-myInfo-cards {
     width: 264px;
     height: 165px;
     /* ❕ 156 → 165 (피그마 스펙 165.37px) */
@@ -98,6 +96,9 @@
     /* ❕ 추가 - 피그마는 border-box 기준, 없으면 padding이 바깥으로 더해져서 크기 틀어짐 */
 }
 
+.main-myInfo-cards:hover {
+    cursor: pointer;
+}
 
 
 
@@ -122,7 +123,8 @@
 }
 
 /*현재등급*/
-.main-statusNow {
+.main-statusNow,
+.main-statusNext {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -248,14 +250,18 @@
 
 .duoCard {
     display: grid;
-    grid-template-columns: 40px 1fr 90px;
+    grid-template-columns: 40px 1fr 80px;
     align-items: center;
     gap: 12px;
-    height: 64px;
+    height: 88px;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 8px;
     background: rgba(30, 41, 59, 0.50);
+}
+
+.duoCard:hover {
+    cursor: pointer;
 }
 
 .duoProfile {
@@ -285,10 +291,10 @@
     margin-top: 5px;
 }
 
-.star {
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 2px;
+.wanted {
+    height: 20px;
+    color: #3B82F6;
+    margin-left: 20px;
 }
 
 /*lecture*/
@@ -336,4 +342,8 @@
 
 .toLink {
     color: #3B82F6;
+}
+
+.toLink:hover {
+    cursor: pointer;
 }

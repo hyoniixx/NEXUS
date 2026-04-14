@@ -1,7 +1,25 @@
 [
     {
         "type": "duo | lecture",
+        "roomId": 3,
+        "fromMemberId": 4,
+        "fromMemberName": "tester2",
+        "content": "ㄴㄴㄴㄴ",
+        "createdAt": "2024-11-20T15:28:12.411",
+        "isRead": false
+    },
+    {
+        "type": "duo | lecture",
         "roomId": 4,
+        "fromMemberId": 4,
+        "fromMemberName": "tester2",
+        "content": "ㄴㄴㄴㄴ",
+        "createdAt": "2024-11-20T15:28:12.411",
+        "isRead": false
+    },
+    {
+        "type": "duo | lecture",
+        "roomId": 2,
         "fromMemberId": 4,
         "fromMemberName": "tester2",
         "content": "ㄴㄴㄴㄴ",

@@ -1,0 +1,31 @@
+.detail-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-left: 266.67px;
+    margin-right: 266.67px;
+}
+
+.toLectureList {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 31px;
+}
+
+.detail-box,
+.detail {
+    border: 1px solid gray
+}
+
+.detail-head {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+.detail-content-layout {
+    display: grid;
+    grid-template-columns: 650px 309px;
+    gap: 32px;
+}

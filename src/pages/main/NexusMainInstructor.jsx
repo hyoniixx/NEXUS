@@ -4,6 +4,7 @@ import LectureItem from '../../components/lecture/LectureItem';
 import MainMyInfoCards from '../../components/main/MainMyInfoCards';
 import MainReviewCard from '../../components/main/MainReviewCard';
 import MainStudentCard from '../../components/main/MainStudentCard';
+import tierUp from '../../assets/tierUp.svg'
 
 function NexusMainInstructor() {
     const user = { userName: '김태완', userTier: 2, userCsScore: 80 };
@@ -37,10 +38,7 @@ function NexusMainInstructor() {
                 <div className='main-status'>
                     <div className='main-statusNow'>
                         <div className='main-statusNow-top'>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M18.3307 5.83203L11.2484 12.9143L7.08235 8.74826L1.6665 14.1641" stroke="#3B82F6" stroke-width="1.66641" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M13.3313 5.83203H18.3305V10.8313" stroke="#3B82F6" stroke-width="1.66641" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                            <img src={tierUp} alt="" width="20" height="20" />
                             <p style={{ color: 'white', fontSize: '20px', fontWeight: 700 }}>내 현재 상태</p>
                         </div>
                         <div className='main-statusNow-bottom'>

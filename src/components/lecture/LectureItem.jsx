@@ -12,6 +12,7 @@ function LectureItem({
   onToggleLike,
   onChatClick,
   onRemoveWish,
+  showLike = true,
 }) {
   if (!lecture) return null;
 
@@ -27,6 +28,10 @@ function LectureItem({
     lecture.reviewStatus === "done" ? "후기 작성 완료" : "후기 미작성";
 
   const renderTopRightButton = () => {
+    if (!showLike && cardType !== "myLecture") {
+      return null;
+    }
+
     if (cardType === "wish") {
       return (
         <button

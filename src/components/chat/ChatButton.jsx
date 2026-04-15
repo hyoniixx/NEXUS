@@ -1,36 +1,14 @@
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 import { chatContext } from '../../pages/chat/Chat'
 import { useNavigate } from 'react-router-dom'
-import { updateChat } from '../../service/ChatService'
+import { deleteChat, updateChat } from '../../service/ChatService'
+import { createMessage, deleteMessage } from '../../service/MessageService'
+import setUpdataData from '../../reducer/chatButtonReducer'
+import ReviewDuo from '../common/ReviewDuoModal'
 // import { updateChat } from '../../service/ChatService'
 
 
-function setUpdataData(state, action) {
-    switch (action.type) {
-        case 'CANCEL_DUO':
-            console.log('cancel')
-            return {
-                [`status.${action.payload.myuid}`]: '취소',
-                'participants': action.payload.participants.find(p => p !== action.payload.myuid)
-            }
-        case 'AGREE_DUO':
-            console.log('agree')
-            return {
-                [`status.${action.payload.myuid}`]: '중',
-                [`status.${action.payload.opponentId}`]: '중'
-            }
-        case 'COMPLETE_DUO':
-            console.log('comp')
-            return {
-                [`status.${action.payload.myuid}`]: '후',
-            }
-        case 'LEAVE_DUO':
-            console.log('le')
-            return {
-                'participants': action.payload.participants.find(p => p !== action.payload.myuid)
-            }
-    }
-}
+
 
 
 function ChatButton() {
@@ -41,73 +19,109 @@ function ChatButton() {
         currentChatOpponentId,
         currentChatStatus,
         currentChatI,
-        currentParticipants
+        currentParticipants,
     } = currentChatInfo
-    const [updateData, dispatch] = useReducer(setUpdataData, currentChatInfo.currentChatStatus)
+
+    const [copyCurrentParticipants, setCopyCurrentParticipants] = useState(currentParticipants)
+    const [copyCurrentChatStatus, setCopyCurrentChatStatus] = useState(currentChatStatus)
+    console.log('1', copyCurrentParticipants, copyCurrentChatStatus)
+    const [update, dispatch] = useReducer(setUpdataData, {
+        updateData: {
+            status: currentChatStatus,
+            participants: currentParticipants
+        },
+        sendMessage: ''
+    })
     const navigate = useNavigate();
     const myuid = 'asdf';
+    const myNickname = '정프로'
 
     useEffect(() => {
-        updateChat(currentChatInfo.currentChatId, updateData)
-        console.log('성공');
-    }, [updateData])
 
+        if (update.sendMessage === '') {
+            return;
+        }
+        console.log('실행')
+        //수정된 채팅 정보 업데이트 
+        updateChat(currentChatInfo.currentChatId, update.updateData);
+        console.log('ddddd', update.updateData)
+        console.log('2', { ...copyCurrentChatStatus, ...update.updateData.status })
+        setCopyCurrentChatStatus({ ...copyCurrentChatStatus, ...update.updateData.status });
+        console.log('3', copyCurrentChatStatus)
+
+        //안내 메세지 보내주는 함수
+        createMessage({
+            type: currentChatInfo.currentChatType,
+            roomId: currentChatInfo.currentChatId,
+            fromMemberId: 'admin',
+            fromMemberName: '관리자',
+            content: update.sendMessage
+        });
+        console.log('성공');
+    }, [update.updateData])
+
+
+    useEffect(() => {
+        setCopyCurrentParticipants(currentParticipants)
+        setCopyCurrentChatStatus(currentChatStatus)
+        console.log(copyCurrentChatStatus, copyCurrentParticipants)
+    }, [currentChatId])
 
     const chatStatus = () => {
         if (currentChatType === 'duo') {
             if (currentChatI.role === 'host') {
-                if (currentChatStatus[currentChatOpponentId] === '취소') {
-                    return { text: '나가기', color: 'purple', clickEvent: 'LEAVE_DUO' };
-                } else if (currentChatStatus[myuid] === '전') {
+                if (copyCurrentChatStatus[currentChatOpponentId] === '취소') {
+                    return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
+                } else if (copyCurrentChatStatus[myuid] === '전') {
                     return { text: ['듀오 거절', '듀오 승낙'], color: ['red', 'blue'], clickEvent: ['CANCEL_DUO', 'AGREE_DUO'] };
-                } else if (currentChatStatus[myuid] === '중') {
-                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO' };
-                } else if (currentChatStatus[myuid] === '후') {
-                    return { text: '나가기', color: 'black', clickEvent: 'LEAVE_DUO' };
+                } else if (copyCurrentChatStatus[myuid] === '중') {
+                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO', modal: 'true' };
+                } else if (copyCurrentChatStatus[myuid] === '후') {
+                    return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
-                    return { text: '닫기', color: 'purple', clickEvent: 'LEAVE_DUO' };
+                    return { text: '닫기', color: 'purple', clickEvent: 'LEAVE' };
                 }
             } else if (currentChatI.role === 'guest') {
-                if (currentChatStatus[currentChatOpponentId] === '취소') {
-                    return { text: '나가기', color: 'purple', clickEvent: 'LEAVE_DUO' };
-                } else if (currentChatStatus[myuid] === '전') {
+                if (copyCurrentChatStatus[currentChatOpponentId] === '취소') {
+                    return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
+                } else if (copyCurrentChatStatus[myuid] === '전') {
                     return { text: '듀오 취소', color: 'red', clickEvent: 'CANCEL_DUO' };
-                } else if (currentChatStatus[myuid] === '중') {
-                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO' };
-                } else if (currentChatStatus[myuid] === '후') {
-                    return { text: '나가기', color: 'black', clickEvent: 'LEAVE_DUO' };
+                } else if (copyCurrentChatStatus[myuid] === '중') {
+                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO', modal: 'true' };
+                } else if (copyCurrentChatStatus[myuid] === '후') {
+                    return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
-                    return { text: '닫기', color: 'purple', clickEvent: 'LEAVE_DUO' };
+                    return { text: '닫기', color: 'purple', clickEvent: 'LEAVE' };
                 }
             } else {
                 return { text: '닫기', color: 'purple' };
             }
         } else if (currentChatType === 'lecture') {
             if (currentChatI.role === 'instructor') {
-                switch (currentChatStatus[currentChatOpponentId]) {
+                switch (copyCurrentChatStatus[currentChatOpponentId]) {
                     case '취소':
-                        return { text: '닫기', color: 'purple', clickEvent: '채팅방 삭제' };
+                        return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
                     case '전':
-                        return { text: '강의 확정', color: 'blue', clickEvent: '둘다 중으로 상태 변경' };
+                        return { text: '강의 확정', color: 'blue', clickEvent: 'AGREE_LECTURE' };
                     case '중':
                         return { text: '강의 중', color: 'purple', clickEvent: 'none' };
                     case '후':
-                        return { text: '강의 완료', color: 'black', clickEvent: 'none' };
+                        return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                     default:
-                        return { text: '오류', color: 'white', clickEvent: 'none' }
+                        return { text: '오류', color: 'white', clickEvent: 'LEAVE' }
                 }
             } else if (currentChatI.role === 'student') {
-                switch (currentChatStatus[myuid]) {
+                switch (copyCurrentChatStatus[myuid]) {
                     case '취소':
-                        return { text: '닫기', color: 'purple', clickEvent: '채팅방 나감' };
+                        return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
                     case '전':
-                        return { text: '취소하기', color: 'red', clickEvent: '취소 문자 발송, 자신의 상태 취소로' };
+                        return { text: '취소하기', color: 'red', clickEvent: 'CANCEL_LECTURE' };
                     case '중':
-                        return { text: '수강 완료', color: 'blue', clickEvent: '둘다 후로 상태 변경, 수강종료되었습니다. 문자 발송' };
+                        return { text: '수강 완료', color: 'blue', clickEvent: 'COMPLETE_LECTURE' };
                     case '후':
-                        return { text: '수강 완료', color: 'black', clickEvent: 'none' };
+                        return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                     default:
-                        return { text: '오류', color: 'purple', clickEvent: 'none' }
+                        return { text: '오류', color: 'purple', clickEvent: 'LEAVE' }
                 }
             } else {
                 return { text: '닫기', color: 'purple' };
@@ -118,19 +132,37 @@ function ChatButton() {
     }
 
     const btn = useMemo(() => {
+        console.log('4', copyCurrentChatStatus);
         return chatStatus();
-    }, [currentChatStatus, currentChatId])
+    }, [copyCurrentChatStatus])
 
-    //채팅 정보를 업데이트 하는 함수
+    //채팅 정보를 수정하는 함수
     const handleUpdateChat = (clickEvent) => {
+        if (clickEvent === 'none') {
+            return;
+        }
+
+        if (clickEvent === 'LEAVE' && currentParticipants.length === 1) {
+            deleteChat(currentChatId);
+            deleteMessage(currentChatId);
+            return;
+        }
+
+        if (clickEvent === 'COMPLETE_DUO') {
+
+        }
+
         dispatch({
             type: `${clickEvent}`,
             payload: {
                 myuid: myuid,
-                participants: currentParticipants
+                myNickname: myNickname,
+                participants: currentParticipants,
+                opponentId: currentChatOpponentId
             }
         })
     }
+
 
     return (
         <div>
@@ -140,6 +172,7 @@ function ChatButton() {
             </>) : (
                 <button className={`c-chat-${btn.color}button`} onClick={() => handleUpdateChat(btn.clickEvent)}>{btn.text}</button>
             )}
+            <ReviewDuo />
         </div>
     )
 }

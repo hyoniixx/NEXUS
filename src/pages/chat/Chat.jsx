@@ -13,10 +13,9 @@ function Chat() {
         currentChatOpponentId: '',
         currentChatStatus: '',
         currentChatI: '',
-        currentParticipants: []
+        currentParticipants: [],
+        currentUnreadCount: {}
     });
-
-
 
     // 나중에 전역 콘텍스트로 받아올 사용자 자신의 uid
     const myuid = 'asdf';

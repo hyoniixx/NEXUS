@@ -3,10 +3,11 @@ import sendBtn from '../../assets/chatSendBtn.svg'
 import ChatItem from '../../components/chat/ChatItem'
 import { useContext, useEffect, useState } from 'react'
 import { chatContext } from './Chat'
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore'
 import { db } from '../../firebase/config'
 import { createMessage } from '../../service/MessageService'
 import ChatButton from '../../components/chat/ChatButton'
+import { updateChat } from '../../service/ChatService'
 
 function Chating() {
     const myuid = 'asdf';
@@ -32,6 +33,13 @@ function Chating() {
             setMessages(MessageData);
             console.log(messages)
         })
+        //누른 채팅 읽음 처리
+        if (currentChatInfo.currentChatId) {
+            updateChat(currentChatInfo.currentChatId, {
+                [`unreadCount.${myuid}`]: 0
+            })
+        }
+
 
         return () => unsub();
     }, [currentChatInfo.currentChatId]);
@@ -52,6 +60,13 @@ function Chating() {
                 fromMemberName: currentChatInfo.currentChatI.nickname,
                 content: newMessage
             })
+
+            updateChat(currentChatInfo.currentChatId, {
+                lastMessage: newMessage,
+                lastMessageAt: serverTimestamp(),
+                [`unreadCount.${currentChatInfo.currentChatOpponentId}`]: currentChatInfo.currentUnreadCount + 1
+            })
+            setNewMessage('');
         } catch (error) {
             console.log('메시지 전송 실패')
         } finally {

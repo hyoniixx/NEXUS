@@ -1,3 +1,4 @@
+/*전체 레이아웃 -> 바로가기 링크 때문에*/
 .detail-layout {
     display: flex;
     flex-direction: column;
@@ -6,6 +7,7 @@
     margin-right: 266.67px;
 }
 
+/*링크*/
 .toLectureList {
     color: #94A3B8;
     font-size: 16px;
@@ -13,19 +15,331 @@
     margin-top: 31px;
 }
 
-.detail-box,
-.detail {
-    border: 1px solid gray
-}
-
-.detail-head {
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-}
-
+/*
+    강의내용 영역 | 신청 및 찜하기 영역
+*/
 .detail-content-layout {
     display: grid;
     grid-template-columns: 650px 309px;
     gap: 32px;
+}
+
+/*
+    신청 및 찜하기 영역
+*/
+.detail-box {
+    border-radius: 12px;
+    border: 0.667px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 210px;
+}
+
+.detail-box>h2 {
+    color: #E8EAF0;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.detail-box-top-button,
+.detail-box-bottom-button,
+.detail-box-top-on {
+    width: 260px;
+    height: 48px;
+    font-size: 16px;
+    border-radius: 8px;
+    color: #E8EAF0;
+    border: none;
+    font-weight: 600;
+}
+
+.detail-box-top-on {
+    background: linear-gradient(225deg,
+            rgba(59, 130, 246, 0.2) 0%,
+            rgba(69, 128, 246, 0.2) 7.14%,
+            rgba(77, 125, 246, 0.2) 14.29%,
+            rgba(85, 123, 246, 0.2) 21.43%,
+            rgba(91, 120, 246, 0.2) 28.57%,
+            rgba(97, 118, 246, 0.2) 35.71%,
+            rgba(103, 115, 246, 0.2) 42.86%,
+            rgba(108, 113, 246, 0.2) 50%,
+            rgba(113, 110, 246, 0.2) 57.14%,
+            rgba(118, 107, 246, 0.2) 64.29%,
+            rgba(123, 104, 246, 0.2) 71.43%,
+            rgba(127, 101, 246, 0.2) 78.57%,
+            rgba(131, 98, 246, 0.2) 85.71%,
+            rgba(135, 95, 246, 0.2) 92.86%,
+            rgba(139, 92, 246, 0.2) 100%);
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-box-top-button {
+    background: linear-gradient(90deg, #3B82F6 0%, #4580F6 7.14%, #4D7DF6 14.29%, #557BF6 21.43%, #5B78F6 28.57%, #6176F6 35.71%, #6773F6 42.86%, #6C71F6 50%, #716EF6 57.14%, #766BF6 64.29%, #7B68F6 71.43%, #7F65F6 78.57%, #8362F6 85.71%, #875FF6 92.86%, #8B5CF6 100%);
+}
+
+.detail-box-top-on>p {
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.detail-box-bottom-button {
+    border: 0.667px solid rgba(148, 163, 184, 0.20);
+    background-color: rgba(8, 5, 2, 0);
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+
+/*
+    강의 세부 내용 영역
+*/
+
+/*전체 레이아웃*/
+.detail {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/*각 박스들 스타일 적용*/
+.detail-head,
+.detail-intro,
+.detail-info,
+.detail-curriculum,
+.detail-review {
+    display: flex;
+    flex-direction: column;
+    padding: 24.67px;
+    border-radius: 12px;
+    border: 0.667px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    gap: 16px;
+}
+
+/*강의 세부 - 헤드*/
+.detail-head {
+    gap: 23px;
+}
+
+.detail-head-profile {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    height: 64px;
+}
+
+.detail-head-profileImg {
+    width: 64px;
+    height: 64px;
+    border: 1px solid white;
+}
+
+.detail-head-profileDetail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-head-profileName {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: center;
+    justify-content: left;
+}
+
+.detail-head-profileName>p {
+    color: #E8EAF0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.detail-head-profileName>.badge {
+    width: 16px;
+    height: 16px;
+}
+
+.detail-head-profileTier {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.detail-head-profileTier>p {
+    font-size: 16px;
+    color: #3B82F6;
+    line-height: 30px;
+}
+
+.detail-head-profileTier>.tierBadge {
+    width: 30px;
+    height: 30px;
+}
+
+.detail-head-title {
+    font-size: 24px;
+    color: #E8EAF0;
+    font-weight: 700;
+}
+
+.detail-head-image {
+    width: 600px;
+    height: 256px;
+    background-color: lightpink;
+    border-radius: 8px;
+}
+
+/*강의 소개*/
+
+.detail-intro>h6 {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.detail-intro>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+/*강의 정보*/
+
+.detail-info-head>p {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.detail-info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-info-time,
+.detail-info-diff {
+    border-bottom: 0.667px solid rgba(148, 163, 184, 0.20);
+}
+
+.detail-info-time,
+.detail-info-diff,
+.detail-info-star {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 36.5px;
+    align-items: center;
+}
+
+.detail-info-time>h6,
+.detail-info-diff>h6,
+.detail-info-star>h6 {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.detail-info-time>p,
+.detail-info-diff>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.detail-info-star-content {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.detail-info-star-content>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.detail-info-star-content>h5 {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/*커리큘럼*/
+
+.detail-curriculum-head {
+    display: flex;
+    flex-direction: row;
+    gap: 9.67px;
+    align-items: center;
+}
+
+.detail-curriculum-head>img {
+    padding-top: 4px;
+}
+
+.detail-curriculum-head>p {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.detail-curriculum-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/*수강생 후기*/
+
+.detail-review-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.detail-review-head>p {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.detail-review-head>div {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+
+.detail-review-head>div:hover {
+    cursor: pointer;
+}
+
+.detail-review-head>div>p {
+    color: #3B82F6;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.detail-review-head>div>img {
+    padding-top: 2px;
+}
+
+.detail-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }

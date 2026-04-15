@@ -1,30 +1,27 @@
 import React from 'react'
+import "./LectureReviewItem.css"
 import emptyStar from '../../assets/emptyStar.svg'
 
-function MainReviewCard({ image, reviewer, date, star, content }) {
+function LectureReviewItem({ name, content, star }) {
     const stars = [false, false, false, false, false];
     for (let i = 0; i < Number(star); i++) {
         stars[i] = true
     }
     return (
-        <div className='reviewCard'>{/*컴포넌트*/}
-            <div className='reviewCard-top'>
-                <img src={image} alt='' className='review-profile' />
-                <div className='reviewer'>
-                    <p>{reviewer}</p>
-                    <h6>{date}</h6>
-                </div>
-                <div className='review-star'>
+        <div className='lecture-review-item'>
+            <div className='lecture-review-top'>
+                <p>{name}</p>
+                <div className='lecture-review-star'>
                     {stars.map((item) => {
                         if (item) return <img src={emptyStar} alt="" width="16" height="16" />
                     })}
                 </div>
             </div>
-            <div className='review-content'>
+            <div className='lecture-review-bottom'>
                 <p>{content}</p>
             </div>
         </div>
     )
 }
 
-export default MainReviewCard
+export default LectureReviewItem

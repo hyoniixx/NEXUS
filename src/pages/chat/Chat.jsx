@@ -3,7 +3,7 @@ import useModal from '../../hooks/useModal';
 import Chating from './Chating';
 import ChatList from './ChatList';
 import './Chat.css'
-import { createContext, useEffect, useState } from "react"
+import { createContext, useState } from "react"
 
 export const chatContext = createContext();
 
@@ -19,15 +19,17 @@ function Chat() {
         currentChatType: '',
         currentChatId: '',
         currentChatOpponent: '',
+        currentChatOpponentId: '',
         currentChatStatus: '',
-        currentChatI: ''
+        currentChatI: '',
+        currentParticipants: []
     });
 
 
 
     // 나중에 전역 콘텍스트로 받아올 사용자 자신의 uid
-    const myuid = 'awds';
-    console.log(currentChatInfo)
+    const myuid = 'asdf';
+
     return (
         <div className='c-chat'>
             <main className='c-chat-main'>

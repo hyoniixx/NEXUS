@@ -9,8 +9,7 @@ function ChatList() {
     const [chats, setChats] = useState([]);
     const [chatCategory, setChatCategory] = useState('all');
 
-    const myuid = 'awds';
-
+    const myuid = 'asdf';
 
     useEffect(() => {
         let q;
@@ -34,9 +33,9 @@ function ChatList() {
         const unsub = onSnapshot(q, (snapshot) => {
             const chatData = snapshot.docs.map((doc) => ({
                 roomId: doc.id,
-                ...doc.data(),
-                opponent: doc.data().participants.filter((p) => myuid !== p)
+                ...doc.data()
             }));
+
             setChats(chatData)
         })
 

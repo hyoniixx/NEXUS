@@ -5,19 +5,18 @@ import { useContext, useEffect, useState } from 'react'
 import { chatContext } from './Chat'
 import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../../firebase/config'
-import { type } from 'firebase/firestore/pipelines'
 import { createMessage } from '../../service/MessageService'
+import ChatButton from '../../components/chat/ChatButton'
 
 function Chating() {
-    const myuid = 'awds';
+    const myuid = 'asdf';
 
     const { currentChatInfo } = useContext(chatContext);
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [loading, setLoading] = useState(false);
 
-
-
+    //전체 메시지 중 roomId가 일치하는 메시지만 받아오는 함수
     useEffect(() => {
         const q = query(
             collection(db, 'messages'),
@@ -38,6 +37,7 @@ function Chating() {
     }, [currentChatInfo.currentChatId]);
 
 
+    //메시지 보내는 함수
     const handleCreateChat = async () => {
         if (!newMessage.trim()) {
             return;
@@ -49,7 +49,7 @@ function Chating() {
                 type: currentChatInfo.currentChatType,
                 roomId: currentChatInfo.currentChatId,
                 fromMemberId: myuid,
-                fromMemberName: currentChatInfo.currentChatI,
+                fromMemberName: currentChatInfo.currentChatI.nickname,
                 content: newMessage
             })
         } catch (error) {
@@ -62,7 +62,8 @@ function Chating() {
     return (
         <section className='c-chat-chating-ct'>
             <article className='c-chat-chating-top'>
-                <h2>{currentChatInfo.currentChatOpponent}</h2><button>{currentChatInfo.currentChatStatus}</button>
+                <h2>{currentChatInfo.currentChatOpponent.nickname}</h2>
+                <ChatButton />
             </article>
             <article className='c-chat-chatItem-ct'>
                 {messages.map((message) => {

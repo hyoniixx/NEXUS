@@ -28,13 +28,12 @@
     border-radius: 12px 12px 0 0;
 }
 
-.c-chat-chating-top>button {
+.c-chat-chating-top button {
     display: flex;
     padding: 6.425px 18.6px 9.557px 20px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
-    background: #EF4444;
     color: #FFF;
     text-align: center;
     font-family: Inter;
@@ -43,6 +42,29 @@
     font-weight: 600;
     line-height: 24px;
     border: 0;
+}
+
+.c-chat-redbutton {
+    background-color: #EF4444;
+}
+
+.c-chat-bluebutton {
+    background-color: #3B82F6;
+}
+
+.c-chat-purplebutton {
+    background-color: #8B5CF6;
+}
+
+.c-chat-blackbutton {
+    background-color: #1E293B;
+    color: #94A3B8 !important;
+}
+
+
+.c-chat-chating-top div {
+    display: flex;
+    gap: 14px;
 }
 
 .c-chat-chating-bottom {

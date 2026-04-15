@@ -2,22 +2,24 @@ import React, { useContext } from 'react'
 import './ChatRoom.css'
 import { chatContext } from '../../pages/chat/Chat';
 //채팅방 왼쪽에있는 방 하나하나
-function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, unreadCount, opponent, createdAt, status }) {
+function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants }) {
     const { setCurrentChatInfo } = useContext(chatContext);
-    const opponentInfo = opponent[0];
-
-    const myuid = 'awds';
+    const myuid = 'asdf';
+    const keys = Object.keys(participantInfo);
+    const opponent = keys.find(k => k !== myuid)
 
     return (
         <div className='c-chatroom-ct' onClick={() => setCurrentChatInfo({
             currentChatType: type,
             currentChatId: roomId,
-            currentChatOpponent: participantInfo[opponentInfo].nickname,
+            currentChatOpponent: participantInfo[opponent],
+            currentChatOpponentId: opponent,
             currentChatStatus: status,
-            currentChatI: participantInfo[myuid].nickname
+            currentChatI: participantInfo[myuid],
+            currentParticipants: participants
         })}>
             <div className='c-chatroom-unread'>{unreadCount[myuid]}</div>
-            <p className='c-chatroom-name'>{participantInfo[opponentInfo].nickname}</p>
+            <p className='c-chatroom-name'>{participantInfo[opponent].nickname}</p>
             <p className='c-chatroom-content'>{lastMessage || '대화가 없습니다.'}</p>
             <p className='c-chatroom-date'>{lastMessageAt || createdAt.toDate().toLocaleString()}</p>
         </div>

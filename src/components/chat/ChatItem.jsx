@@ -9,7 +9,7 @@ function ChatItem({
     isRead
 }) {
 
-    const myuid = 'awds';
+    const myuid = 'asdf';
     return (
         <div className={fromMemberId === myuid ? 'c-chat-blue' : 'c-chat-black'}>
             <p className='c-chat-text'>{content}</p>

@@ -11,9 +11,9 @@ function ChatItem({
 
     const myuid = 'asdf';
     return (
-        <div className={fromMemberId === myuid ? 'c-chat-blue' : 'c-chat-black'}>
+        <div className={fromMemberId === 'admin' ? 'c-chat-admin' : (fromMemberId === myuid ? 'c-chat-blue' : 'c-chat-black')}>
             <p className='c-chat-text'>{content}</p>
-            <p className='c-chat-date'>{createdAt?.toDate().toLocaleString().substr(5, 17) || 0}</p>
+            {fromMemberId !== 'admin' && <p className='c-chat-date'>{createdAt?.toDate().toLocaleString().substr(5, 17) || 0}</p>}
         </div>
     )
 }

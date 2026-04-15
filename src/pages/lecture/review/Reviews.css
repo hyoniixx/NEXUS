@@ -1,0 +1,20 @@
+.review-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-left: 276.64px;
+    padding-right: 276.64px;
+    margin-top: 30px;
+    margin-bottom: 32px;
+}
+
+.review-back {
+    display: flex;
+    flex-direction: row;
+}
+
+.review-back>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 500;
+}

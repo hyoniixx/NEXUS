@@ -1,5 +1,3 @@
-import Modal from '../../components/common/Modal';
-import useModal from '../../hooks/useModal';
 import Chating from './Chating';
 import ChatList from './ChatList';
 import './Chat.css'
@@ -8,13 +6,6 @@ import { createContext, useState } from "react"
 export const chatContext = createContext();
 
 function Chat() {
-
-    const handleConfirm = () => {
-        console.log("확인");
-    };
-
-    const { openModal, closeModal, activeModal, isModal } = useModal(handleConfirm);
-
     const [currentChatInfo, setCurrentChatInfo] = useState({
         currentChatType: '',
         currentChatId: '',
@@ -41,14 +32,7 @@ function Chat() {
                     </chatContext.Provider>
                 </section>
             </main>
-            <Modal
-                isModal={isModal}
-                closeModal={closeModal}
-                activeModal={activeModal}
-                title='듀오 거절'
-                content={`안녕하세요\n안녕히계세요`}
-                type='one'
-            />
+
         </div>
     )
 }

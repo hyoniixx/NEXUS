@@ -78,11 +78,12 @@
 .main-myInfoCards {
     display: flex;
     flex-direction: row;
-    gap: 16px
+    gap: 16px;
+    flex: 1;
 }
 
 .main-myInfo-card {
-    width: 194px;
+    flex: 1;
     height: 165px;
     /* ❕ 156 → 165 (피그마 스펙 165.37px) */
     border-radius: 12px;

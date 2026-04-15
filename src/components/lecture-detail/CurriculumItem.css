@@ -1,0 +1,29 @@
+.detail-curriculum-item {
+    padding: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.50);
+}
+
+.index {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 22369600px;
+    background: #3B82F6;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.content {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+}

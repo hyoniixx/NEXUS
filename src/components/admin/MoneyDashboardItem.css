@@ -1,0 +1,26 @@
+.money-dashboard-item {
+    display: flex;
+    width: 299.998px;
+    height: 129.378px;
+    padding: 24.695px 24.695px 0.701px 24.695px;
+    flex-direction: column;
+    gap: 7.994px;
+    border-radius: 12px;
+}
+
+.money-dashboard-item-header {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+}
+
+.money-dashboard-item-header>div {
+    display: flex;
+    width: 39.994px;
+    height: 39.994px;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}

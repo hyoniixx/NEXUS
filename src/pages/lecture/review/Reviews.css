@@ -1,0 +1,241 @@
+/*전체 레이아웃*/
+.review-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-left: 276.64px;
+    padding-right: 276.64px;
+    margin-top: 30px;
+    margin-bottom: 32px;
+}
+
+/*강의 상세보기로 돌아가기*/
+.review-back {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.review-back>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/*
+수강생후기
+"강의 제목"
+*/
+
+.review-head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-head>h2 {
+    color: #E8EAF0;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.review-head>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/*
+리뷰 대시보드
+*/
+.review-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    border-radius: 12px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    height: 185.551px;
+    padding: 24.792px;
+}
+
+/*대시보드 왼쪽*/
+.review-dashboard-total {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.review-dashboard-total>h2 {
+    color: #E8EAF0;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.review-dashboard-total-star {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+
+.review-dashboard-total>p {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* 대시보드 오른쪽 */
+.review-dashboard-star {
+    display: grid;
+    grid-template-rows: repeat(5, 1fr);
+}
+
+
+/*
+필터
+*/
+
+.review-filter {
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    gap: 12px;
+    align-items: center;
+}
+
+.review-filter-header>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.review-filter>select {
+    border-radius: 8px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    width: 153.675px;
+    height: 40.637px;
+    padding: 10px;
+    color: white;
+}
+
+.review-filter-my {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    height: 40.637px;
+    align-items: center;
+    border-radius: 8px;
+    border: 0.795px solid #3B82F6;
+    background: #111827;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.review-filter-my>p {
+    color: #3B82F6;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.review-filter-write {
+    display: flex;
+    gap: 12px;
+    flex-direction: row;
+    width: 125.577px;
+    height: 39.966px;
+    align-items: center;
+    border-radius: 8px;
+    background: #3B82F6;
+    padding-left: 16px;
+    padding-right: 16px;
+    border: 0.795px solid #3B82F6;
+}
+
+.review-filter-write>p {
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.review-filter-page {
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.review-filter-page>p {
+    color: #94A3B8;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+/*
+리뷰 리스트
+*/
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+/*
+페이지 이동
+*/
+
+.review-page {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.review-page-button {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-page-button>p {
+    color: #E8EAF0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.review-page-button-selected {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    background: #3B82F6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-page-button-selected>p {
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.review-page-button-selected:hover,
+.review-page-button:hover {
+    cursor: pointer;
+}

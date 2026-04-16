@@ -1,0 +1,56 @@
+.review-page-list-items {
+    width: 864px;
+    padding: 24.79px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+}
+
+.review-page-list-item-header {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.review-page-list-item-profile {
+    width: 40px;
+    height: 40px;
+}
+
+.review-page-list-item-star {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: auto;
+}
+
+.review-page-list-item-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.review-page-list-item-middle>h6 {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.review-page-list-item-middle>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.review-page-list-item-content p {
+    word-break: break-word;
+    line-height: 120%;
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 400;
+}

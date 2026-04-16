@@ -1,0 +1,50 @@
+.review-dashboard-star-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-dashboard-star-head {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    width: 63.988px;
+    height: 20.008px;
+    align-items: center;
+}
+
+.review-dashboard-star-head>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.review-dashboard-gauge {
+    width: 259px;
+    height: 8px;
+}
+
+.review-dashboard-gaugeExist {
+    background-color: #3B82F6;
+    align-items: center;
+    border-top-left-radius: 259px;
+    border-bottom-left-radius: 259px;
+}
+
+.review-dashboard-gaugeRemain {
+    background-color: #1E293B;
+    border-top-right-radius: 259px;
+    border-bottom-right-radius: 259px;
+}
+
+.review-dashboard-count {
+    align-items: center;
+}
+
+.review-dashboard-count>p {
+    color: #94A3B8;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 400;
+}

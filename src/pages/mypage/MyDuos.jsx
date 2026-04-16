@@ -2,14 +2,17 @@ import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
+import Modal from "../../components/common/Modal";
+import useModal from "../../hooks/useModal";
 import "./MyDuos.css";
 
 function MyDuos() {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("my"); //my, pending, completed
+  const [activeTab, setActiveTab] = useState("my"); // my, pending, done
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingDuo, setEditingDuo] = useState(null);
+  const [deletingDuo, setDeletingDuo] = useState(null);
 
   const [myDuoList, setMyDuoList] = useState([
     {
@@ -86,80 +89,110 @@ function MyDuos() {
     });
   };
 
-  const handleDelete = (duo) => {
+  const handleConfirmDelete = () => {
+    if (!deletingDuo) return;
+
     if (activeTab === "my") {
-      setMyDuoList((prev) => prev.filter((item) => item.id !== duo.id));
-      return;
+      setMyDuoList((prev) => prev.filter((item) => item.id !== deletingDuo.id));
     }
 
     if (activeTab === "done") {
-      setCompletedDuoList((prev) => prev.filter((item) => item.id !== duo.id));
+      setCompletedDuoList((prev) =>
+        prev.filter((item) => item.id !== deletingDuo.id),
+      );
     }
+
+    setDeletingDuo(null);
+  };
+
+  const deleteModal = useModal(handleConfirmDelete);
+
+  const handleDelete = (duo) => {
+    setDeletingDuo(duo);
+    deleteModal.openModal();
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeletingDuo(null);
+    deleteModal.closeModal();
   };
 
   return (
-    <div className="myduos-page">
-      <div className="myduos-inner">
-        <div className="myduos-header">
-          <div className="myduos-title-wrap">
-            <h1 className="myduos-title">내 듀오</h1>
-            <p className="myduos-subtitle">
-              등록한 듀오와 신청한 듀오를 관리하세요
-            </p>
+    <>
+      <div className="myduos-page">
+        <div className="myduos-inner">
+          <div className="myduos-header">
+            <div className="myduos-title-wrap">
+              <h1 className="myduos-title">내 듀오</h1>
+              <p className="myduos-subtitle">
+                등록한 듀오와 신청한 듀오를 관리하세요
+              </p>
+            </div>
+          </div>
+
+          <div className="myduos-tab-row">
+            <button
+              type="button"
+              className={`myduos-tab ${activeTab === "my" ? "active" : ""}`}
+              onClick={() => setActiveTab("my")}
+            >
+              내 듀오
+            </button>
+
+            <button
+              type="button"
+              className={`myduos-tab ${activeTab === "pending" ? "active" : ""}`}
+              onClick={() => setActiveTab("pending")}
+            >
+              신청 중인 듀오
+            </button>
+
+            <button
+              type="button"
+              className={`myduos-tab ${activeTab === "done" ? "active" : ""}`}
+              onClick={() => setActiveTab("done")}
+            >
+              완료된 듀오
+            </button>
+          </div>
+
+          <div className="myduos-count">전체 {currentList.length}개</div>
+
+          <div className="myduos-card-grid">
+            {currentList.map((duo) => (
+              <DuoItem
+                key={duo.id}
+                duo={duo}
+                mode={activeTab}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onChat={handleChat}
+              />
+            ))}
           </div>
         </div>
 
-        <div className="myduos-tab-row">
-          <button
-            type="button"
-            className={`myduos-tab ${activeTab === "my" ? "active" : ""}`}
-            onClick={() => setActiveTab("my")}
-          >
-            내 듀오
-          </button>
-
-          <button
-            type="button"
-            className={`myduos-tab ${activeTab === "pending" ? "active" : ""}`}
-            onClick={() => setActiveTab("pending")}
-          >
-            신청 중인 듀오
-          </button>
-
-          <button
-            type="button"
-            className={`myduos-tab ${activeTab === "done" ? "active" : ""}`}
-            onClick={() => setActiveTab("done")}
-          >
-            완료된 듀오
-          </button>
-        </div>
-
-        <div className="myduos-count">전체 {currentList.length}개</div>
-
-        <div className="myduos-card-grid">
-          {currentList.map((duo) => (
-            <DuoItem
-              key={duo.id}
-              duo={duo}
-              mode={activeTab}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onChat={handleChat}
-            />
-          ))}
-        </div>
+        {isEditModalOpen && editingDuo && (
+          <CreateDuoModal
+            mode="edit"
+            initialData={editingDuo}
+            onClose={handleCloseEditModal}
+            onCreate={handleUpdateDuo}
+          />
+        )}
       </div>
 
-      {isEditModalOpen && editingDuo && (
-        <CreateDuoModal
-          mode="edit"
-          initialData={editingDuo}
-          onClose={handleCloseEditModal}
-          onCreate={handleUpdateDuo}
+      <div className="myduos-delete-modal-red">
+        <Modal
+          isModal={deleteModal.isModal}
+          closeModal={handleCloseDeleteModal}
+          activeModal={deleteModal.activeModal}
+          title="듀오 삭제"
+          content={`정말 이 듀오를 삭제하시겠습니까?\n삭제 후에는 되돌릴 수 없습니다.`}
+          type="two"
         />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 

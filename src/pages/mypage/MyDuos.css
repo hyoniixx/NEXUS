@@ -96,3 +96,7 @@
   gap: 24px;
   align-items: start;
 }
+
+.myduos-delete-modal-red .c-modal-btn-yes {
+  background: #ef4444;
+}

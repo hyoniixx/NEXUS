@@ -1,18 +1,19 @@
 import React, { useMemo, useState } from "react";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
+import Modal from "../../components/common/Modal";
+import useModal from "../../hooks/useModal";
 import duoChatIcon from "../../assets/duochat.png";
 import "./Duo.css";
 
 function Duo() {
-  // ✅ 지금은 테스트용
-  // 나중에 Firebase auth 연결하면 여기만 currentUser role로 교체
-  const [role] = useState("user"); //user||admin
+  const [role] = useState("user"); // user || admin
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState("전체 티어");
   const [selectedLine, setSelectedLine] = useState("전체 라인");
   const [openFilter, setOpenFilter] = useState("");
+  const [selectedDuo, setSelectedDuo] = useState(null);
 
   const [duoList, setDuoList] = useState([
     {
@@ -91,8 +92,6 @@ function Duo() {
   };
 
   const handleDelete = (id) => {
-    // ✅ 지금은 로컬 상태 삭제
-    // 나중에 Firebase 붙일 때 여기만 deleteDoc 등으로 교체
     setDuoList((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -110,129 +109,159 @@ function Duo() {
     setOpenFilter("");
   };
 
+  const handleConfirmApply = () => {
+    if (!selectedDuo) return;
+    console.log("듀오 신청 실행:", selectedDuo);
+    setSelectedDuo(null);
+  };
+
+  const applyDuoModal = useModal(handleConfirmApply);
+
+  const handleOpenApplyModal = (duo) => {
+    setSelectedDuo(duo);
+    applyDuoModal.openModal();
+  };
+
   return (
-    <div className="duo-page">
-      <div className="duo-page-inner">
-        <div
-          className={`duo-top-section ${isAdmin ? "duo-top-section-admin" : ""}`}
-        >
-          <div className="duo-title-wrap">
-            <h1 className="duo-title">듀오 매칭</h1>
-            <p className="duo-subtitle">함께 게임할 듀오 파트너를 찾아보세요</p>
+    <>
+      <div className="duo-page">
+        <div className="duo-page-inner">
+          <div
+            className={`duo-top-section ${isAdmin ? "duo-top-section-admin" : ""}`}
+          >
+            <div className="duo-title-wrap">
+              <h1 className="duo-title">듀오 매칭</h1>
+              <p className="duo-subtitle">
+                함께 게임할 듀오 파트너를 찾아보세요
+              </p>
+            </div>
+
+            {!isAdmin && (
+              <div className="duo-action-wrap">
+                <button className="duo-chat-btn" type="button">
+                  <img src={duoChatIcon} alt="채팅" className="duo-btn-icon" />
+                  <span className="duo-btn-label">채팅</span>
+                </button>
+
+                <button
+                  className="duo-create-btn"
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <span className="duo-plus">+</span>
+                  <span className="duo-btn-label">듀오 신청 등록</span>
+                </button>
+              </div>
+            )}
           </div>
 
-          {!isAdmin && (
-            <div className="duo-action-wrap">
-              <button className="duo-chat-btn" type="button">
-                <img src={duoChatIcon} alt="채팅" className="duo-btn-icon" />
-                <span className="duo-btn-label">채팅</span>
-              </button>
-
-              <button
-                className="duo-create-btn"
-                type="button"
-                onClick={() => setIsModalOpen(true)}
-              >
-                <span className="duo-plus">+</span>
-                <span className="duo-btn-label">듀오 신청 등록</span>
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="duo-filter-row">
-          <div className="duo-filters">
-            <div className="duo-filter-box">
-              <button
-                type="button"
-                className="duo-filter-trigger"
-                onClick={() => handleToggleFilter("tier")}
-              >
-                <span>{selectedTier}</span>
-                <span
-                  className={`duo-filter-arrow ${
-                    openFilter === "tier" ? "open" : ""
-                  }`}
+          <div className="duo-filter-row">
+            <div className="duo-filters">
+              <div className="duo-filter-box">
+                <button
+                  type="button"
+                  className="duo-filter-trigger"
+                  onClick={() => handleToggleFilter("tier")}
                 >
-                  ▾
-                </span>
-              </button>
+                  <span>{selectedTier}</span>
+                  <span
+                    className={`duo-filter-arrow ${
+                      openFilter === "tier" ? "open" : ""
+                    }`}
+                  >
+                    ▾
+                  </span>
+                </button>
 
-              {openFilter === "tier" && (
-                <div className="duo-filter-menu">
-                  {tierOptions.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={`duo-filter-item ${
-                        selectedTier === option ? "active" : ""
-                      }`}
-                      onClick={() => handleSelectTier(option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                {openFilter === "tier" && (
+                  <div className="duo-filter-menu">
+                    {tierOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className={`duo-filter-item ${
+                          selectedTier === option ? "active" : ""
+                        }`}
+                        onClick={() => handleSelectTier(option)}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className="duo-filter-box">
-              <button
-                type="button"
-                className="duo-filter-trigger"
-                onClick={() => handleToggleFilter("line")}
-              >
-                <span>{selectedLine}</span>
-                <span
-                  className={`duo-filter-arrow ${
-                    openFilter === "line" ? "open" : ""
-                  }`}
+              <div className="duo-filter-box">
+                <button
+                  type="button"
+                  className="duo-filter-trigger"
+                  onClick={() => handleToggleFilter("line")}
                 >
-                  ▾
-                </span>
-              </button>
+                  <span>{selectedLine}</span>
+                  <span
+                    className={`duo-filter-arrow ${
+                      openFilter === "line" ? "open" : ""
+                    }`}
+                  >
+                    ▾
+                  </span>
+                </button>
 
-              {openFilter === "line" && (
-                <div className="duo-filter-menu">
-                  {lineOptions.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={`duo-filter-item ${
-                        selectedLine === option ? "active" : ""
-                      }`}
-                      onClick={() => handleSelectLine(option)}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
+                {openFilter === "line" && (
+                  <div className="duo-filter-menu">
+                    {lineOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className={`duo-filter-item ${
+                          selectedLine === option ? "active" : ""
+                        }`}
+                        onClick={() => handleSelectLine(option)}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+
+            <div className="duo-count">전체 {filteredList.length}개</div>
           </div>
 
-          <div className="duo-count">전체 {filteredList.length}개</div>
+          <div className="duo-card-grid">
+            {filteredList.map((duo) => (
+              <DuoItem
+                key={duo.id}
+                duo={duo}
+                mode={isAdmin ? "admin" : "default"}
+                onDelete={() => handleDelete(duo.id)}
+                onApply={handleOpenApplyModal}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="duo-card-grid">
-          {filteredList.map((duo) => (
-            <DuoItem
-              key={duo.id}
-              duo={duo}
-              mode={isAdmin ? "admin" : "default"}
-              onDelete={() => handleDelete(duo.id)}
-            />
-          ))}
-        </div>
+        {!isAdmin && isModalOpen && (
+          <CreateDuoModal
+            mode="create"
+            onClose={() => setIsModalOpen(false)}
+            onCreate={handleCreateDuo}
+          />
+        )}
       </div>
 
-      {!isAdmin && isModalOpen && (
-        <CreateDuoModal
-          onClose={() => setIsModalOpen(false)}
-          onCreate={handleCreateDuo}
+      <div className="duo-modal-blue">
+        <Modal
+          isModal={applyDuoModal.isModal}
+          closeModal={applyDuoModal.closeModal}
+          activeModal={applyDuoModal.activeModal}
+          title="듀오 신청"
+          content={`${selectedDuo?.nickname || ""}님에게 듀오를 신청하시겠습니까?`}
+          type="two"
         />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 

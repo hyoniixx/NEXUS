@@ -206,3 +206,7 @@
   gap: 24px;
   align-items: start;
 }
+
+.duo-modal-blue .c-modal-btn-yes {
+  background: #3b82f6;
+}

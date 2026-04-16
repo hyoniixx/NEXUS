@@ -16,9 +16,11 @@ function Chating() {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [loading, setLoading] = useState(false);
-
+    const [copyCurrentChatUnReadOpponent, setCopyCurrentChatUnReadOpponent] = useState(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId])
     //전체 메시지 중 roomId가 일치하는 메시지만 받아오는 함수
     useEffect(() => {
+        setCopyCurrentChatUnReadOpponent(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId]);
+
         const q = query(
             collection(db, 'messages'),
             where('roomId', '==', currentChatInfo.currentChatId),
@@ -31,18 +33,19 @@ function Chating() {
                 ...doc.data()
             }));
             setMessages(MessageData);
-            console.log(messages)
         })
-        //누른 채팅 읽음 처리
+
+        //확인한 채팅 읽음 처리
         if (currentChatInfo.currentChatId) {
             updateChat(currentChatInfo.currentChatId, {
                 [`unreadCount.${myuid}`]: 0
             })
         }
 
-
         return () => unsub();
     }, [currentChatInfo.currentChatId]);
+
+
 
 
     //메시지 보내는 함수
@@ -61,14 +64,17 @@ function Chating() {
                 content: newMessage
             })
 
+            setCopyCurrentChatUnReadOpponent(copyCurrentChatUnReadOpponent + 1);
+            console.log('!!', copyCurrentChatUnReadOpponent);
             updateChat(currentChatInfo.currentChatId, {
                 lastMessage: newMessage,
                 lastMessageAt: serverTimestamp(),
-                [`unreadCount.${currentChatInfo.currentChatOpponentId}`]: currentChatInfo.currentUnreadCount + 1
+                [`unreadCount.${currentChatInfo.currentChatOpponentId}`]: copyCurrentChatUnReadOpponent
             })
             setNewMessage('');
         } catch (error) {
             console.log('메시지 전송 실패')
+            console.log(error)
         } finally {
             setLoading(false);
         }

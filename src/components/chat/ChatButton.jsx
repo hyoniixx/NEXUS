@@ -9,8 +9,6 @@ import ReviewDuo from '../common/ReviewDuoModal'
 
 
 
-
-
 function ChatButton() {
     const { currentChatInfo } = useContext(chatContext);
     const {
@@ -24,7 +22,6 @@ function ChatButton() {
 
     const [copyCurrentParticipants, setCopyCurrentParticipants] = useState(currentParticipants)
     const [copyCurrentChatStatus, setCopyCurrentChatStatus] = useState(currentChatStatus)
-    console.log('1', copyCurrentParticipants, copyCurrentChatStatus)
     const [update, dispatch] = useReducer(setUpdataData, {
         updateData: {
             status: currentChatStatus,
@@ -41,13 +38,9 @@ function ChatButton() {
         if (update.sendMessage === '') {
             return;
         }
-        console.log('실행')
         //수정된 채팅 정보 업데이트 
         updateChat(currentChatInfo.currentChatId, update.updateData);
-        console.log('ddddd', update.updateData)
-        console.log('2', { ...copyCurrentChatStatus, ...update.updateData.status })
         setCopyCurrentChatStatus({ ...copyCurrentChatStatus, ...update.updateData.status });
-        console.log('3', copyCurrentChatStatus)
 
         //안내 메세지 보내주는 함수
         createMessage({
@@ -64,7 +57,16 @@ function ChatButton() {
     useEffect(() => {
         setCopyCurrentParticipants(currentParticipants)
         setCopyCurrentChatStatus(currentChatStatus)
-        console.log(copyCurrentChatStatus, copyCurrentParticipants)
+        dispatch({
+            type: 'INIT',
+            payload: {
+                myuid: myuid,
+                myNickname: myNickname,
+                participants: currentParticipants,
+                opponentId: currentChatOpponentId,
+                chatStatus: currentChatStatus
+            }
+        })
     }, [currentChatId])
 
     const chatStatus = () => {
@@ -132,7 +134,6 @@ function ChatButton() {
     }
 
     const btn = useMemo(() => {
-        console.log('4', copyCurrentChatStatus);
         return chatStatus();
     }, [copyCurrentChatStatus])
 
@@ -172,7 +173,7 @@ function ChatButton() {
             </>) : (
                 <button className={`c-chat-${btn.color}button`} onClick={() => handleUpdateChat(btn.clickEvent)}>{btn.text}</button>
             )}
-            <ReviewDuo />
+            {/* <ReviewDuo /> */}
         </div>
     )
 }

@@ -1,12 +1,24 @@
 function setUpdataData(state, action) {
     switch (action.type) {
+        case 'INIT':
+            return {
+                ...state,
+                updateData: {
+                    status: action.payload.chatStatus,
+                    participants: action.payload.participants
+                },
+                sendMessage: ''
+            }
         case 'CANCEL_DUO':
+            console.log('//////', action.payload.opponentId);
+            console.log('????????', state.updateData.status[action.payload.opponentId])
             return {
                 ...state,
                 updateData: {
                     status: {
                         [`${action.payload.myuid}`]: '취소',
                         [`${action.payload.opponentId}`]: state.updateData.status[action.payload.opponentId],
+
                     },
                     participants: action.payload.participants.find(p => p !== action.payload.myuid)
                 },
@@ -19,6 +31,7 @@ function setUpdataData(state, action) {
                     status: {
                         [`${action.payload.myuid}`]: '취소',
                         [`${action.payload.opponentId}`]: state.updateData.status[action.payload.opponentId],
+
                     },
                     participants: action.payload.participants.find(p => p !== action.payload.myuid)
                 },

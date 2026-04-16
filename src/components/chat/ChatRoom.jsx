@@ -19,10 +19,13 @@ function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, u
             currentParticipants: participants,
             currentUnreadCount: unreadCount
         })}>
+
             {!!unreadCount[myuid] && (<div className='c-chatroom-unread'>{unreadCount[myuid]}</div>)}
             <p className='c-chatroom-name'>{participantInfo[opponent].nickname}</p>
             <p className='c-chatroom-content'>{lastMessage || '대화가 없습니다.'}</p>
-            <p className='c-chatroom-date'>{lastMessageAt?.toDate().toLocaleString() || createdAt.toDate().toLocaleString()}</p>
+            <p className='c-chatroom-date'>{lastMessageAt
+                ? lastMessageAt.toDate().toLocaleString()
+                : (createdAt ? createdAt.toDate().toLocaleString() : '날짜 정보 없음')}</p>
         </div>
     )
 }

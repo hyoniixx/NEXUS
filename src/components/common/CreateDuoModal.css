@@ -169,3 +169,7 @@
   color: rgba(255, 255, 255, 0.7);
   cursor: not-allowed;
 }
+
+.create-duo-modal-confirm-blue .c-modal-btn-yes {
+  background: #3b82f6;
+}

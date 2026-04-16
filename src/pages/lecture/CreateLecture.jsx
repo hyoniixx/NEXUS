@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import LectureForm from "../../components/lecture/LectureForm";
 import Modal from "../../components/common/Modal";
 import useModal from "../../hooks/useModal";
+import "./CreateLecture.css";
 
 function CreateLecture() {
   const navigate = useNavigate();
@@ -50,14 +51,16 @@ function CreateLecture() {
         onCancel={handleCancel}
       />
 
-      <Modal
-        isModal={createLectureModal.isModal}
-        closeModal={createLectureModal.closeModal}
-        activeModal={createLectureModal.activeModal}
-        title="강의 등록"
-        content={`새로운 강의를 등록하시겠습니까?`}
-        type="two"
-      />
+      <div className="lecture-create-modal-blue">
+        <Modal
+          isModal={createLectureModal.isModal}
+          closeModal={createLectureModal.closeModal}
+          activeModal={createLectureModal.activeModal}
+          title="강의 등록"
+          content={`새로운 강의를 등록하시겠습니까?`}
+          type="two"
+        />
+      </div>
     </>
   );
 }

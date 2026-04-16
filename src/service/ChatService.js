@@ -118,6 +118,8 @@
 
 
 
+
+
 import { db } from '../firebase/config.js'
 import { addDoc, collection, deleteDoc, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 
@@ -126,7 +128,7 @@ const COLLECTION_NAME = 'chats';
 const createChat = async () => {
     try {
         const chatRef = await addDoc(collection(db, COLLECTION_NAME), {
-            type: "duo",
+            type: "lecture",
             refId: 6, //강의 또는 듀오의 고유 ID값
             participants: [
                 'asdf',
@@ -135,19 +137,19 @@ const createChat = async () => {
             participantInfo: {
                 asdf: {
                     nickname: "정프로",
-                    role: "host"
+                    role: "student"
                 },
                 fdsa: {
                     nickname: "박프로",
-                    role: "guest"
+                    role: "instructor"
                 }
             },
             createdAt: serverTimestamp(),
             lastMessage: '듀오 호스트 승인 전',
             lastMessageAt: null,
             status: {
-                asdf: '전',
-                fdsa: '전'
+                asdf: '중',
+                fdsa: '중'
             },
             unreadCount: {
                 asdf: 1,
@@ -178,12 +180,12 @@ export const updateChat = async (roomId, updateData) => {
 }
 
 
-// const deleteChat = async (roomId) => {
-//     try {
-//         await deleteDoc(doc(db, COLLECTION_NAME, roomId))
-//         console.log('채팅이 삭제되었습니다.')
-//     } catch (error) {
-//         console.log(e)
-//     }
-// }
+export const deleteChat = async (roomId) => {
+    try {
+        await deleteDoc(doc(db, COLLECTION_NAME, roomId))
+        console.log('채팅이 삭제되었습니다.')
+    } catch (error) {
+        console.log(error)
+    }
+}
 

@@ -14,6 +14,12 @@
     align-self: flex-start;
 }
 
+.c-chat-admin {
+    width: 100%;
+    text-align: center;
+}
+
+
 .c-chat-text {
     margin-bottom: 4px;
     color: #FFF;
@@ -24,6 +30,7 @@
     line-height: 20px;
     /* 142.857% */
 }
+
 
 .c-chat-date {
     color: rgba(255, 255, 255, 0.70);

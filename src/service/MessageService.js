@@ -9,7 +9,7 @@
 // }
 
 
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/config.js";
 
 const COLLECTION_NAME = 'messages';
@@ -25,6 +25,14 @@ export const createMessage = async (newMessage) => {
     } catch (error) {
         console.log(error);
         throw error
+    }
+}
+
+export const deleteMessage = async (roomId) => {
+    try {
+        await deleteDoc(doc(db, COLLECTION_NAME, roomId))
+    } catch (error) {
+        console.log(error);
     }
 }
 

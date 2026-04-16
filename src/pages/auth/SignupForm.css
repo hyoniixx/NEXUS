@@ -1,0 +1,87 @@
+.a-signup-form-role-btn {
+    display: flex;
+    gap: 15.99px;
+
+}
+
+.a-signup-form-role-btn>button {
+    width: 100%;
+    height: 81.56px;
+    flex-direction: column;
+    gap: 5.97px;
+    border-radius: 8px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background: #0A0E27;
+}
+
+#student>h4,
+#instructor>h4 {
+    color: #E8EAF0;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    /* 150% */
+}
+
+#student>p,
+#instructor>p {
+    color: #94A3B8;
+    text-align: center;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    /* 142.857% */
+}
+
+.a-active-role-btn {
+    border: 0.795px solid #3B82F6 !important;
+    background: rgba(59, 130, 246, 0.10) !important;
+}
+
+.a-signup-profileimg-ct {
+    display: flex;
+    gap: 15.99px;
+    align-items: center;
+}
+
+.a-signup-profileimg-ct>label {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.a-signup-profileimg-div {
+    display: flex;
+    width: 95.988px;
+    height: 95.988px;
+    padding: 0 30.409px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 26687200px;
+    border: 1.591px dashed rgba(148, 163, 184, 0.20);
+    background: #1E293B;
+}
+
+.a-signup-btn {
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3B82F6 0%, #4580F6 7.14%, #4D7DF6 14.29%, #557BF6 21.43%, #5B78F6 28.57%, #6176F6 35.71%, #6773F6 42.86%, #6C71F6 50%, #716EF6 57.14%, #766BF6 64.29%, #7B68F6 71.43%, #7F65F6 78.57%, #8362F6 85.71%, #875FF6 92.86%, #8B5CF6 100%);
+    display: flex;
+    padding: 9.788px 0 14.181px 0;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    border: 0;
+    /* 150% */
+}

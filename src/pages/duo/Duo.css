@@ -1,0 +1,208 @@
+.duo-page {
+  width: 100%;
+  min-height: calc(100vh - 65px);
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 96px 0 80px;
+}
+
+.duo-page-inner {
+  width: 1248px;
+  max-width: 1248px;
+}
+
+.duo-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.duo-top-section-admin {
+  justify-content: flex-start;
+}
+
+.duo-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.duo-title {
+  margin: 0;
+  color: #e8eaf0;
+  font-family: Inter, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.duo-subtitle {
+  margin: 0;
+  color: #94a3b8;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.duo-action-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.duo-chat-btn,
+.duo-create-btn {
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.duo-chat-btn {
+  min-width: 108px;
+  padding: 0 20px;
+  background: #8b5cf6;
+}
+
+.duo-create-btn {
+  min-width: 183px;
+  padding: 0 20px;
+  background: #3b82f6;
+}
+
+.duo-btn-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+
+.duo-btn-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.duo-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 24px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.duo-filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.duo-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.duo-filter-box {
+  position: relative;
+}
+
+.duo-filter-trigger {
+  width: 156px;
+  height: 40px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  background: #1a1f3a;
+  color: #e8eaf0;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.duo-filter-arrow {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.duo-filter-arrow.open {
+  transform: rotate(180deg);
+}
+
+.duo-filter-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 156px;
+  background: #1a1f3a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 30;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.duo-filter-item {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: #e8eaf0;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.duo-filter-item:hover,
+.duo-filter-item.active {
+  background: rgba(88, 119, 216, 0.95);
+}
+
+.duo-count {
+  padding-top: 10px;
+  color: #94a3b8;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.duo-card-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 400px);
+  gap: 24px;
+  align-items: start;
+}

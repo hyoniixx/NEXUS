@@ -1,5 +1,5 @@
 .a-signup-ct {
-    width: 447.991px;
+    width: 671.989px;
     flex-shrink: 0;
     margin: 0 auto;
 }
@@ -24,4 +24,40 @@
     font-weight: 400;
     line-height: 24px;
     /* 150% */
+}
+
+.a-signup-form-ct {
+    display: flex;
+    flex-direction: column;
+}
+
+.a-signup-form-ct>label {
+    color: #E8EAF0;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 150% */
+}
+
+.a-signup-input,
+.a-signup-password-input {
+    display: flex;
+    height: 49.419px;
+    padding: 12px 16px;
+    align-items: center;
+    border-radius: 8px;
+    border: 0.716px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    outline: none;
+    color: #FFF;
+}
+
+.a-signup-password-input>input {
+    outline: none;
+    border: 0;
+    flex: 1;
+    background: #1A1F3A;
+    color: #FFF;
 }

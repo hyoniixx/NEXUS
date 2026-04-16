@@ -10,28 +10,28 @@ function SignupLecture() {
             <article>
                 <div>
                     <label>롤 게임 닉네임</label>
-                    <input />
+                    <input className='a-signup-input' />
                     <p></p>
                 </div>
                 <div>
                     <label>태그라인</label>
-                    <input />
+                    <input className='a-signup-input' />
                     <p></p>
                 </div>
             </article>
-            <button>티어 인증</button>
-            <label>티어 인증 이미지</label>
-            <input />
+            <button className='a-signup-btn'>티어 인증</button>
+            <label >티어 인증 이미지</label>
+            <input hidden />
             <div>
                 <img />
             </div>
-            <label>이미지 업로드</label>
+            <label className='a-signup-input'>이미지 업로드</label>
             <label>프로/스트리머 인증(선택)</label>
-            <input />
+            <input hidden />
             <div>
                 <img />
             </div>
-            <label>인증 자료 업로드</label>
+            <label className='a-signup-input'>인증 자료 업로드</label>
 
         </>
     )

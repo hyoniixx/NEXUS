@@ -1,22 +1,50 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import logo from '../assets/NexusHeaderLogo.svg'
+import logoutBtn from '../assets/logout.svg'
+import myPage from '../assets/myPage.svg'
+import heart from '../assets/like_filled_badge.png'
 import './Header.css'
+import { useContext } from 'react'
+import { userContext } from '../App'
+import { logout } from '../service/AuthService'
+
 
 function Header() {
+    const { userData, dispatch } = useContext(userContext);
+
+    const navigate = useNavigate();
+    console.log('header', userData)
+
+    const handleLogout = async () => {
+        await logout();
+        dispatch({ type: 'INIT_USER_DATA' })
+        navigate('/');
+    }
+
     return (
         <header className='l-header'>
-            <img src={logo} />
+            <img src={logo} onClick={() => navigate(`/${userData.role}`)} />
             <nav className='l-header-links '>
                 <NavLink to="/lecture-list">강의목록</NavLink>
-                <NavLink to="/create-lecture">강의등록</NavLink>
+                {userData.role === 'instructor' &&
+                    <NavLink to="/create-lecture">강의등록</NavLink>}
                 <NavLink to="/duo">듀오</NavLink>
-                <NavLink to="/gacha">뽑기</NavLink>
+                {userData.userName &&
+                    <NavLink to="/gacha">뽑기</NavLink>}
             </nav>
-            <div className='l-header-btn'>
-                <button className='l-header-lg-btn'>로그인</button>
-                <button className='l-header-su-btn'>회원가입</button>
-            </div>
-        </header>
+            {userData.userName ? (
+                <div className='l-header-auth'>
+                    <button className='l-header-heart-btn' onClick={() => navigate('/wish')}><img src={heart} /></button>
+                    <button className='l-header-mypage-btn' onClick={() => navigate('/mypage')}><img src={myPage} /><p>{userData.userName}</p></button>
+                    <button className='l-header-logout-btn' onClick={handleLogout}><img src={logoutBtn} /></button>
+                </div>
+            ) : (<div className='l-header-unAuth'>
+                <button className='l-header-lg-btn' onClick={() => navigate('/login')}>로그인</button>
+                <button className='l-header-su-btn' onClick={() => navigate('/signup')}>회원가입</button>
+            </div >)
+            }
+
+        </header >
     )
 }
 

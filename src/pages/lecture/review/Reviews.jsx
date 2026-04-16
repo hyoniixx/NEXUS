@@ -7,6 +7,7 @@ import ReviewDashboardStar from '../../../components/review/ReviewDashboardStar'
 import people from '../../../assets/people.svg'
 import write from '../../../assets/writeIcon.svg'
 import right from '../../../assets/rightIcon.svg'
+import ReviewItem from '../../../components/review/ReviewItem'
 
 function Reviews() {
     const { id } = useParams();
@@ -54,7 +55,7 @@ function Reviews() {
         stars[i] = true
     }
 
-    //현재 선택된 페이지를 변경하기
+    //현재 선택된 페이지를 변경하기 : 페이지 이동 버튼에 이벤트 걸려있음
     const handlePageNow = (number) => {
         setPageNow(number);
     };
@@ -107,11 +108,11 @@ function Reviews() {
                     <p>총 {lecture.star.total}개의 후기</p>
                 </div>
                 <div className='review-dashboard-star'>
-                    <ReviewDashboardStar star='5' now={lecture.star['5']} all={lecture.star.total * 0.04} />
-                    <ReviewDashboardStar star='4' now={lecture.star['4']} all={lecture.star.total * 0.04} />
-                    <ReviewDashboardStar star='3' now={lecture.star['3']} all={lecture.star.total * 0.04} />
-                    <ReviewDashboardStar star='2' now={lecture.star['2']} all={lecture.star.total * 0.04} />
-                    <ReviewDashboardStar star='1' now={lecture.star['1']} all={lecture.star.total * 0.04} />
+                    <ReviewDashboardStar star='5' now={lecture.star['5']} all={lecture.star.total * 0.5} />
+                    <ReviewDashboardStar star='4' now={lecture.star['4']} all={lecture.star.total * 0.5} />
+                    <ReviewDashboardStar star='3' now={lecture.star['3']} all={lecture.star.total * 0.5} />
+                    <ReviewDashboardStar star='2' now={lecture.star['2']} all={lecture.star.total * 0.5} />
+                    <ReviewDashboardStar star='1' now={lecture.star['1']} all={lecture.star.total * 0.5} />
                 </div>
             </div>
             <div className='review-filter'>
@@ -125,8 +126,12 @@ function Reviews() {
                 <button className='review-filter-write'><img src={write} alt="" width="16" height="16" /><p>후기 작성</p></button>
                 <div className='review-filter-page'><p>{pageNow * 5 - 4}-{Math.min(pageNow * 5, lecture.star.total)}/{lecture.star.total}개</p></div>
             </div>
-            <div className='review-list'>
-
+            <div className='review-list'>{/*map((review,index)=>return <ReviewItem key='index' name={} content={} date={} star={})*/}
+                <ReviewItem key='1' name='김길동' content='정말 재밌었습니다.' date='2026.04.03' star='5' />
+                <ReviewItem key='2' name='김길동' content='정말 재밌었습니다.' date='2026.04.03' star='5' />
+                <ReviewItem key='3' name='김길동' content='정말 재밌었습니다.' date='2026.04.03' star='5' />
+                <ReviewItem key='4' name='김길동' content='정말 재밌었습니다.' date='2026.04.03' star='5' />
+                <ReviewItem key='5' name='김길동' content='정말 재밌었습니다.' date='2026.04.03' star='5' />
             </div>
             <div className='review-page'>
                 <button className='review-page-button' onClick={() => handlePageNow(pagination[0] - 5)} disabled={!canClick[0]}><img src={right} alt="" width='5px' height='10px' style={{ transform: 'scaleX(-1)' }} /></button>

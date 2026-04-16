@@ -179,6 +179,11 @@
 리뷰 리스트
 */
 
+.review-list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
 
 /*
 페이지 이동
@@ -189,6 +194,7 @@
     flex-direction: row;
     gap: 3px;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .review-page-button {

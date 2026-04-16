@@ -1,0 +1,10 @@
+.payment-list-item {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.payment-list-item-status {
+    width: 60px;
+    height: 24px;
+}

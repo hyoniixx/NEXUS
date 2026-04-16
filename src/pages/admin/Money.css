@@ -46,12 +46,61 @@
 }
 
 /*
-대시보드
-아이템 4개
+    대시보드
+    아이템 4개
 */
 
 .admin-money-dashboard {
     display: flex;
     flex-direction: row;
     gap: 16px;
+}
+
+
+/*
+    검색창
+*/
+.admin-money-search {
+    border-radius: 8px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    display: flex;
+    height: 49.379px;
+    padding: 12px 16px 12px 16px;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-money-search>input {
+    background-color: rgba(8, 5, 2, 0);
+    border: none;
+    height: 100%;
+    width: 100%;
+    color: #E8EAF0;
+}
+
+/*navBar*/
+.admin-money-navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    height: 48.678px;
+}
+
+.admin-money-navbar * {
+    display: flex;
+    width: 79.977px;
+    height: 47.977px;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-money-nav-active {
+    border-bottom: 3px solid #3B82F6;
+    color: red;
+
+}
+
+.admin-money-nav-default {
+    border-bottom: 3px solid rgba(8, 5, 2, 0);
 }

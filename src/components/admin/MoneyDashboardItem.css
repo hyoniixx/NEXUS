@@ -24,3 +24,14 @@
     align-items: center;
     border-radius: 8px;
 }
+
+.money-dashboard-item-header>p {
+    color: #94A3B8;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.money-dashboard-item-value>p {
+    font-size: 24px;
+    font-weight: 700;
+}

@@ -7,7 +7,7 @@ import "./MyDuos.css";
 function MyDuos() {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("my");
+  const [activeTab, setActiveTab] = useState("my"); //my, pending, completed
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingDuo, setEditingDuo] = useState(null);
 

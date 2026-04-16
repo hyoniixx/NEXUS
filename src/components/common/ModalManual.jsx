@@ -28,6 +28,7 @@ function ModalManual() {
                 title='듀오 거절'
                 content={`안녕하세요\n안녕히계세요`}
                 type='one'
+                color='red'
             />
             <Modal
                 isModal={modal1.isModal}
@@ -36,6 +37,7 @@ function ModalManual() {
                 title='듀오 거절1'
                 content={`안녕하세요1안녕히계세요1`}
                 type='two'
+                color='purple'
             />
 
         </div>

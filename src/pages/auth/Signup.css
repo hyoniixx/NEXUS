@@ -1,0 +1,27 @@
+.a-signup-ct {
+    width: 447.991px;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+.a-signup-top-ct>h2 {
+    color: #E8EAF0;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    /* 120% */
+}
+
+.a-signup-top-ct>p {
+    color: #94A3B8;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    /* 150% */
+}

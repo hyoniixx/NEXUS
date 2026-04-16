@@ -1,0 +1,82 @@
+.a-login-ct {
+    width: 447.991px;
+    height: 482.752px;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+.a-login-top-ct>h2 {
+    color: #E8EAF0;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    /* 120% */
+}
+
+.a-login-top-ct>p {
+    color: #94A3B8;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    /* 150% */
+}
+
+.a-login-form-ct {
+    display: flex;
+    flex-direction: column;
+}
+
+.a-login-form-ct>label {
+    color: #E8EAF0;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 150% */
+}
+
+.a-login-form-ct>button {
+    display: flex;
+    padding: 10.428px 0 13.56px 0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #3B82F6 0%, #4580F6 7.14%, #4D7DF6 14.29%, #557BF6 21.43%, #5B78F6 28.57%, #6176F6 35.71%, #6773F6 42.86%, #6C71F6 50%, #716EF6 57.14%, #766BF6 64.29%, #7B68F6 71.43%, #7F65F6 78.57%, #8362F6 85.71%, #875FF6 92.86%, #8B5CF6 100%);
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    border: 0;
+    /* 150% */
+}
+
+.a-login-email-input,
+.a-login-password-input {
+    display: flex;
+    height: 49.419px;
+    padding: 12px 16px;
+    align-items: center;
+    border-radius: 8px;
+    border: 0.716px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    outline: none;
+    color: #FFF;
+}
+
+.a-login-password-input>input {
+    outline: none;
+    border: 0;
+    flex: 1;
+    background: #1A1F3A;
+    color: #FFF;
+}

@@ -97,10 +97,69 @@
 
 .admin-money-nav-active {
     border-bottom: 3px solid #3B82F6;
-    color: red;
-
+    color: #3B82F6;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 .admin-money-nav-default {
     border-bottom: 3px solid rgba(8, 5, 2, 0);
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+
+/*페이지네이션*/
+.deposit-pagination {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.deposit-page-button {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deposit-page-button>p {
+    color: #E8EAF0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.deposit-page-button-selected {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    background: #3B82F6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deposit-page-button-selected>p {
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.deposit-page-button-selected:hover,
+.deposit-page-button:hover {
+    cursor: pointer;
 }

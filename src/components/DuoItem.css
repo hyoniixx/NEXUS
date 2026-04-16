@@ -1,0 +1,216 @@
+.duo-item-card {
+  box-sizing: border-box;
+  position: relative;
+  width: 400px;
+  height: 285px;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.duo-item-apply-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  min-width: 88px;
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #51a2ff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.duo-item-trash-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.duo-item-trash-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: block;
+}
+
+.duo-item-header {
+  height: 61px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  box-sizing: border-box;
+}
+
+.duo-item-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 52px;
+}
+
+.duo-item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg,
+      #3b82f6 0%,
+      #4580f6 7.14%,
+      #4d7df6 14.29%,
+      #557bf6 21.43%,
+      #5b78f6 28.57%,
+      #6176f6 35.71%,
+      #6773f6 42.86%,
+      #6c71f6 50%,
+      #716ef6 57.14%,
+      #766bf6 64.29%,
+      #7b68f6 71.43%,
+      #7f65f6 78.57%,
+      #8362f6 85.71%,
+      #875ff6 92.86%,
+      #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  flex-shrink: 0;
+}
+
+.duo-item-user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.duo-item-name {
+  color: #e8eaf0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.duo-item-tag {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.duo-item-info-wrap {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+}
+
+.duo-item-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.duo-item-label {
+  margin-bottom: 2px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.duo-item-badge-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.duo-item-line-badge,
+.duo-item-want-line-badge,
+.duo-item-tier-badge,
+.duo-item-want-tier-badge {
+  height: 30px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 0 14px;
+}
+
+.duo-item-line-badge {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.duo-item-want-line-badge {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.duo-item-tier-badge {
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #e8eaf0;
+}
+
+.duo-item-want-tier-badge {
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #51a2ff;
+}
+
+.duo-item-bottom {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.duo-item-intro {
+  width: 100%;
+  min-height: 40px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  color: rgba(232, 234, 240, 0.8);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.duo-item-date {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: right;
+}

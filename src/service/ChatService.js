@@ -128,7 +128,7 @@ const COLLECTION_NAME = 'chats';
 const createChat = async () => {
     try {
         const chatRef = await addDoc(collection(db, COLLECTION_NAME), {
-            type: "lecture",
+            type: "duo",
             refId: 6, //강의 또는 듀오의 고유 ID값
             participants: [
                 'asdf',
@@ -137,19 +137,19 @@ const createChat = async () => {
             participantInfo: {
                 asdf: {
                     nickname: "정프로",
-                    role: "student"
+                    role: "guest"
                 },
                 fdsa: {
                     nickname: "박프로",
-                    role: "instructor"
+                    role: "host"
                 }
             },
             createdAt: serverTimestamp(),
-            lastMessage: '듀오 호스트 승인 전',
+            lastMessage: '듀오 호스트 승인 전3',
             lastMessageAt: null,
             status: {
-                asdf: '중',
-                fdsa: '중'
+                asdf: '전',
+                fdsa: '전'
             },
             unreadCount: {
                 asdf: 1,

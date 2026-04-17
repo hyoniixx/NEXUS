@@ -162,8 +162,27 @@
     gap: 12px;
 }
 
+/*만약 뿌려질 요소가 없다면?*/
+.admin-members-nothing {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    min-height: 222px;
+    align-items: center;
+    justify-content: center;
+}
 
+.admin-members-nothing>h1 {
+    color: #E8EAF0;
+    font-size: 50px;
+    font-weight: 700;
+}
 
+.admin-members-nothing>h6 {
+    color: #94A3B8;
+    font-size: 22px;
+    font-weight: 400;
+}
 
 /*페이지네이션*/
 .members-pagination {

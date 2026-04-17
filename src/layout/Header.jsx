@@ -4,7 +4,7 @@ import logoutBtn from '../assets/logout.svg'
 import myPage from '../assets/myPage.svg'
 import heart from '../assets/like_filled_badge.png'
 import './Header.css'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { userContext } from '../App'
 import { logout } from '../service/AuthService'
 
@@ -12,8 +12,10 @@ import { logout } from '../service/AuthService'
 function Header() {
     const { userData, dispatch } = useContext(userContext);
 
+    useEffect(() => {
+        console.log(userData)
+    })
     const navigate = useNavigate();
-    console.log('header', userData)
 
     const handleLogout = async () => {
         await logout();

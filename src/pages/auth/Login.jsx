@@ -8,38 +8,11 @@ import { userContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import useModal from '../../hooks/useModal';
 import Modal from '../../components/common/Modal';
+import loginMain from '../../assets/loginMain.svg'
+import AuthTop from '../../components/auth/AuthTop';
+import setLoginInfo from '../../reducer/loginReducer';
+import { type } from 'firebase/firestore/pipelines';
 
-
-function setLoginInfo(state, action) {
-    switch (action.type) {
-        case 'CHANGE_INPUT':
-            return {
-                ...state,
-                [action.payload.id]: action.payload.value
-            }
-        case 'LODING':
-            return {
-                ...state,
-                loading: !state.loading
-            }
-        case 'ERROR':
-            return {
-                ...state,
-                errorMessage: action.payload
-            }
-        case 'INIT':
-            return {
-                email: '',
-                password: '',
-                loading: false,
-                errorMessage: '로그인 중 오류가 발생했습니다.'
-            }
-        default:
-            return {
-                ...state
-            }
-    }
-}
 
 function Login() {
     const [isVisible, setIsVisible] = useState(false);
@@ -54,14 +27,15 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const trimModal = useModal();
+    const sucesssModal = useModal();
     const errorModal = useModal();
 
 
     const handleLoginBtn = async (e) => {
         e.preventDefault();
         if (!(loginInfo.email.trim() && loginInfo.password.trim())) {
-            trimModal.openModal();
+            loginDispatch({ type: 'ERROR' })
+            errorModal.openModal();
             return;
         }
 
@@ -70,19 +44,11 @@ function Login() {
             await login(loginInfo.email, loginInfo.password)
             const userInfo = await getUser();
             dispatch({ type: 'SET_USER_DATA', payload: userInfo });
-            navigate(`/${userInfo.role}`);
+            console.log('1');
+            sucesssModal.openModal();
         } catch (error) {
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    loginDispatch({ type: 'ERROR', payload: '올바른 이메일 형식이 아닙니다.' })
-                    break;
-                case 'auth/invalid-credential':
-                    loginDispatch({ type: 'ERROR', payload: '등록된 계정이 아닙니다.' })
-                    break;
-                case 'auth/too-many-requests':
-                    loginDispatch({ type: 'ERROR', payload: '너무 많은 로그인 시도가 있었습니다. 잠시 후 다시 시도해주세요.' })
-                    break;
-            }
+            loginDispatch({ type: error.code })
+            console.log('2');
             errorModal.openModal();
         } finally {
             loginDispatch({ type: 'LOADING' })
@@ -90,13 +56,9 @@ function Login() {
     }
 
     return (
-        <div>
+        <div className='a-login-background'>
             <section className='a-login-ct'>
-                <article className='a-login-top-ct'>
-                    <img />
-                    <h2>로그인</h2>
-                    <p>NEXUS에 오신 것을 환영합니다</p>
-                </article>
+                <AuthTop type='로그인' img={loginMain} />
                 <form className='a-login-form-ct'>
                     <label htmlFor='email'>이메일</label>
                     <input
@@ -118,14 +80,14 @@ function Login() {
                     </div>
                     <button onClick={(e) => handleLoginBtn(e)}>{loginInfo.loading ? '로그인 중...' : '로그인'}</button>
                 </form>
-                <p>계정이 없으신가요? <span>회원가입</span></p>
+                <p className='a-login-question'>계정이 없으신가요? <span onClick={() => navigate('/signup')}>회원가입</span></p>
             </section>
             <Modal
-                isModal={trimModal.isModal}
-                closeModal={trimModal.closeModal}
-                activeModal={trimModal.activeModal}
+                isModal={sucesssModal.isModal}
+                closeModal={() => { sucesssModal.closeModal(); navigate(`/${userData.role}`); }}
+                activeModal={sucesssModal.activeModal}
                 title='로그인'
-                content={`값을 모두 입력해주세요`}
+                content={'로그인 성공하였습니다.'}
                 type='one'
             />
             <Modal

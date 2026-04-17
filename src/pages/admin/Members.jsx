@@ -7,8 +7,8 @@ import right from '../../assets/rightIcon.svg'
 import MemberListItem from '../../components/admin/MemberListItem'
 
 function Members() {
-    const [navSelected, setNavSelected] = useState([true, false, false, false]);
-    const [onlyBlacklist, setOnlyBlacklist] = useState(true);
+    const [navSelected, setNavSelected] = useState([true, false, false, false]); //navBar, 전체 | 수강생 | 강사 | 블랙리스트
+    const [onlyBlacklist, setOnlyBlacklist] = useState(false); //false: 블랙리스트제외 | true : 블랙리스트만 보기
     const total = 27; //전체 데이터 수
     const [pageNow, setPageNow] = useState(1); //현재 선택된 페이지
     const [pages, setPages] = useState(1); //전체 페이지수

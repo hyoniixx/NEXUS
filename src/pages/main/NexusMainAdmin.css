@@ -94,6 +94,7 @@
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    flex-shrink: 1;
     /* ❕ 추가 - 피그마는 border-box 기준, 없으면 padding이 바깥으로 더해져서 크기 틀어짐 */
 }
 

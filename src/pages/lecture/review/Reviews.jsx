@@ -17,9 +17,9 @@ function Reviews() {
         star: {
             "1": 2,
             "2": 6,
-            "3": 12,
+            "3": 6,
             "4": 10,
-            "5": 20,
+            "5": 26,
             total: 50
         }
     }
@@ -108,11 +108,11 @@ function Reviews() {
                     <p>총 {lecture.star.total}개의 후기</p>
                 </div>
                 <div className='review-dashboard-star'>
-                    <ReviewDashboardStar star='5' now={lecture.star['5']} all={lecture.star.total * 0.5} />
-                    <ReviewDashboardStar star='4' now={lecture.star['4']} all={lecture.star.total * 0.5} />
-                    <ReviewDashboardStar star='3' now={lecture.star['3']} all={lecture.star.total * 0.5} />
-                    <ReviewDashboardStar star='2' now={lecture.star['2']} all={lecture.star.total * 0.5} />
-                    <ReviewDashboardStar star='1' now={lecture.star['1']} all={lecture.star.total * 0.5} />
+                    <ReviewDashboardStar star='5' now={lecture.star['5']} all={lecture.star.total} />
+                    <ReviewDashboardStar star='4' now={lecture.star['4']} all={lecture.star.total} />
+                    <ReviewDashboardStar star='3' now={lecture.star['3']} all={lecture.star.total} />
+                    <ReviewDashboardStar star='2' now={lecture.star['2']} all={lecture.star.total} />
+                    <ReviewDashboardStar star='1' now={lecture.star['1']} all={lecture.star.total} />
                 </div>
             </div>
             <div className='review-filter'>

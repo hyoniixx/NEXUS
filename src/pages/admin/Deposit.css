@@ -1,0 +1,34 @@
+/* 입금 전체 레이아웃 */
+.deposit-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/*입금 헤더*/
+
+.deposit-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.deposit-header>h2 {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.deposit-header>p {
+    margin-left: auto;
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/*입금 내역(리스트)*/
+
+.deposit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

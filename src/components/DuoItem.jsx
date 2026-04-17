@@ -1,5 +1,7 @@
 import React from "react";
 import duoTrashIcon from "../assets/duotrash.png";
+import modifyIcon from "../assets/modify.png";
+import msgIcon from "../assets/msgicon.png";
 import "./DuoItem.css";
 
 function formatCreatedAt(createdAt) {
@@ -15,31 +17,138 @@ function formatCreatedAt(createdAt) {
   return `${month}월 ${day}일 ${hours}:${minutes}`;
 }
 
-function DuoItem({ duo, mode = "default", onDelete }) {
+function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
   const handleApplyClick = () => {
+    if (onApply) {
+      onApply(duo);
+      return;
+    }
     console.log(`${duo.nickname} 듀오 신청 클릭`);
   };
 
-  return (
-    <div className="duo-item-card">
-      {mode === "admin" ? (
+  const handleDeleteClick = () => {
+    if (onDelete) {
+      onDelete(duo);
+      return;
+    }
+    console.log(`${duo.nickname} 듀오 삭제 클릭`);
+  };
+
+  const handleEditClick = () => {
+    if (onEdit) {
+      onEdit(duo);
+      return;
+    }
+    console.log(`${duo.nickname} 듀오 수정 클릭`);
+  };
+
+  const handleChatClick = () => {
+    if (onChat) {
+      onChat(duo);
+      return;
+    }
+    console.log(`${duo.nickname} 채팅 클릭`);
+  };
+
+  const renderActionButtons = () => {
+    if (mode === "admin") {
+      return (
         <button
           type="button"
           className="duo-item-trash-btn"
-          onClick={onDelete}
+          onClick={handleDeleteClick}
           aria-label="듀오 삭제"
         >
           <img src={duoTrashIcon} alt="삭제" className="duo-item-trash-icon" />
         </button>
-      ) : (
-        <button
-          type="button"
-          className="duo-item-apply-btn"
-          onClick={handleApplyClick}
-        >
-          <span>듀오 신청</span>
-        </button>
-      )}
+      );
+    }
+
+    if (mode === "my") {
+      return (
+        <div className="duo-item-action-group">
+          <button
+            type="button"
+            className="duo-item-icon-btn"
+            onClick={handleEditClick}
+            aria-label="수정"
+          >
+            <img src={modifyIcon} alt="수정" className="duo-item-action-icon" />
+          </button>
+
+          <button
+            type="button"
+            className="duo-item-icon-btn"
+            onClick={handleDeleteClick}
+            aria-label="삭제"
+          >
+            <img
+              src={duoTrashIcon}
+              alt="삭제"
+              className="duo-item-action-icon"
+            />
+          </button>
+
+          <button
+            type="button"
+            className="duo-item-icon-btn"
+            onClick={handleChatClick}
+            aria-label="채팅"
+          >
+            <img src={msgIcon} alt="채팅" className="duo-item-action-icon" />
+          </button>
+        </div>
+      );
+    }
+
+    if (mode === "pending") {
+      return (
+        <div className="duo-item-action-group">
+          <button
+            type="button"
+            className="duo-item-icon-btn"
+            onClick={handleChatClick}
+            aria-label="채팅"
+          >
+            <img src={msgIcon} alt="채팅" className="duo-item-action-icon" />
+          </button>
+        </div>
+      );
+    }
+
+    if (mode === "done") {
+      return (
+        <div className="duo-item-action-group">
+          <button
+            type="button"
+            className="duo-item-icon-btn"
+            onClick={handleDeleteClick}
+            aria-label="삭제"
+          >
+            <img
+              src={duoTrashIcon}
+              alt="삭제"
+              className="duo-item-action-icon"
+            />
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <button
+        type="button"
+        className="duo-item-apply-btn"
+        onClick={handleApplyClick}
+      >
+        <span>듀오 신청</span>
+      </button>
+    );
+  };
+
+  return (
+    <div className="duo-item-card">
+      {renderActionButtons()}
 
       <div className="duo-item-header">
         <div className="duo-item-profile">

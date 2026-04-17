@@ -1,6 +1,6 @@
 import './Modal.css';
 
-function Modal({ isModal, closeModal, activeModal, title, content, type }) {
+function Modal({ isModal, closeModal, activeModal, title, content, type, color }) {
     if (!isModal) return null;
 
     return (
@@ -12,7 +12,7 @@ function Modal({ isModal, closeModal, activeModal, title, content, type }) {
                     <p>{content}</p>
                 </article>
                 <article className='c-modal-btn-ct'>
-                    {type === 'two' && <button onClick={activeModal} className='c-modal-btn-yes'>예</button>}
+                    {type === 'two' && <button onClick={activeModal} className={`c-modal-btn-yes-${color}`}>예</button>}
                     <button onClick={closeModal} className='c-modal-btn-no'>{type === 'one' ? '확인' : '아니오'}</button>
                 </article>
             </div>

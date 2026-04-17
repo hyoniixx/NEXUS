@@ -1,0 +1,72 @@
+.deposit-list-item {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 24.7px;
+    height: 97.4px;
+    border-radius: 12px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    align-items: center;
+}
+
+.deposit-list-item-header {
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.10);
+    height: 47.999px;
+    width: 47.999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deposit-list-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.deposit-list-item-name {
+    display: flex;
+    flex-direction: row;
+    gap: 11px;
+    align-items: center;
+}
+
+.deposit-list-item-name>h6 {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.deposit-list-item-name>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.deposit-list-item-title>p {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.deposit-list-item-detail {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    align-items: end;
+}
+
+.deposit-list-item-detail>h6 {
+    color: #3B82F6;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.deposit-list-item-detail>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}

@@ -1,0 +1,102 @@
+.myduos-page {
+  width: 100%;
+  min-height: calc(100vh - 65px);
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 96px 0 80px;
+}
+
+.myduos-inner {
+  width: 1248px;
+  max-width: 1248px;
+}
+
+.myduos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.myduos-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.myduos-title {
+  margin: 0;
+  color: #e8eaf0;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+.myduos-subtitle {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.myduos-tab-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  margin-bottom: 24px;
+}
+
+.myduos-tab {
+  position: relative;
+  height: 48px;
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.myduos-tab.active {
+  color: #3b82f6;
+}
+
+.myduos-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: #3b82f6;
+  border-radius: 999px;
+}
+
+.myduos-count {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.myduos-card-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 400px);
+  gap: 24px;
+  align-items: start;
+}
+
+.myduos-delete-modal-red .c-modal-btn-yes {
+  background: #ef4444;
+}

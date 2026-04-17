@@ -71,9 +71,18 @@
     /* 150% */
 }
 
-.c-modal-btn-yes {
+.c-modal-btn-yes-red {
     background: #EF4444;
 }
+
+.c-modal-btn-yes-blue {
+    background: #3B82F6;
+}
+
+.c-modal-btn-yes-purple {
+    background: #8B5CF6;
+}
+
 
 .c-modal-btn-no {
     background: #1E293B;

@@ -37,9 +37,11 @@ export const createUser = async (newUserInfo) => {
 
 export const getUser = async (uid = auth.currentUser.uid) => {
     const docSnapShot = await getDoc(doc(db, COLLECTION_NAME, uid))
-    console.log('!!!!!!!!!', uid);
-    console.log('????????????', docSnapShot.data());
-    return docSnapShot.data();
+    const userData = {
+        uid: uid,
+        ...docSnapShot.data()
+    }
+    return userData;
 }
 
 

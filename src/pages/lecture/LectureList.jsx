@@ -1,11 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./LectureList.css";
 import LectureItem from "../../components/lecture/LectureItem";
 import champions from "../../data/champions";
 import proBadge from "../../assets/probadge.png";
 import strmBadge from "../../assets/strmbadge.png";
+import { getLectures } from "../../service/LectureService";
+import {
+  getWishLecturesByUid,
+  toggleWishByUid,
+} from "../../service/WishService";
 
 function LectureList() {
+  const navigate = useNavigate();
+
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("latest");
   const [level, setLevel] = useState("all");
@@ -16,136 +24,143 @@ function LectureList() {
   const [isChampionOpen, setIsChampionOpen] = useState(false);
   const [championKeyword, setChampionKeyword] = useState("");
 
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isLevelOpen, setIsLevelOpen] = useState(false);
+  const [isLineOpen, setIsLineOpen] = useState(false);
+
   const championDropdownRef = useRef(null);
+  const sortDropdownRef = useRef(null);
+  const levelDropdownRef = useRef(null);
+  const lineDropdownRef = useRef(null);
+  const [lectures, setLectures] = useState([]);
 
-  const [lectures, setLectures] = useState([
-    {
-      id: 1,
-      instructorName: "Faker",
-      badgeType: "PRO",
-      title: "다이아 돌파를 위한 미드 라이너 마스터클래스",
-      line: "미드",
-      level: "심화",
-      champion: "야스오",
-      rating: 4.9,
-      reviewCount: 127,
-      price: 50000,
-      isLiked: false,
-    },
-    {
-      id: 2,
-      instructorName: "Canyon",
-      badgeType: "STREAMER",
-      title: "정글 캐리의 정석 - 초보자 환영",
-      line: "정글",
-      level: "초급",
-      champion: "리 신",
-      rating: 4.8,
-      reviewCount: 89,
-      price: 35000,
-      isLiked: true,
-    },
-    {
-      id: 3,
-      instructorName: "Zeus",
-      badgeType: "PRO",
-      title: "탑 라인 1:1 압살 테크닉",
-      line: "탑",
-      level: "중급",
-      champion: "제이스",
-      rating: 4.7,
-      reviewCount: 64,
-      price: 45000,
-      isLiked: false,
-    },
-    {
-      id: 4,
-      instructorName: "Gumayusi",
-      badgeType: "STREAMER",
-      title: "원딜 포지셔닝 완전 정복",
-      line: "원딜",
-      level: "심화",
-      champion: "이즈리얼",
-      rating: 4.9,
-      reviewCount: 102,
-      price: 55000,
-      isLiked: false,
-    },
-    {
-      id: 5,
-      instructorName: "Keria",
-      badgeType: "PRO",
-      title: "서폿 시야 장악과 한타 설계",
-      line: "서폿",
-      level: "중급",
-      champion: "쓰레쉬",
-      rating: 4.8,
-      reviewCount: 91,
-      price: 42000,
-      isLiked: false,
-    },
-    {
-      id: 6,
-      instructorName: "Chovy",
-      badgeType: "PRO",
-      title: "라인전 우위 잡는 미드 운영법",
-      line: "미드",
-      level: "중급",
-      champion: "아리",
-      rating: 4.9,
-      reviewCount: 110,
-      price: 48000,
-      isLiked: false,
-    },
-    {
-      id: 7,
-      instructorName: "Deft",
-      badgeType: "STREAMER",
-      title: "원딜 기본기 완성",
-      line: "원딜",
-      level: "초급",
-      champion: "케이틀린",
-      rating: 4.7,
-      reviewCount: 80,
-      price: 30000,
-      isLiked: false,
-    },
-    {
-      id: 8,
-      instructorName: "Bdd",
-      badgeType: "PRO",
-      title: "미드 컨트롤 완벽 정리",
-      line: "미드",
-      level: "심화",
-      champion: "아지르",
-      rating: 4.8,
-      reviewCount: 76,
-      price: 47000,
-      isLiked: false,
-    },
-    {
-      id: 9,
-      instructorName: "Peanut",
-      badgeType: "STREAMER",
-      title: "정글 동선 완벽 이해",
-      line: "정글",
-      level: "중급",
-      champion: "세주아니",
-      rating: 4.7,
-      reviewCount: 68,
-      price: 38000,
-      isLiked: false,
-    },
-  ]);
+  const convertLevel = (level) => {
+    if (level === "BEGINNER") return "초급";
+    if (level === "INTERMEDIATE") return "중급";
+    if (level === "ADVANCED") return "심화";
+    if (level === "초급" || level === "중급" || level === "심화") return level;
+    return level || "";
+  };
 
-  const handleToggleLike = (lectureId) => {
-    setLectures((prevLectures) =>
-      prevLectures.map((lecture) =>
-        lecture.id === lectureId
-          ? { ...lecture, isLiked: !lecture.isLiked }
-          : lecture,
-      ),
-    );
+  const convertLine = (line) => {
+    if (line === "TOP") return "탑";
+    if (line === "JUNGLE") return "정글";
+    if (line === "MID") return "미드";
+    if (line === "ADC") return "원딜";
+    if (line === "SUPPORT") return "서폿";
+    if (
+      line === "탑" ||
+      line === "정글" ||
+      line === "미드" ||
+      line === "원딜" ||
+      line === "서폿"
+    ) {
+      return line;
+    }
+    return line || "";
+  };
+
+  const sortOptions = [
+    { value: "latest", label: "최신순" },
+    { value: "star", label: "평점 높은 순" },
+    { value: "price", label: "저렴한 순" },
+  ];
+
+  const levelOptions = [
+    { value: "all", label: "난이도" },
+    { value: "초급", label: "초급" },
+    { value: "중급", label: "중급" },
+    { value: "심화", label: "심화" },
+  ];
+
+  const lineOptions = [
+    { value: "all", label: "라인 선택" },
+    { value: "탑", label: "탑" },
+    { value: "정글", label: "정글" },
+    { value: "미드", label: "미드" },
+    { value: "원딜", label: "원딜" },
+    { value: "서폿", label: "서폿" },
+  ];
+
+  const selectedSortLabel =
+    sortOptions.find((option) => option.value === sort)?.label || "최신순";
+  const selectedLevelLabel =
+    levelOptions.find((option) => option.value === level)?.label || "난이도";
+  const selectedLineLabel =
+    lineOptions.find((option) => option.value === line)?.label || "라인 선택";
+
+  useEffect(() => {
+    const fetchLectures = async () => {
+      try {
+        const uid = 1;
+        const [data, wishLectures] = await Promise.all([
+          getLectures(),
+          getWishLecturesByUid(uid),
+        ]);
+
+        const wishDocIds = new Set(
+          wishLectures.map((lecture) => lecture.docId),
+        );
+
+        const formatted = data.map((lecture) => ({
+          docId: lecture.docId || lecture.lectureId || "",
+          lectureId: lecture.docId || lecture.lectureId || "",
+          uid: lecture.uid ?? null,
+          title: lecture.title || "",
+          price: Number(lecture.price) || 0,
+          createdAt: lecture.createdAt || null,
+
+          instructorName: lecture.instructorName || "강사",
+          badgeType: lecture.badgeType || "PRO",
+
+          line: convertLine(lecture.line),
+          level: convertLevel(lecture.level),
+
+          champion: Array.isArray(lecture.champion)
+            ? lecture.champion
+            : lecture.champion
+              ? [lecture.champion]
+              : [],
+
+          star: lecture.star?.average || 0,
+          total: lecture.total || 0,
+          time: lecture.time ?? null,
+          isLiked: wishDocIds.has(lecture.docId),
+        }));
+
+        setLectures(formatted);
+      } catch (err) {
+        console.error("강의 불러오기 오류", err);
+      }
+    };
+
+    fetchLectures();
+  }, []);
+
+  const handleToggleLike = async (docId) => {
+    try {
+      const uid = 1;
+      const targetLecture = lectures.find((lecture) => lecture.docId === docId);
+
+      if (!targetLecture) return;
+
+      const nextLiked = await toggleWishByUid(
+        uid,
+        docId,
+        targetLecture.isLiked,
+      );
+
+      setLectures((prev) =>
+        prev.map((lecture) =>
+          lecture.docId === docId
+            ? { ...lecture, isLiked: nextLiked }
+            : lecture,
+        ),
+      );
+    } catch (error) {
+      console.error("찜 토글 오류", error);
+      alert("찜 처리에 실패했습니다.");
+    }
   };
 
   const handleBadgeFilterClick = (type) => {
@@ -154,7 +169,6 @@ function LectureList() {
 
   const filteredChampionList = useMemo(() => {
     const keyword = championKeyword.trim().toLowerCase();
-
     if (!keyword) return champions;
 
     return champions.filter((champion) =>
@@ -183,6 +197,27 @@ function LectureList() {
         setIsChampionOpen(false);
         setChampionKeyword("");
       }
+
+      if (
+        sortDropdownRef.current &&
+        !sortDropdownRef.current.contains(e.target)
+      ) {
+        setIsSortOpen(false);
+      }
+
+      if (
+        levelDropdownRef.current &&
+        !levelDropdownRef.current.contains(e.target)
+      ) {
+        setIsLevelOpen(false);
+      }
+
+      if (
+        lineDropdownRef.current &&
+        !lineDropdownRef.current.contains(e.target)
+      ) {
+        setIsLineOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -200,12 +235,12 @@ function LectureList() {
         lecture.title.toLowerCase().includes(keyword) ||
         lecture.instructorName.toLowerCase().includes(keyword);
 
-      const matchesLevel = level === "all" ? true : lecture.level === level;
+      const matchesLevel = level === "all" || lecture.level === level;
       const matchesChampion =
-        championType === "all" ? true : lecture.champion === championType;
-      const matchesLine = line === "all" ? true : lecture.line === line;
+        championType === "all" || lecture.champion.includes(championType);
+      const matchesLine = line === "all" || lecture.line === line;
       const matchesBadge =
-        badgeFilter === "all" ? true : lecture.badgeType === badgeFilter;
+        badgeFilter === "all" || lecture.badgeType === badgeFilter;
 
       return (
         matchesSearch &&
@@ -216,10 +251,31 @@ function LectureList() {
       );
     })
     .sort((a, b) => {
-      if (sort === "rating") return b.rating - a.rating;
+      if (sort === "star") return b.star - a.star;
       if (sort === "price") return a.price - b.price;
-      return a.id - b.id;
+
+      // latest면 createdAt 기준 정렬
+      if (sort === "latest") {
+        const aTime = a.createdAt?.seconds
+          ? a.createdAt.seconds
+          : a.createdAt
+            ? new Date(a.createdAt).getTime()
+            : 0;
+        const bTime = b.createdAt?.seconds
+          ? b.createdAt.seconds
+          : b.createdAt
+            ? new Date(b.createdAt).getTime()
+            : 0;
+
+        return bTime - aTime;
+      }
+
+      return 0;
     });
+
+  const handleMoveLectureDetail = (docId) => {
+    navigate(`/lecture/${docId}`);
+  };
 
   return (
     <section className="lecture-list-page">
@@ -239,26 +295,84 @@ function LectureList() {
 
         <div className="lecture-list-filter-row">
           <div className="lecture-list-filter-left">
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="lecture-list-select lecture-list-sort"
-            >
-              <option value="latest">최신순</option>
-              <option value="rating">평점 높은 순</option>
-              <option value="price">저렴한 순</option>
-            </select>
+            <div className="lecture-list-custom-dropdown" ref={sortDropdownRef}>
+              <button
+                type="button"
+                className="lecture-list-select lecture-list-sort lecture-list-custom-button"
+                onClick={() => {
+                  setIsSortOpen((prev) => !prev);
+                  setIsLevelOpen(false);
+                  setIsLineOpen(false);
+                  setIsChampionOpen(false);
+                }}
+              >
+                <span>{selectedSortLabel}</span>
+                <span
+                  className={`lecture-list-custom-arrow ${isSortOpen ? "open" : ""}`}
+                >
+                  ▼
+                </span>
+              </button>
 
-            <select
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
-              className="lecture-list-select lecture-list-level"
+              {isSortOpen && (
+                <div className="lecture-list-custom-menu">
+                  {sortOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`lecture-list-custom-option ${sort === option.value ? "selected" : ""}`}
+                      onClick={() => {
+                        setSort(option.value);
+                        setIsSortOpen(false);
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="lecture-list-custom-dropdown"
+              ref={levelDropdownRef}
             >
-              <option value="all">난이도</option>
-              <option value="초급">초급</option>
-              <option value="중급">중급</option>
-              <option value="심화">심화</option>
-            </select>
+              <button
+                type="button"
+                className="lecture-list-select lecture-list-level lecture-list-custom-button"
+                onClick={() => {
+                  setIsLevelOpen((prev) => !prev);
+                  setIsSortOpen(false);
+                  setIsLineOpen(false);
+                  setIsChampionOpen(false);
+                }}
+              >
+                <span>{selectedLevelLabel}</span>
+                <span
+                  className={`lecture-list-custom-arrow ${isLevelOpen ? "open" : ""}`}
+                >
+                  ▼
+                </span>
+              </button>
+
+              {isLevelOpen && (
+                <div className="lecture-list-custom-menu">
+                  {levelOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`lecture-list-custom-option ${level === option.value ? "selected" : ""}`}
+                      onClick={() => {
+                        setLevel(option.value);
+                        setIsLevelOpen(false);
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <div
               className="lecture-list-champion-dropdown"
@@ -321,18 +435,43 @@ function LectureList() {
               )}
             </div>
 
-            <select
-              value={line}
-              onChange={(e) => setLine(e.target.value)}
-              className="lecture-list-select lecture-list-line"
-            >
-              <option value="all">라인 선택</option>
-              <option value="탑">탑</option>
-              <option value="정글">정글</option>
-              <option value="미드">미드</option>
-              <option value="원딜">원딜</option>
-              <option value="서폿">서폿</option>
-            </select>
+            <div className="lecture-list-custom-dropdown" ref={lineDropdownRef}>
+              <button
+                type="button"
+                className="lecture-list-select lecture-list-line lecture-list-custom-button"
+                onClick={() => {
+                  setIsLineOpen((prev) => !prev);
+                  setIsSortOpen(false);
+                  setIsLevelOpen(false);
+                  setIsChampionOpen(false);
+                }}
+              >
+                <span>{selectedLineLabel}</span>
+                <span
+                  className={`lecture-list-custom-arrow ${isLineOpen ? "open" : ""}`}
+                >
+                  ▼
+                </span>
+              </button>
+
+              {isLineOpen && (
+                <div className="lecture-list-custom-menu">
+                  {lineOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`lecture-list-custom-option ${line === option.value ? "selected" : ""}`}
+                      onClick={() => {
+                        setLine(option.value);
+                        setIsLineOpen(false);
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="lecture-list-filter-right">
@@ -366,11 +505,20 @@ function LectureList() {
 
         <div className="lecture-list-grid">
           {filteredLectures.map((lecture) => (
-            <LectureItem
-              key={lecture.id}
-              lecture={lecture}
-              onToggleLike={handleToggleLike}
-            />
+            <div
+              key={lecture.docId}
+              onClick={() => handleMoveLectureDetail(lecture.docId)}
+              style={{ cursor: "pointer" }}
+            >
+              <LectureItem
+                lecture={{
+                  ...lecture,
+                  rating: lecture.star,
+                  reviewCount: lecture.total,
+                }}
+                onToggleLike={handleToggleLike}
+              />
+            </div>
           ))}
         </div>
       </div>

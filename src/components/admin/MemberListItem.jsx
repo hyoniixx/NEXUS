@@ -9,11 +9,11 @@ import whiteBadge from '../../assets/memberWhite.svg'
 function MemberListItem({ name, id, role, isPro = 'false', isStrm = 'false', email, date, score, isblack }) {
     const roleText = role === 'student' ? '수강생' : role === 'instructor' ? '강사' : role === 'admin' ? '관리자' : '알 수 없음';
     const roleColor = role === 'student' ? '#8B5CF6' : role === 'instructor' ? '#3B82F6' : role === 'admin' ? '#d034ef' : '#e52d2d';
-    const buttonColor = isblack === 'false' ? ['rgba(239, 68, 68, 0.10)', '#EF4444'] : ['rgba(0, 201, 80, 0.10)', '#00C950'];
+    const buttonColor = isblack === false ? ['rgba(239, 68, 68, 0.10)', '#EF4444'] : ['rgba(0, 201, 80, 0.10)', '#00C950'];
     return (
         <div className='member-list-item'>
             <div className='member-list-item-profile'>
-                <img src="" width="52px" height="52px" style={{ border: '1px solid black' }} />
+                <img width="52px" height="52px" style={{ border: '1px solid black' }} />
                 <div className='member-list-item-name'>
                     <h6>{name}</h6>
                     <div className='member-list-badge'>
@@ -49,7 +49,7 @@ function MemberListItem({ name, id, role, isPro = 'false', isStrm = 'false', ema
             <div className='member-list-item-footer'>
                 <div className='member-list-item-date'>
                     <h6>가입일 : </h6>
-                    <p>{date}</p>
+                    <p>{date.toLocaleString()}</p>
                 </div>
                 <div className='member-list-item-manage'>
                     <div className='member-list-item-score'>
@@ -57,8 +57,8 @@ function MemberListItem({ name, id, role, isPro = 'false', isStrm = 'false', ema
                         <p>{score}점</p>
                     </div>
                     <button className='member-list-black-button' style={{ background: buttonColor[0] }}>
-                        <img src={isblack == 'true' ? whiteBadge : blackBadge} width="16" height="16" />
-                        <p style={{ color: buttonColor[1] }}>{isblack == 'false' ? '차단' : '해제'}</p>
+                        <img src={isblack === true ? whiteBadge : blackBadge} width="16" height="16" />
+                        <p style={{ color: buttonColor[1] }}>{isblack === false ? '차단' : '해제'}</p>
                     </button>
                 </div>
             </div>

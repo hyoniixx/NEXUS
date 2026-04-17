@@ -5,20 +5,52 @@ import leftArrow from '../../assets/leftArrow.svg'
 import search from '../../assets/searchIcon.svg'
 import right from '../../assets/rightIcon.svg'
 import MemberListItem from '../../components/admin/MemberListItem'
+import { getUserList } from '../../service/MemberViewService'
 
 function Members() {
-    const [navSelected, setNavSelected] = useState([true, false, false, false]); //navBar, 전체 | 수강생 | 강사 | 블랙리스트
-    const [onlyBlacklist, setOnlyBlacklist] = useState(false); //false: 블랙리스트제외 | true : 블랙리스트만 보기
-    const total = 27; //전체 데이터 수
+    const [total, setTotal] = useState(27); //전체 데이터 수
     const [pageNow, setPageNow] = useState(1); //현재 선택된 페이지
     const [pages, setPages] = useState(1); //전체 페이지수
     const [pagination, setPagination] = useState([1, 0, 0, 0, 0]); //페이지네이션
     const [pageSelected, setPageSelected] = useState([true, false, false, false, false]) //페이지 아이템들 상태 관리(눌려있는지)
     const [canClick, setCanClick] = useState([false, true]) //좌우 이동 버튼 활성화 관리
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); //뒤로가기 연결
 
+    const [navSelected, setNavSelected] = useState([true, false, false, false]); //navBar, 전체 | 수강생 | 강사 | 블랙리스트
+    const [onlyBlacklist, setOnlyBlacklist] = useState(false); //false: 블랙리스트제외 | true : 블랙리스트만 보기
+    const [inputValue, setInputValue] = useState(''); //검색창
+    const [filterSelected, setFilterSelected] = useState([true, false]); //정렬 기준
+
+    const [users, setUsers] = useState([]); //전체 유저 데이터
+    const [filterUsers, setFilterUsers] = useState([]);//검색 또는 필터링에 걸린 유저들
+    const [showUsers, setShowUsers] = useState([]); //필터링 이후 페이지네이션에 의해 표시할 유저 데이터
+
+    //정렬기준 상태관리(filterSelected)
+    const handleFilter = (e) => {
+        var temp = [false, false];
+        if (e.target.selectedIndex === 0) {
+            temp = [true, false]
+        } else { temp = [false, true] }
+        setFilterSelected(temp)
+        console.log(filterSelected)
+    }
+
+    //유저정보 불러오기(최초 1회 마운트 시점)
     useEffect(() => {
+        const initiallize = async () => {
+            var a = await getUserList();
+            setUsers(a);
+            setTotal(a.length);
+            setFilterUsers(a);
+        }
+        initiallize();
+    }, [])
+
+    //데이터 불러온 뒤, 총 회원수 알아낸거 바탕으로 페이지네이션 구성
+    // console.log(users)
+    useEffect(() => {
+        setTotal(users.length);
         const tempPage = Math.ceil(total / 5); //전체 페이지 수 지정(올림)
         setPages(tempPage);
         if (tempPage < 5) {
@@ -28,7 +60,21 @@ function Members() {
             };
             setPagination(temp);
         }
-    }, [])
+    }, [total])
+
+    //검색창 입력하면 입력한 내용을 포함하고 있는 데이터만 필터링 하여 filterUsers 변경
+    useEffect(() => {
+        setFilterUsers(users.filter((item) =>
+            item.email.includes(inputValue) || item.userName.includes(inputValue)))
+    }, [inputValue])
+
+
+
+
+
+
+
+
     //현재 선택된 페이지를 변경하기 : 페이지 이동 버튼에 이벤트 걸려있음
     const handlePageNow = (number) => {
         setPageNow(number);
@@ -58,7 +104,11 @@ function Members() {
             rightTemp = true;
         } else { rightTemp = false; }
         setCanClick([leftTemp, rightTemp]);
-    }, [pageNow, pages])
+
+        //현재 페이지에 표시할 멤버리스트아이템 내역 관리
+        var tempShow = filterUsers.slice(pageNow * 5 - 5, 5);
+        setShowUsers(tempShow);
+    }, [pageNow, pages, filterUsers, users])
 
     return (
         <div className='admin-members-layout'>
@@ -67,7 +117,7 @@ function Members() {
                     className='admin-members-header-back'
                     onClick={() => navigate('/mypage')}
                 >
-                    <img src={leftArrow} alt="" style={{ width: '20px', height: '20px' }} />
+                    <img src={leftArrow} style={{ width: '20px', height: '20px' }} />
                     <p>마이페이지로 돌아가기</p>
                 </div>
                 <div className='admin-members-header-title'>
@@ -77,12 +127,17 @@ function Members() {
             </div>
             <div className='admin-members-search'>
                 <div className='admin-members-search-box'>
-                    <img src={search} alt="" width='20px' height='20px' />
-                    <input type="text" placeholder='이름, 아이디, 이메일, 전화번호로 검색...' />
+                    <img src={search} width='20px' height='20px' />
+                    <input
+                        type="text"
+                        placeholder='이름, 아이디, 이메일, 전화번호로 검색...'
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                    />
                 </div>
-                <select name="member-filter" id="member-filter">
-                    <option value="">가입일 순</option>
-                    <option value="">이름 순</option>
+                <select name="member-filter" id="member-filter" onChange={(e) => handleFilter(e)}>
+                    <option value="sortByDate" selected={filterSelected[0]} >가입일 순</option>
+                    <option value="sortByName" selected={filterSelected[1]}>이름 순</option>
                 </select>
             </div>
             <div className='admin-members-navbar'>
@@ -139,20 +194,25 @@ function Members() {
                 <p>{Number(pageNow) * 5 - 4}-{Math.min(Number(pageNow) * 5, total)} / {total}명</p>
             </div>
             <div className='admin-members-list'>
-                <MemberListItem name='김태정' id='user01' role='student' email='user01@nexus.com' date='2025.04.01' score='93' isblack='false' />
+                {showUsers.map((user, index) => {
+                    return (
+                        <MemberListItem key={index} name={user.userName} id={user.birthDate} role={user.role} email={user.email} date={user.createAt.toDate()} score={user.csScore} isblack={user.isBlacklist} />
+                    )
+                })}
+                {/* <MemberListItem name='김태정' id='user01' role='student' email='user01@nexus.com' date='2025.04.01' score='93' isblack='false' />
                 <MemberListItem name='김블랙' id='user02' role='student' email='user02@nexus.com' date='2025.04.04' score='11' isblack='true' />
                 <MemberListItem name='이지경' id='user03' isStrm='true' role='instructor' email='inst99@nexus.com' date='2022.02.11' score='153' isblack='false' />
                 <MemberListItem name='대상혁' id='user04' isPro='true' isStrm='true' role='instructor' email='faker@nexus.com' date='2016.04.01' score='939' isblack='false' />
-                <MemberListItem name='블랙됨' id='user05' role='student' email='ban1919@nexus.com' date='2022.03.28' score='3' isblack='true' />
+                <MemberListItem name='블랙됨' id='user05' role='student' email='ban1919@nexus.com' date='2022.03.28' score='3' isblack='true' /> */}
             </div>
             <div className='members-pagination'>
-                <button className='members-page-button' onClick={() => handlePageNow(pagination[0] - 5)} disabled={!canClick[0]}><img src={right} alt="" width='5px' height='10px' style={{ transform: 'scaleX(-1)' }} /></button>
+                <button className='members-page-button' onClick={() => handlePageNow(pagination[0] - 5)} disabled={!canClick[0]}><img src={right} width='5px' height='10px' style={{ transform: 'scaleX(-1)' }} /></button>
                 <button className={pageSelected[0] ? 'members-page-button-selected' : 'members-page-button'} onClick={() => handlePageNow(pagination[0])} style={{ display: `${pagination[0] === 0 ? 'none' : 'flex'}` }}><p>{pagination[0]}</p></button>
                 <button className={pageSelected[1] ? 'members-page-button-selected' : 'members-page-button'} onClick={() => handlePageNow(pagination[1])} style={{ display: `${pagination[1] === 0 ? 'none' : 'flex'}` }}><p>{pagination[1]}</p></button>
                 <button className={pageSelected[2] ? 'members-page-button-selected' : 'members-page-button'} onClick={() => handlePageNow(pagination[2])} style={{ display: `${pagination[2] === 0 ? 'none' : 'flex'}` }}><p>{pagination[2]}</p></button>
                 <button className={pageSelected[3] ? 'members-page-button-selected' : 'members-page-button'} onClick={() => handlePageNow(pagination[3])} style={{ display: `${pagination[3] === 0 ? 'none' : 'flex'}` }}><p>{pagination[3]}</p></button>
                 <button className={pageSelected[4] ? 'members-page-button-selected' : 'members-page-button'} onClick={() => handlePageNow(pagination[4])} style={{ display: `${pagination[4] === 0 ? 'none' : 'flex'}` }}><p>{pagination[4]}</p></button>
-                <button className='members-page-button' onClick={() => handlePageNow(pagination[0] + 5)} disabled={!canClick[1]}><img src={right} alt="" width='5px' height='10px' /></button>
+                <button className='members-page-button' onClick={() => handlePageNow(pagination[0] + 5)} disabled={!canClick[1]}><img src={right} width='5px' height='10px' /></button>
             </div>
         </div>
     )

@@ -18,7 +18,7 @@ function DepositListItem({ studentName, studentId, lectureTitle, price, date }) 
                 </div>
             </div>
             <div className='deposit-list-item-detail'>
-                <h6>+{Number(price).toLocaleString()}</h6>
+                <h6>+{Number(price).toLocaleString()}원</h6>
                 <p>{date}</p>
             </div>
         </div>

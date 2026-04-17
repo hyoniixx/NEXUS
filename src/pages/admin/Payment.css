@@ -1,0 +1,46 @@
+/* 정산 전체 레이아웃 */
+.payment-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/*정산 헤더*/
+
+.payment-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.payment-header>h2 {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.payment-header>select {
+    margin-left: auto;
+    border-radius: 8px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    width: 128.721px;
+    height: 40.52px;
+    color: white;
+    padding-left: 10px;
+}
+
+.payment-header>p {
+    margin-left: 10px;
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/*정산 내역(리스트)*/
+
+.payment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}

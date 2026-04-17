@@ -16,6 +16,10 @@ function LectureItem({
 }) {
   if (!lecture) return null;
 
+  const targetId = lecture.docId || lecture.lectureId;
+  const ratingValue = lecture.star?.average ?? lecture.rating ?? 0;
+  const reviewCountValue = lecture.total ?? lecture.reviewCount ?? 0;
+
   const badgeImage = lecture.badgeType === "PRO" ? proBadge : strmBadge;
   const avatarText = lecture.instructorName?.charAt(0).toUpperCase() || "N";
 
@@ -37,7 +41,10 @@ function LectureItem({
         <button
           type="button"
           className="lecture-item-like-button"
-          onClick={() => onRemoveWish && onRemoveWish(lecture.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemoveWish && onRemoveWish(targetId);
+          }}
         >
           <img
             src={likeFilled}
@@ -53,7 +60,10 @@ function LectureItem({
         <button
           type="button"
           className="lecture-item-msg-btn"
-          onClick={() => onChatClick && onChatClick(lecture.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onChatClick && onChatClick(targetId);
+          }}
         >
           <img src={msgIcon} alt="메시지" className="lecture-item-msg-icon" />
         </button>
@@ -64,7 +74,10 @@ function LectureItem({
       <button
         type="button"
         className="lecture-item-like-button"
-        onClick={() => onToggleLike && onToggleLike(lecture.id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onToggleLike && onToggleLike(targetId);
+        }}
       >
         <img
           src={lecture.isLiked ? likeFilled : likeEmpty}
@@ -128,9 +141,9 @@ function LectureItem({
       <div className="lecture-item-footer">
         <div className="lecture-item-rating-box">
           <span className="lecture-item-rating-star">☆</span>
-          <span className="lecture-item-rating-score">{lecture.rating}</span>
+          <span className="lecture-item-rating-score">{ratingValue}</span>
           <span className="lecture-item-rating-count">
-            ({lecture.reviewCount})
+            ({reviewCountValue})
           </span>
         </div>
 

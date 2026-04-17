@@ -1,60 +1,87 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
 import Modal from "../../components/common/Modal";
 import useModal from "../../hooks/useModal";
 import "./MyDuos.css";
+import {
+  deleteDuo,
+  getDuoApplicationsByApplicantUid,
+  getDuos,
+  getDuosByWriterUid,
+  updateDuo,
+} from "../../service/DuoService";
 
 function MyDuos() {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("my"); // my, pending, done
+  const [activeTab, setActiveTab] = useState("my");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingDuo, setEditingDuo] = useState(null);
   const [deletingDuo, setDeletingDuo] = useState(null);
 
-  const [myDuoList, setMyDuoList] = useState([
-    {
-      id: "my-1",
-      nickname: "SoloKing",
-      gameTag: "Hide on bush#KR1",
-      myLine: "미드",
-      myTier: "챌린저",
-      wantLine: "정글",
-      wantTier: "다이아+",
-      intro: "편하게 즐겜하실 분 구합니다!",
-      createdAt: "2026-04-15T15:39:00",
-    },
-  ]);
+  const [myDuoList, setMyDuoList] = useState([]);
+  const [pendingDuoList, setPendingDuoList] = useState([]);
+  const [completedDuoList, setCompletedDuoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [pendingDuoList] = useState([
-    {
-      id: "pending-1",
-      nickname: "이영희",
-      gameTag: "SKT Faker#KR1",
-      myLine: "원딜",
-      myTier: "다이아",
-      wantLine: "서포터",
-      wantTier: "플래티넘+",
-      intro: "서폿 잘하시는 분 찾습니다",
-      createdAt: "2026-04-15T14:12:00",
-    },
-  ]);
+  const formatDuos = (data) =>
+    data.map((duo) => ({
+      docId: duo.docId,
+      writer: {
+        uid: duo.writer?.uid ?? null,
+        userName: duo.writer?.userName ?? "",
+        profileImage: duo.writer?.profileImage ?? null,
+        gameName: duo.writer?.gameName ?? "",
+        gameTag: duo.writer?.gameTag ?? "",
+        tier: duo.writer?.tier ?? "",
+        line: duo.writer?.line ?? "",
+      },
+      wishDuo: {
+        tier: duo.wishDuo?.tier ?? "",
+        line: duo.wishDuo?.line ?? "",
+      },
+      content: duo.content ?? "",
+      createdAt: duo.createdAt ?? null,
+      isMatched: duo.isMatched ?? false,
+    }));
 
-  const [completedDuoList, setCompletedDuoList] = useState([
-    {
-      id: "done-1",
-      nickname: "박민수",
-      gameTag: "Deft#KR1",
-      myLine: "탑",
-      myTier: "마스터",
-      wantLine: "정글",
-      wantTier: "다이아+",
-      intro: "랭크 올리실 분 구해요",
-      createdAt: "2026-04-15T13:05:00",
-    },
-  ]);
+  useEffect(() => {
+    const fetchMyDuos = async () => {
+      try {
+        setIsLoading(true);
+
+        const uid = 1; // 나중에 로그인 유저 uid로 교체
+
+        const [myDuosRaw, allDuosRaw, myApplications] = await Promise.all([
+          getDuosByWriterUid(uid),
+          getDuos(),
+          getDuoApplicationsByApplicantUid(uid),
+        ]);
+
+        const myDuos = formatDuos(myDuosRaw);
+        const allDuos = formatDuos(allDuosRaw);
+
+        const pendingAppliedDuos = myApplications
+          .filter((application) => application.status === "pending")
+          .map((application) =>
+            allDuos.find((duo) => duo.docId === application.duoId),
+          )
+          .filter(Boolean);
+
+        setMyDuoList(myDuos.filter((duo) => !duo.isMatched));
+        setCompletedDuoList(myDuos.filter((duo) => duo.isMatched));
+        setPendingDuoList(pendingAppliedDuos);
+      } catch (error) {
+        console.error("내 듀오 불러오기 실패", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyDuos();
+  }, []);
 
   const currentList = useMemo(() => {
     if (activeTab === "my") return myDuoList;
@@ -72,37 +99,85 @@ function MyDuos() {
     setEditingDuo(null);
   };
 
-  const handleUpdateDuo = (updatedDuo) => {
-    setMyDuoList((prev) =>
-      prev.map((item) => (item.id === updatedDuo.id ? updatedDuo : item)),
-    );
-    handleCloseEditModal();
+  const handleUpdateDuo = async (updatedDuo) => {
+    try {
+      const docId = updatedDuo.docId || editingDuo?.docId;
+      if (!docId) return;
+
+      const duoData = {
+        writer: {
+          uid: 1,
+          userName: updatedDuo.nickname ?? editingDuo?.writer?.userName ?? "",
+          profileImage: null,
+          gameName: "",
+          gameTag: updatedDuo.gameTag ?? editingDuo?.writer?.gameTag ?? "",
+          tier: updatedDuo.myTier ?? editingDuo?.writer?.tier ?? "",
+          line: updatedDuo.myLine ?? editingDuo?.writer?.line ?? "",
+        },
+        wishDuo: {
+          tier: updatedDuo.wantTier ?? editingDuo?.wishDuo?.tier ?? "",
+          line: updatedDuo.wantLine ?? editingDuo?.wishDuo?.line ?? "",
+        },
+        content: updatedDuo.intro ?? editingDuo?.content ?? "",
+        isMatched: editingDuo?.isMatched ?? false,
+      };
+
+      await updateDuo(docId, duoData);
+
+      const nextUpdated = {
+        ...editingDuo,
+        ...duoData,
+      };
+
+      setMyDuoList((prev) =>
+        prev.map((item) => (item.docId === docId ? nextUpdated : item)),
+      );
+
+      setCompletedDuoList((prev) =>
+        prev.map((item) => (item.docId === docId ? nextUpdated : item)),
+      );
+
+      handleCloseEditModal();
+    } catch (error) {
+      console.error("듀오 수정 실패", error);
+      alert("듀오 수정 실패");
+    }
   };
 
   const handleChat = (duo) => {
     navigate("/chat", {
       state: {
-        duoId: duo.id,
-        nickname: duo.nickname,
-        gameTag: duo.gameTag,
+        duoId: duo.docId,
+        nickname: duo.writer.userName,
+        gameTag: `${duo.writer.gameName}${duo.writer.gameTag}`,
       },
     });
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deletingDuo) return;
 
-    if (activeTab === "my") {
-      setMyDuoList((prev) => prev.filter((item) => item.id !== deletingDuo.id));
-    }
+    try {
+      await deleteDuo(deletingDuo.docId);
 
-    if (activeTab === "done") {
-      setCompletedDuoList((prev) =>
-        prev.filter((item) => item.id !== deletingDuo.id),
-      );
-    }
+      if (activeTab === "my") {
+        setMyDuoList((prev) =>
+          prev.filter((item) => item.docId !== deletingDuo.docId),
+        );
+      }
 
-    setDeletingDuo(null);
+      if (activeTab === "done") {
+        setCompletedDuoList((prev) =>
+          prev.filter((item) => item.docId !== deletingDuo.docId),
+        );
+      }
+
+      setDeletingDuo(null);
+      deleteModal.closeModal();
+    } catch (error) {
+      console.error("듀오 삭제 실패", error);
+      alert("듀오 삭제 실패");
+    }
   };
 
   const deleteModal = useModal(handleConfirmDelete);
@@ -116,6 +191,23 @@ function MyDuos() {
     setDeletingDuo(null);
     deleteModal.closeModal();
   };
+
+  if (isLoading) {
+    return (
+      <div className="myduos-page">
+        <div className="myduos-inner">
+          <div className="myduos-header">
+            <div className="myduos-title-wrap">
+              <h1 className="myduos-title">내 듀오</h1>
+              <p className="myduos-subtitle">
+                듀오 정보를 불러오는 중입니다...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -141,7 +233,9 @@ function MyDuos() {
 
             <button
               type="button"
-              className={`myduos-tab ${activeTab === "pending" ? "active" : ""}`}
+              className={`myduos-tab ${
+                activeTab === "pending" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("pending")}
             >
               신청 중인 듀오
@@ -161,7 +255,7 @@ function MyDuos() {
           <div className="myduos-card-grid">
             {currentList.map((duo) => (
               <DuoItem
-                key={duo.id}
+                key={duo.docId}
                 duo={duo}
                 mode={activeTab}
                 onEdit={handleEdit}
@@ -186,10 +280,11 @@ function MyDuos() {
         <Modal
           isModal={deleteModal.isModal}
           closeModal={handleCloseDeleteModal}
-          activeModal={deleteModal.activeModal}
+          activeModal={handleConfirmDelete}
           title="듀오 삭제"
           content={`정말 이 듀오를 삭제하시겠습니까?\n삭제 후에는 되돌릴 수 없습니다.`}
           type="two"
+          color="red"
         />
       </div>
     </>

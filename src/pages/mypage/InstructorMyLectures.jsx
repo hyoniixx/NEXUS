@@ -1,46 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LectureItem from "../../components/lecture/LectureItem";
 import "./InstructorMyLectures.css";
+import { getLecturesByInstructorId } from "../../service/LectureService";
 
 function InstructorMyLectures() {
-  const lectures = [
-    {
-      id: 1,
-      instructorName: "Faker",
-      badgeType: "PRO",
-      title: "다이아 돌파를 위한 미드 라이너 마스터클래스",
-      line: "미드",
-      level: "심화",
-      rating: 4.9,
-      reviewCount: 127,
-      price: 50000,
-      isLiked: false,
-    },
-    {
-      id: 2,
-      instructorName: "CanyonJC",
-      badgeType: "STREAMER",
-      title: "정글 캐리의 정석 - 초보자 환영",
-      line: "정글",
-      level: "초급",
-      rating: 4.8,
-      reviewCount: 89,
-      price: 35000,
-      isLiked: false,
-    },
-    {
-      id: 3,
-      instructorName: "Zeus",
-      badgeType: "PRO",
-      title: "탑 라인 1:1 압살 테크닉",
-      line: "탑",
-      level: "중급",
-      rating: 4.7,
-      reviewCount: 64,
-      price: 45000,
-      isLiked: false,
-    },
-  ];
+  const [lectures, setLectures] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const levelLabelMap = {
+    BEGINNER: "초급",
+    INTERMEDIATE: "중급",
+    ADVANCED: "심화",
+  };
+
+  const lineLabelMap = {
+    TOP: "탑",
+    JUNGLE: "정글",
+    MID: "미드",
+    ADC: "원딜",
+    SUPPORT: "서폿",
+  };
+
+  const getLevelLabel = (value) => levelLabelMap[value] || value;
+  const getLineLabel = (value) => lineLabelMap[value] || value;
+
+  useEffect(() => {
+    const fetchMyLectures = async () => {
+      try {
+        setIsLoading(true);
+
+        // 🔥 나중에 로그인 유저 uid로 바꿔야 함
+        const uid = 1;
+
+        const data = await getLecturesByInstructorId(uid);
+
+        const formatted = data.map((lecture) => ({
+          docId: lecture.docId,
+          lectureId: lecture.lectureId ?? null,
+          instructorId: lecture.uid ?? null,
+          instructorName: lecture.instructorName || "강사",
+          badgeType: lecture.badgeType || "PRO",
+          title: lecture.title || "",
+          line: lecture.line || "",
+          level: lecture.level || "",
+          champion: Array.isArray(lecture.champion)
+            ? lecture.champion
+            : lecture.champion
+              ? [lecture.champion]
+              : [],
+          star: lecture.star || { average: 0 },
+          total: lecture.total || 0,
+          price: lecture.price || 0,
+          isLiked: false,
+        }));
+
+        setLectures(formatted);
+      } catch (error) {
+        console.error("강사 강의 불러오기 실패", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyLectures();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="instructor-my-lectures-page">
+        <p className="instructor-my-lectures-count">강의 불러오는 중...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="instructor-my-lectures-page">
@@ -50,7 +81,17 @@ function InstructorMyLectures() {
 
       <div className="instructor-my-lectures-grid">
         {lectures.map((lecture) => (
-          <LectureItem key={lecture.id} lecture={lecture} showLike={false} />
+          <LectureItem
+            key={lecture.docId}
+            lecture={{
+              ...lecture,
+              line: getLineLabel(lecture.line),
+              level: getLevelLabel(lecture.level),
+              rating: lecture.star?.average || 0,
+              reviewCount: lecture.total || 0,
+            }}
+            showLike={false}
+          />
         ))}
       </div>
     </div>

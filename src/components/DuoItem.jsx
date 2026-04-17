@@ -5,7 +5,12 @@ import msgIcon from "../assets/msgicon.png";
 import "./DuoItem.css";
 
 function formatCreatedAt(createdAt) {
-  const date = new Date(createdAt);
+  if (!createdAt) return "";
+
+  const date =
+    typeof createdAt?.toDate === "function"
+      ? createdAt.toDate()
+      : new Date(createdAt);
 
   if (Number.isNaN(date.getTime())) return "";
 
@@ -18,12 +23,26 @@ function formatCreatedAt(createdAt) {
 }
 
 function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
+  if (!duo) return null;
+
+  const duoId = duo.docId || duo.duoId || duo.id || "";
+  const nickname = duo.writer?.userName || duo.nickname || "";
+  const gameName = duo.writer?.gameName || duo.gameName || "";
+  const gameTagValue = duo.writer?.gameTag || duo.gameTag || "";
+  const gameTag = `${gameName}${gameTagValue}`;
+  const myLine = duo.writer?.line || duo.myLine || "";
+  const myTier = duo.writer?.tier || duo.myTier || "";
+  const wantLine = duo.wishDuo?.line || duo.wantLine || "";
+  const wantTier = duo.wishDuo?.tier || duo.wantTier || "";
+  const intro = duo.content || duo.intro || "";
+  const createdAt = duo.createdAt || "";
+
   const handleApplyClick = () => {
     if (onApply) {
       onApply(duo);
       return;
     }
-    console.log(`${duo.nickname} 듀오 신청 클릭`);
+    console.log(`${nickname} 듀오 신청 클릭`);
   };
 
   const handleDeleteClick = () => {
@@ -31,7 +50,7 @@ function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
       onDelete(duo);
       return;
     }
-    console.log(`${duo.nickname} 듀오 삭제 클릭`);
+    console.log(`${nickname} 듀오 삭제 클릭`);
   };
 
   const handleEditClick = () => {
@@ -39,7 +58,7 @@ function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
       onEdit(duo);
       return;
     }
-    console.log(`${duo.nickname} 듀오 수정 클릭`);
+    console.log(`${nickname} 듀오 수정 클릭`);
   };
 
   const handleChatClick = () => {
@@ -47,7 +66,7 @@ function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
       onChat(duo);
       return;
     }
-    console.log(`${duo.nickname} 채팅 클릭`);
+    console.log(`${nickname} 채팅 클릭`);
   };
 
   const renderActionButtons = () => {
@@ -147,18 +166,16 @@ function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
   };
 
   return (
-    <div className="duo-item-card">
+    <div className="duo-item-card" data-duo-id={duoId}>
       {renderActionButtons()}
 
       <div className="duo-item-header">
         <div className="duo-item-profile">
-          <div className="duo-item-avatar">
-            {duo.nickname?.charAt(0) || "?"}
-          </div>
+          <div className="duo-item-avatar">{nickname?.charAt(0) || "?"}</div>
 
           <div className="duo-item-user-info">
-            <div className="duo-item-name">{duo.nickname}</div>
-            <div className="duo-item-tag">{duo.gameTag}</div>
+            <div className="duo-item-name">{nickname}</div>
+            <div className="duo-item-tag">{gameTag}</div>
           </div>
         </div>
       </div>
@@ -167,23 +184,23 @@ function DuoItem({ duo, mode = "default", onDelete, onEdit, onChat, onApply }) {
         <div className="duo-item-info-col">
           <div className="duo-item-label">내 정보</div>
           <div className="duo-item-badge-row">
-            <div className="duo-item-line-badge">{duo.myLine}</div>
-            <div className="duo-item-tier-badge">{duo.myTier}</div>
+            <div className="duo-item-line-badge">{myLine}</div>
+            <div className="duo-item-tier-badge">{myTier}</div>
           </div>
         </div>
 
         <div className="duo-item-info-col">
           <div className="duo-item-label">원하는 듀오</div>
           <div className="duo-item-badge-row">
-            <div className="duo-item-want-line-badge">{duo.wantLine}</div>
-            <div className="duo-item-want-tier-badge">{duo.wantTier}</div>
+            <div className="duo-item-want-line-badge">{wantLine}</div>
+            <div className="duo-item-want-tier-badge">{wantTier}</div>
           </div>
         </div>
       </div>
 
       <div className="duo-item-bottom">
-        <div className="duo-item-intro">{duo.intro}</div>
-        <div className="duo-item-date">{formatCreatedAt(duo.createdAt)}</div>
+        <div className="duo-item-intro">{intro}</div>
+        <div className="duo-item-date">{formatCreatedAt(createdAt)}</div>
       </div>
     </div>
   );

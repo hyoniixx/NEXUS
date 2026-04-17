@@ -31,31 +31,85 @@
   margin-bottom: 24px;
 }
 
-.student-my-lectures-select {
-  width: 145px;
-  height: 40px;
+.student-my-lectures-custom-filter {
+  position: relative;
+  width: 180px;
+}
+
+button.student-my-lectures-select {
+  width: 180px;
+  height: 48px;
+  padding: 0 16px;
   background: #1a1f3a;
   border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 8px;
+  border-radius: 12px;
   color: #e8eaf0;
   font-size: 14px;
-
-  padding: 0 40px 0 16px;
   box-sizing: border-box;
-
   display: flex;
   align-items: center;
-
-  line-height: 40px;
+  justify-content: space-between;
+  text-align: left;
   outline: none;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  background-image: none;
+  cursor: pointer;
+  line-height: 1;
+}
 
-  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23E8EAF0' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path d='M6 9l6 6 6-6'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 16px;
+button.student-my-lectures-select span:first-child {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.student-my-lectures-filter-arrow {
+  flex-shrink: 0;
+  margin-left: 12px;
+  transition: transform 0.2s ease;
+}
+
+.student-my-lectures-filter-arrow.open {
+  transform: rotate(180deg);
+}
+
+.student-my-lectures-filter-menu {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  width: 180px;
+  background: #1a1f3a;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.student-my-lectures-filter-item {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: #e8eaf0;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.student-my-lectures-filter-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.student-my-lectures-filter-item.active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #51a2ff;
 }
 
 .student-my-lectures-count {

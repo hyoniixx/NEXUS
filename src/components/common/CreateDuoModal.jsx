@@ -71,7 +71,7 @@ function CreateDuoModal({
   onCreate,
 }) {
   const [form, setForm] = useState({
-    id: "",
+    docId: "",
     nickname: "",
     gameTag: "",
     intro: "",
@@ -89,14 +89,16 @@ function CreateDuoModal({
   useEffect(() => {
     if (mode === "edit" && initialData) {
       setForm({
-        id: initialData.id || "",
-        nickname: initialData.nickname || "",
-        gameTag: initialData.gameTag || "",
-        intro: initialData.intro || "",
-        myLine: initialData.myLine || "",
-        myTier: initialData.myTier || "",
-        wantLine: initialData.wantLine || "",
-        wantTier: initialData.wantTier || "",
+        docId: initialData.docId || initialData.duoId || "",
+        nickname: initialData.writer?.userName || "",
+        gameTag: initialData.writer?.gameTag
+          ? initialData.writer.gameTag.replace(/^#/, "")
+          : "",
+        intro: initialData.content || "",
+        myLine: initialData.writer?.line || "",
+        myTier: initialData.writer?.tier || "",
+        wantLine: initialData.wishDuo?.line || "",
+        wantTier: initialData.wishDuo?.tier || "",
         createdAt: initialData.createdAt || "",
       });
     }
@@ -115,7 +117,7 @@ function CreateDuoModal({
   }, []);
 
   const handleChange = (key, value) => {
-    if (key === "intro" && value.length > 45) return;
+    if (key === "intro" && value.length > 50) return;
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -148,14 +150,18 @@ function CreateDuoModal({
     e.preventDefault();
     if (!isValid) return;
 
-    const payload =
-      mode === "edit"
-        ? { ...form }
-        : {
-            ...form,
-            id: Date.now().toString(),
-            createdAt: new Date().toISOString(),
-          };
+    const payload = {
+      docId: form.docId,
+      nickname: form.nickname.trim(),
+      gameName: "",
+      gameTag: `#${form.gameTag.trim().replace(/^#/, "")}`,
+      intro: form.intro.trim(),
+      myLine: form.myLine,
+      myTier: form.myTier,
+      wantLine: form.wantLine,
+      wantTier: form.wantTier,
+      createdAt: mode === "edit" ? form.createdAt : new Date().toISOString(),
+    };
 
     setPendingPayload(payload);
     setShowFormModal(false);
@@ -220,7 +226,9 @@ function CreateDuoModal({
                   <input
                     className="create-duo-modal-input"
                     value={form.gameTag}
-                    onChange={(e) => handleChange("gameTag", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("gameTag", e.target.value.replace(/^#/, ""))
+                    }
                     placeholder="KR1"
                   />
                 </div>
@@ -237,7 +245,7 @@ function CreateDuoModal({
                   placeholder="간단한 자기소개를 입력하세요"
                 />
                 <div className="create-duo-modal-count">
-                  {form.intro.length}/45
+                  {form.intro.length}/50
                 </div>
               </div>
 
@@ -313,6 +321,7 @@ function CreateDuoModal({
               : `새로운 듀오 신청을 등록하시겠습니까?`
           }
           type="two"
+          color="blue"
         />
       </div>
     </>

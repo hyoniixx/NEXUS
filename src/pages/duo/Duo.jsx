@@ -1,13 +1,22 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
 import Modal from "../../components/common/Modal";
 import useModal from "../../hooks/useModal";
 import duoChatIcon from "../../assets/duochat.png";
 import "./Duo.css";
+import {
+  applyToDuo,
+  createDuo,
+  deleteDuo,
+  getDuos,
+} from "../../service/DuoService";
 
 function Duo() {
-  const [role] = useState("user"); // user || admin
+  const navigate = useNavigate();
+  const [role] = useState("user"); // "user" || "admin"
+  const isAdmin = role === "admin";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTier, setSelectedTier] = useState("전체 티어");
@@ -15,41 +24,11 @@ function Duo() {
   const [openFilter, setOpenFilter] = useState("");
   const [selectedDuo, setSelectedDuo] = useState(null);
 
-  const [duoList, setDuoList] = useState([
-    {
-      id: "duo-1",
-      nickname: "SoloKing",
-      gameTag: "Hide on bush#KR1",
-      myLine: "미드",
-      myTier: "챌린저",
-      wantLine: "정글",
-      wantTier: "다이아+",
-      intro: "편하게 즐겜하실 분 구합니다!",
-      createdAt: "2026-04-15T15:39:00",
-    },
-    {
-      id: "duo-2",
-      nickname: "이영희",
-      gameTag: "SKT Faker#KR1",
-      myLine: "원딜",
-      myTier: "다이아",
-      wantLine: "서포터",
-      wantTier: "플래티넘+",
-      intro: "서폿 잘하시는 분 찾습니다",
-      createdAt: "2026-04-15T14:12:00",
-    },
-    {
-      id: "duo-3",
-      nickname: "박민수",
-      gameTag: "Deft#KR1",
-      myLine: "탑",
-      myTier: "마스터",
-      wantLine: "정글",
-      wantTier: "다이아+",
-      intro: "랭크 올리실 분 구해요",
-      createdAt: "2026-04-15T13:05:00",
-    },
-  ]);
+  const [duoList, setDuoList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [resultModalMessage, setResultModalMessage] = useState("");
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
   const tierOptions = [
     "전체 티어",
@@ -67,32 +46,76 @@ function Duo() {
 
   const lineOptions = ["전체 라인", "탑", "정글", "미드", "원딜", "서포터"];
 
-  const isAdmin = role === "admin";
+  const formatDuos = (data) =>
+    data.map((duo) => ({
+      docId: duo.docId,
+      writer: {
+        uid: duo.writer?.uid ?? null,
+        userName: duo.writer?.userName ?? "",
+        profileImage: duo.writer?.profileImage ?? null,
+        gameName: duo.writer?.gameName ?? "",
+        gameTag: duo.writer?.gameTag ?? "",
+        tier: duo.writer?.tier ?? "",
+        line: duo.writer?.line ?? "",
+      },
+      wishDuo: {
+        tier: duo.wishDuo?.tier ?? "",
+        line: duo.wishDuo?.line ?? "",
+      },
+      content: duo.content ?? "",
+      createdAt: duo.createdAt ?? null,
+      isMatched: duo.isMatched ?? false,
+    }));
+
+  useEffect(() => {
+    const fetchDuos = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getDuos();
+        setDuoList(formatDuos(data));
+      } catch (error) {
+        console.error("듀오 목록 불러오기 실패", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDuos();
+  }, []);
 
   const filteredList = useMemo(() => {
     return duoList.filter((duo) => {
       const tierMatch =
-        selectedTier === "전체 티어" || duo.myTier === selectedTier;
+        selectedTier === "전체 티어" || duo.writer.tier === selectedTier;
       const lineMatch =
-        selectedLine === "전체 라인" || duo.myLine === selectedLine;
+        selectedLine === "전체 라인" || duo.writer.line === selectedLine;
 
       return tierMatch && lineMatch;
     });
   }, [duoList, selectedTier, selectedLine]);
 
-  const handleCreateDuo = (newDuo) => {
-    const newItem = {
-      id: Date.now().toString(),
-      ...newDuo,
-      createdAt: new Date().toISOString(),
-    };
-
-    setDuoList((prev) => [newItem, ...prev]);
-    setIsModalOpen(false);
+  const handleCreateDuo = async (newDuo) => {
+    try {
+      await createDuo(newDuo);
+      const data = await getDuos();
+      setDuoList(formatDuos(data));
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("듀오 등록 실패", error);
+      setResultModalMessage("듀오 등록에 실패했습니다.");
+      setIsResultModalOpen(true);
+    }
   };
 
-  const handleDelete = (id) => {
-    setDuoList((prev) => prev.filter((item) => item.id !== id));
+  const handleDelete = async (docId) => {
+    try {
+      await deleteDuo(docId);
+      setDuoList((prev) => prev.filter((item) => item.docId !== docId));
+    } catch (error) {
+      console.error("듀오 삭제 실패", error);
+      setResultModalMessage("듀오 삭제에 실패했습니다.");
+      setIsResultModalOpen(true);
+    }
   };
 
   const handleToggleFilter = (type) => {
@@ -109,10 +132,33 @@ function Duo() {
     setOpenFilter("");
   };
 
-  const handleConfirmApply = () => {
+  const handleConfirmApply = async () => {
     if (!selectedDuo) return;
-    console.log("듀오 신청 실행:", selectedDuo);
-    setSelectedDuo(null);
+
+    try {
+      const applicant = {
+        uid: 1, // 나중에 로그인 유저 uid로 교체
+        userName: "테스트유저",
+      };
+
+      const result = await applyToDuo(selectedDuo, applicant);
+
+      if (result.isNew) {
+        setResultModalMessage("듀오 신청이 완료되었습니다.");
+      } else {
+        setResultModalMessage("이미 신청한 듀오입니다.");
+      }
+
+      applyDuoModal.closeModal();
+      setSelectedDuo(null);
+      setIsResultModalOpen(true);
+    } catch (error) {
+      console.error("듀오 신청 실패", error);
+      setResultModalMessage(error.message || "듀오 신청에 실패했습니다.");
+      applyDuoModal.closeModal();
+      setSelectedDuo(null);
+      setIsResultModalOpen(true);
+    }
   };
 
   const applyDuoModal = useModal(handleConfirmApply);
@@ -122,12 +168,27 @@ function Duo() {
     applyDuoModal.openModal();
   };
 
+  if (isLoading) {
+    return (
+      <div className="duo-page">
+        <div className="duo-page-inner">
+          <div className="duo-title-wrap">
+            <h1 className="duo-title">듀오 매칭</h1>
+            <p className="duo-subtitle">듀오 목록을 불러오는 중입니다...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="duo-page">
         <div className="duo-page-inner">
           <div
-            className={`duo-top-section ${isAdmin ? "duo-top-section-admin" : ""}`}
+            className={`duo-top-section ${
+              isAdmin ? "duo-top-section-admin" : ""
+            }`}
           >
             <div className="duo-title-wrap">
               <h1 className="duo-title">듀오 매칭</h1>
@@ -138,7 +199,11 @@ function Duo() {
 
             {!isAdmin && (
               <div className="duo-action-wrap">
-                <button className="duo-chat-btn" type="button">
+                <button
+                  className="duo-chat-btn"
+                  type="button"
+                  onClick={() => navigate("/chat")}
+                >
                   <img src={duoChatIcon} alt="채팅" className="duo-btn-icon" />
                   <span className="duo-btn-label">채팅</span>
                 </button>
@@ -232,10 +297,10 @@ function Duo() {
           <div className="duo-card-grid">
             {filteredList.map((duo) => (
               <DuoItem
-                key={duo.id}
+                key={duo.docId}
                 duo={duo}
                 mode={isAdmin ? "admin" : "default"}
-                onDelete={() => handleDelete(duo.id)}
+                onDelete={() => handleDelete(duo.docId)}
                 onApply={handleOpenApplyModal}
               />
             ))}
@@ -257,8 +322,23 @@ function Duo() {
           closeModal={applyDuoModal.closeModal}
           activeModal={applyDuoModal.activeModal}
           title="듀오 신청"
-          content={`${selectedDuo?.nickname || ""}님에게 듀오를 신청하시겠습니까?`}
+          content={`${
+            selectedDuo?.writer?.userName || selectedDuo?.nickname || ""
+          }님에게 듀오를 신청하시겠습니까?`}
           type="two"
+          color="blue"
+        />
+      </div>
+
+      <div className="duo-modal-blue">
+        <Modal
+          isModal={isResultModalOpen}
+          closeModal={() => setIsResultModalOpen(false)}
+          activeModal={() => setIsResultModalOpen(false)}
+          title="듀오 신청"
+          content={resultModalMessage}
+          type="one"
+          color="blue"
         />
       </div>
     </>

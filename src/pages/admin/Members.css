@@ -1,0 +1,218 @@
+/*회원관리 페이지 전체 레이아웃*/
+.admin-members-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-left: 86px;
+    padding-right: 86px;
+    margin-top: 30px;
+    margin-bottom: 32px;
+}
+
+/*돌아가기, 회원조회, 모든회원정보를...*/
+.admin-members-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/*돌아가기*/
+.admin-members-header-back {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.admin-members-header-back>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/*회원조회,모든회원정보를...*/
+.admin-members-header-title {
+    gap: 9px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-members-header-title>h2 {
+    color: #E8EAF0;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.admin-members-header-title>p {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/*검색하기, 필터*/
+.admin-members-search {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-members-search-box {
+    height: 49px;
+    border-radius: 8px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    padding: 5px 16px 5px 16px;
+}
+
+.admin-members-search-box>input {
+    color: rgba(232, 234, 240, 0.50);
+    background: #1A1F3A;
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+.admin-members-search>select {
+    width: 125.917px;
+    height: 40.52px;
+    border-radius: 8px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #1A1F3A;
+    color: white;
+    padding-left: 3px;
+}
+
+/*Navbar 전체 수강생 강사 블랙리스트*/
+.admin-members-navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    border-bottom: 0.701px solid rgba(148, 163, 184, 0.20);
+}
+
+.admin-members-navbar-all,
+.admin-members-navbar-student,
+.admin-members-navbar-instructor,
+.admin-members-navbar-blacklist {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    padding: 9px 24px 14px 24px;
+}
+
+.admin-members-navbar-all:hover,
+.admin-members-navbar-student:hover,
+.admin-members-navbar-instructor:hover,
+.admin-members-navbar-blacklist:hover {
+    cursor: pointer;
+}
+
+.admin-members-navbar-all>p,
+.admin-members-navbar-student>p,
+.admin-members-navbar-instructor>p,
+.admin-members-navbar-blacklist>p {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/*필터 버튼*/
+
+.admin-members-filter {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    height: 36px;
+}
+
+.admin-members-filter-button {
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: 6.994px 20.898px 8.98px 20px;
+    justify-content: center;
+    border-radius: 8px;
+    background: #3B82F6;
+    align-items: center;
+    border: none;
+}
+
+.admin-members-filter-button:hover {
+    cursor: pointer;
+}
+
+.admin-members-filter>p {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+/*회원 요소들 뿌려지는 리스트*/
+.admin-members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+
+
+/*페이지네이션*/
+.members-pagination {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.members-page-button {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    border: 0.795px solid rgba(148, 163, 184, 0.20);
+    background-color: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.members-page-button>p {
+    color: #E8EAF0;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.members-page-button-selected {
+    width: 37.567px;
+    height: 37.567px;
+    border-radius: 8px;
+    background: #3B82F6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.members-page-button-selected>p {
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.members-page-button-selected:hover,
+.members-page-button:hover {
+    cursor: pointer;
+}

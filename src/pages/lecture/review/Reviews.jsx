@@ -80,7 +80,7 @@ function Reviews() {
         if (pageNow <= 5) {
             leftTemp = false
         } else { leftTemp = true }
-        if ((pages > pageNow - ((pageNow - 1) % 5) + 5)) {
+        if (pageNow < pages) {
             rightTemp = true;
         } else { rightTemp = false; }
         setCanClick([leftTemp, rightTemp]);

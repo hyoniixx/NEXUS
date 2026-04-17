@@ -13,8 +13,8 @@
 
 .duo-item-apply-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   min-width: 88px;
   height: 32px;
   padding: 0 14px;
@@ -29,15 +29,17 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 3;
 }
 
 .duo-item-action-group {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
+  z-index: 3;
 }
 
 .duo-item-icon-btn,
@@ -52,6 +54,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.duo-item-card>.duo-item-trash-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
 }
 
 .duo-item-action-icon,
@@ -73,7 +82,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-right: 120px;
+  padding-right: 96px;
 }
 
 .duo-item-avatar {

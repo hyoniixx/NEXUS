@@ -1,60 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./StudentMyLectures.css";
 import LectureItem from "../../components/lecture/LectureItem";
+import { getEnrollmentsByStudentId } from "../../service/EnrollmentService";
+import { getLectures } from "../../service/LectureService";
 
 function StudentMyLectures() {
   const [filter, setFilter] = useState("all");
+  const [lectures, setLectures] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterDropdownRef = useRef(null);
 
-  const lectures = [
-    {
-      id: 1,
-      instructorName: "Faker",
-      badgeType: "PRO",
-      title: "다이아 돌파를 위한 미드 라이너 마스터클래스",
-      line: "미드",
-      level: "심화",
-      rating: 4.9,
-      reviewCount: 127,
-      price: 50000,
-      reviewStatus: "done",
-    },
-    {
-      id: 2,
-      instructorName: "Faker",
-      badgeType: "PRO",
-      title: "다이아 돌파를 위한 미드 라이너 마스터클래스",
-      line: "미드",
-      level: "심화",
-      rating: 4.9,
-      reviewCount: 127,
-      price: 50000,
-      reviewStatus: "done",
-    },
-    {
-      id: 3,
-      instructorName: "Faker",
-      badgeType: "PRO",
-      title: "다이아 돌파를 위한 미드 라이너 마스터클래스",
-      line: "미드",
-      level: "심화",
-      rating: 4.9,
-      reviewCount: 127,
-      price: 50000,
-      reviewStatus: "done",
-    },
-    {
-      id: 4,
-      instructorName: "Keria",
-      badgeType: "STREAMER",
-      title: "서포터 캐리 - 로밍과 비전의 모든 것",
-      line: "서폿",
-      level: "심화",
-      rating: 5.0,
-      reviewCount: 201,
-      price: 40000,
-      reviewStatus: "pending",
-    },
+  const levelLabelMap = {
+    BEGINNER: "초급",
+    INTERMEDIATE: "중급",
+    ADVANCED: "심화",
+  };
+
+  const lineLabelMap = {
+    TOP: "탑",
+    JUNGLE: "정글",
+    MID: "미드",
+    ADC: "원딜",
+    BOTTOM: "원딜",
+    SUPPORT: "서폿",
+  };
+
+  const getLevelLabel = (value) => levelLabelMap[value] || value;
+  const getLineLabel = (value) => lineLabelMap[value] || value;
+
+  const filterOptions = [
+    { value: "all", label: "전체" },
+    { value: "done", label: "후기 작성 완료" },
+    { value: "pending", label: "후기 미작성" },
   ];
+
+  const selectedFilterLabel =
+    filterOptions.find((option) => option.value === filter)?.label || "전체";
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        filterDropdownRef.current &&
+        !filterDropdownRef.current.contains(e.target)
+      ) {
+        setIsFilterOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchMyLectures = async () => {
+      try {
+        setIsLoading(true);
+
+        const studentId = 1;
+
+        const enrollments = await getEnrollmentsByStudentId(studentId);
+        const allLectures = await getLectures();
+
+        const mergedLectures = enrollments
+          .map((enrollment) => {
+            const matchedLecture = allLectures.find(
+              (lecture) => lecture.docId === enrollment.lectureId,
+            );
+
+            if (!matchedLecture) return null;
+
+            return {
+              docId: matchedLecture.docId,
+              lectureId: enrollment.lectureId,
+              instructorId:
+                matchedLecture.uid ?? enrollment.instructorId ?? null,
+              instructorName:
+                enrollment.instructorName ||
+                matchedLecture.instructorName ||
+                "강사",
+              badgeType: matchedLecture.badgeType || "PRO",
+              title: matchedLecture.title || enrollment.lectureTitle || "",
+              line: matchedLecture.line || "",
+              level: matchedLecture.level || "",
+              champion: Array.isArray(matchedLecture.champion)
+                ? matchedLecture.champion
+                : matchedLecture.champion
+                  ? [matchedLecture.champion]
+                  : [],
+              star: matchedLecture.star || { average: 0 },
+              total: matchedLecture.total || 0,
+              price: matchedLecture.price || 0,
+              reviewStatus: enrollment.hasReview ? "done" : "pending",
+              enrolledAt: enrollment.enrolledAt || "",
+              paymentStatus: enrollment.paymentStatus || "",
+            };
+          })
+          .filter(Boolean);
+
+        setLectures(mergedLectures);
+      } catch (error) {
+        console.error("내 신청 강의 불러오기 오류", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyLectures();
+  }, []);
 
   const filteredLectures =
     filter === "all"
@@ -65,6 +120,22 @@ function StudentMyLectures() {
     (lecture) => lecture.reviewStatus === "done",
   ).length;
 
+  if (isLoading) {
+    return (
+      <section className="student-my-lectures-page">
+        <div className="student-my-lectures-inner">
+          <h1 className="student-my-lectures-title">내 신청 강의</h1>
+          <p className="student-my-lectures-description">
+            신청한 강의를 확인하고 관리하세요
+          </p>
+          <div style={{ color: "#fff", paddingTop: "30px" }}>
+            강의 정보를 불러오는 중입니다...
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="student-my-lectures-page">
       <div className="student-my-lectures-inner">
@@ -74,15 +145,45 @@ function StudentMyLectures() {
         </p>
 
         <div className="student-my-lectures-filter-row">
-          <select
-            className="student-my-lectures-select"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+          <div
+            className="student-my-lectures-custom-filter"
+            ref={filterDropdownRef}
           >
-            <option value="all">전체</option>
-            <option value="done">후기 작성 완료</option>
-            <option value="pending">후기 미작성</option>
-          </select>
+            <button
+              type="button"
+              className="student-my-lectures-select"
+              onClick={() => setIsFilterOpen((prev) => !prev)}
+            >
+              <span>{selectedFilterLabel}</span>
+              <span
+                className={`student-my-lectures-filter-arrow ${
+                  isFilterOpen ? "open" : ""
+                }`}
+              >
+                ▾
+              </span>
+            </button>
+
+            {isFilterOpen && (
+              <div className="student-my-lectures-filter-menu">
+                {filterOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`student-my-lectures-filter-item ${
+                      filter === option.value ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      setFilter(option.value);
+                      setIsFilterOpen(false);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="student-my-lectures-count">
             <span>전체 {lectures.length}개</span>
@@ -94,8 +195,14 @@ function StudentMyLectures() {
         <div className="student-my-lectures-grid">
           {filteredLectures.map((lecture) => (
             <LectureItem
-              key={lecture.id}
-              lecture={lecture}
+              key={lecture.docId}
+              lecture={{
+                ...lecture,
+                line: getLineLabel(lecture.line),
+                level: getLevelLabel(lecture.level),
+                rating: lecture.star?.average || 0,
+                reviewCount: lecture.total || 0,
+              }}
               cardType="myLecture"
               onChatClick={(id) => console.log("채팅 이동", id)}
             />

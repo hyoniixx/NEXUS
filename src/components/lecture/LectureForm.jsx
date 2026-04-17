@@ -5,19 +5,60 @@ import lectureIconWhite from "../../assets/lectureIconwhite.png";
 import champions from "../../data/champions";
 
 function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
+  const lineCodeMap = {
+    탑: "TOP",
+    정글: "JUNGLE",
+    미드: "MID",
+    원딜: "ADC",
+    서폿: "SUPPORT",
+  };
+
+  const levelCodeMap = {
+    초급: "BEGINNER",
+    중급: "INTERMEDIATE",
+    심화: "ADVANCED",
+  };
+
+  const lineLabelMap = {
+    TOP: "탑",
+    JUNGLE: "정글",
+    MID: "미드",
+    ADC: "원딜",
+    SUPPORT: "서폿",
+  };
+
+  const levelLabelMap = {
+    BEGINNER: "초급",
+    INTERMEDIATE: "중급",
+    ADVANCED: "심화",
+  };
+
   const [form, setForm] = useState({
     title: initialValues?.title ?? "",
     description: initialValues?.description ?? "",
-    line: initialValues?.line ?? "",
-    level: initialValues?.level ?? "",
-    lessonTime: initialValues?.lessonTime ?? "",
-    price: initialValues?.price ?? "",
+    line: initialValues?.line ? lineLabelMap[initialValues.line] || "" : "",
+    level: initialValues?.level ? levelLabelMap[initialValues.level] || "" : "",
+    lectureCount:
+      initialValues?.lectureCount?.toString() ??
+      initialValues?.lessonTime?.toString() ??
+      "",
+    price: initialValues?.price?.toString() ?? "",
     image: initialValues?.image ?? null,
-    champions: initialValues?.champions ?? [],
+    champion: Array.isArray(initialValues?.champion)
+      ? initialValues.champion
+      : Array.isArray(initialValues?.champions)
+        ? initialValues.champions
+        : [],
     curriculum:
-      initialValues?.curriculum && initialValues.curriculum.length > 0
+      typeof initialValues?.curriculum === "string"
         ? initialValues.curriculum
-        : [""],
+            .split("\n")
+            .map((item) => item.replace(/^\d+회차:\s*/, "").trim())
+            .filter(Boolean)
+        : Array.isArray(initialValues?.curriculum) &&
+            initialValues.curriculum.length > 0
+          ? initialValues.curriculum
+          : [""],
   });
 
   const [isChampionOpen, setIsChampionOpen] = useState(false);
@@ -68,6 +109,14 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
     }));
   };
 
+  const handleLectureCountChange = (e) => {
+    const onlyNumber = e.target.value.replace(/[^0-9]/g, "");
+    setForm((prev) => ({
+      ...prev,
+      lectureCount: onlyNumber,
+    }));
+  };
+
   const handleCurriculumChange = (index, value) => {
     setForm((prev) => {
       const next = [...prev.curriculum];
@@ -101,11 +150,11 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
 
   const handleSelectChampion = (champion) => {
     setForm((prev) => {
-      if (prev.champions.includes(champion)) return prev;
+      if (prev.champion.includes(champion)) return prev;
 
       return {
         ...prev,
-        champions: [...prev.champions, champion],
+        champion: [...prev.champion, champion],
       };
     });
   };
@@ -113,7 +162,7 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
   const handleRemoveChampion = (champion) => {
     setForm((prev) => ({
       ...prev,
-      champions: prev.champions.filter((item) => item !== champion),
+      champion: prev.champion.filter((item) => item !== champion),
     }));
   };
 
@@ -138,10 +187,9 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
     if (!form.description.trim()) return false;
     if (!form.line.trim()) return false;
     if (!form.level.trim()) return false;
-    if (!form.lessonTime.trim()) return false;
+    if (!form.lectureCount.trim()) return false;
     if (!form.price.trim()) return false;
-    if (!form.image) return false;
-    if (form.champions.length === 0) return false;
+    if (form.champion.length === 0) return false;
     if (form.curriculum.length === 0) return false;
     if (form.curriculum.some((item) => !item.trim())) return false;
 
@@ -155,8 +203,15 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
     if (!isValid) return;
 
     await onSubmit({
-      ...form,
+      title: form.title.trim(),
+      description: form.description.trim(),
+      line: lineCodeMap[form.line],
+      level: levelCodeMap[form.level],
+      lectureCount: Number(form.lectureCount),
       price: Number(form.price),
+      image: form.image,
+      champion: form.champion,
+      curriculum: form.curriculum.map((item) => item.trim()),
     });
   };
 
@@ -333,9 +388,9 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
               챔피언 선택 시 아래에 태그로 추가됩니다
             </div>
 
-            {form.champions.length > 0 && (
+            {form.champion.length > 0 && (
               <div className="lecture-form-champion-tags">
-                {form.champions.map((champion) => (
+                {form.champion.map((champion) => (
                   <button
                     type="button"
                     key={champion}
@@ -361,12 +416,12 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
             >
               <span
                 className={
-                  form.champions.length > 0
+                  form.champion.length > 0
                     ? "lecture-form-dropdown-value"
                     : "lecture-form-dropdown-placeholder"
                 }
               >
-                {form.champions.length > 0 ? "챔피언 추가 선택" : "챔피언 선택"}
+                {form.champion.length > 0 ? "챔피언 추가 선택" : "챔피언 선택"}
               </span>
               <span
                 className={`lecture-form-dropdown-arrow ${
@@ -396,7 +451,7 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
                 <div className="lecture-form-dropdown-list">
                   {filteredChampions.length > 0 ? (
                     filteredChampions.map((champion) => {
-                      const isSelected = form.champions.includes(champion);
+                      const isSelected = form.champion.includes(champion);
 
                       return (
                         <button
@@ -423,14 +478,14 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
 
           <div className="lecture-form-group">
             <label className="lecture-form-label">
-              수업 시간 <span>*</span>
+              강의 횟수 <span>*</span>
             </label>
             <input
               type="text"
-              name="lessonTime"
-              value={form.lessonTime}
-              onChange={handleChange}
-              placeholder="예: 주 2회, 회당 1시간"
+              name="lectureCount"
+              value={form.lectureCount}
+              onChange={handleLectureCountChange}
+              placeholder="예: 4"
               className="lecture-form-input"
               autoComplete="off"
             />
@@ -445,7 +500,7 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
               name="price"
               value={form.price}
               onChange={handlePriceChange}
-              placeholder="예: 50,000"
+              placeholder="예: 50000"
               className="lecture-form-input"
               autoComplete="off"
             />
@@ -477,7 +532,7 @@ function LectureForm({ mode = "create", initialValues, onSubmit, onCancel }) {
               <span className="lecture-form-upload-text">
                 {form.image && typeof form.image !== "string"
                   ? form.image.name
-                  : form.image && typeof form.image === "string"
+                  : isEdit
                     ? "기존 이미지 선택됨"
                     : "강의 이미지 업로드"}
               </span>

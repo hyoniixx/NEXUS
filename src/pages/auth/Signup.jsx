@@ -1,16 +1,14 @@
 import React from 'react'
 import SignupForm from './SignupForm'
 import './Signup.css'
+import AuthTop from '../../components/auth/AuthTop'
+import signupMain from '../../assets/signupMain.svg'
 
 function Signup() {
     return (
         <div>
             <section className='a-signup-ct'>
-                <article className='a-signup-top-ct'>
-                    <img />
-                    <h2>회원가입</h2>
-                    <p>NEXUS와 함께 시작하세요</p>
-                </article>
+                <AuthTop type='회원가입' img={signupMain} />
                 <SignupForm />
             </section>
         </div>

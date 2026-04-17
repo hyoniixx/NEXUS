@@ -1,0 +1,10 @@
+.l-main-loading-message {
+    color: #E8EAF0;
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+    margin: 20px 0 0 70px;
+    /* 120% */
+}

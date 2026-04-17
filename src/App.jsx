@@ -1,14 +1,17 @@
 import "./App.css";
 import { RouterProvider } from "react-router-dom";
 import { NexusRouter } from './routes/NexusRouter.jsx'
-import React, { createContext, useEffect, useReducer } from 'react'
+import React, { createContext, useEffect, useReducer, useState } from 'react'
 import setUserData from "./reducer/userReducer.js";
 import { auth } from "./firebase/config.js";
+import { getUser } from "./service/UserService.js";
+import { type } from "firebase/firestore/pipelines";
 
 export const userContext = createContext();
 
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [userData, dispatch] = useReducer(setUserData, {
     userName: "",
     email: "",
@@ -24,10 +27,21 @@ function App() {
     createAt: '',
   })
 
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const docSnapShot = await getUser(user.uid);
+        dispatch({ type: 'SET_USER_DATA', payload: docSnapShot })
+      }
+      setLoading(false);
+    })
 
+    return () => unsubscribe();
+  }, []);
 
   return (
-    <userContext.Provider value={{ userData, dispatch }}>
+    <userContext.Provider value={{ userData, dispatch, loading }}>
       <RouterProvider router={NexusRouter} />
     </userContext.Provider>
 

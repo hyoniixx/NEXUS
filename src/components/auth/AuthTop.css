@@ -1,0 +1,35 @@
+.a-auth-top-img {
+    margin: 0 auto;
+    display: flex;
+    width: 63.999px;
+    height: 63.999px;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #3B82F6 0%, #4580F6 7.14%, #4D7DF6 14.29%, #557BF6 21.43%, #5B78F6 28.57%, #6176F6 35.71%, #6773F6 42.86%, #6C71F6 50%, #716EF6 57.14%, #766BF6 64.29%, #7B68F6 71.43%, #7F65F6 78.57%, #8362F6 85.71%, #875FF6 92.86%, #8B5CF6 100%);
+}
+
+.a-auth-top-ct>h2 {
+    color: #E8EAF0;
+    text-align: center;
+    font-family: Inter;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 36px;
+    margin: 13px 0 8px 0;
+    /* 120% */
+}
+
+.a-auth-top-ct>p {
+    color: #94A3B8;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 31px;
+    /* 150% */
+}

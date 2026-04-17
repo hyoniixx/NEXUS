@@ -6,6 +6,7 @@ import search from '../../assets/searchIcon.svg'
 import right from '../../assets/rightIcon.svg'
 import MemberListItem from '../../components/admin/MemberListItem'
 import { getUserList } from '../../service/MemberViewService'
+import teemo from '../../assets/teemo.png'
 
 function Members() {
     const [total, setTotal] = useState(27); //전체 데이터 수
@@ -26,14 +27,26 @@ function Members() {
     const [filterUsers, setFilterUsers] = useState([]);//검색 또는 필터링에 걸린 유저들
     const [showUsers, setShowUsers] = useState([]); //필터링 이후 페이지네이션에 의해 표시할 유저 데이터
 
-    //정렬기준 상태관리(filterSelected)
+    //정렬순서 건드릴때 : 상태값 변경하고, 1페이지로 이동
     const handleFilter = (e) => {
-        var temp = [false, false];
-        if (e.target.selectedIndex === 0) {
-            temp = [true, false]
-        } else { temp = [false, true] }
-        setFilterSelected(temp)
-        console.log(filterSelected)
+        setFilterSelected(e.target.value);
+        setPageNow(1);
+        setInputValue('')
+        console.log(e.target.value)
+    }
+
+    //navbar 건드릴때 : 상태값 변경하고, 1페이지로 이동
+    const handleNav = (num) => {
+        if (num === 3) {
+            setOnlyBlacklist(true)
+        } else if (onlyBlacklist && navSelected[3]) {
+            setOnlyBlacklist(false)
+        };
+        var temp = [false, false, false, false];
+        temp[num] = true;
+        setNavSelected(temp);
+        setPageNow(1);
+        setInputValue('');
     }
 
     //유저정보 불러오기(최초 1회 마운트 시점)
@@ -48,7 +61,6 @@ function Members() {
     }, [])
 
     //데이터 불러온 뒤, 총 회원수 알아낸거 바탕으로 페이지네이션 구성
-    // console.log(users)
     useEffect(() => {
         setTotal(users.length);
         const tempPage = Math.ceil(total / 5); //전체 페이지 수 지정(올림)
@@ -62,15 +74,47 @@ function Members() {
         }
     }, [total])
 
-    //검색창 입력하면 입력한 내용을 포함하고 있는 데이터만 필터링 하여 filterUsers 변경
+    /*
+    ❕검색 필터 관련❕
+    처음엔 그냥 아래 기능들을 각각으로 분류했는데, 검색과 필터를 동시에 사용하였을때 두 조건의 교집합에서의 문제가 발생함.
+    1) user 전체에서 필터링을 잡자니, 다른 조건이 반영이 안된다.
+    2) filterUsers에서 잡자니, 어떤 조건A,B를 걸고 B를 취소하고 A를 취소하면 A&B는 filterUsers에서 영원히 빠짐.
+    그래서 해결 -> useEffect의 의존성 배열에 세가지 모두 포함시킨다. -> 해결됨.
+    정렬순서 및 navbar 선택 시 1페이지로 이동하게 하는 것은 onclick 이벤트에 추가함.
+    */
     useEffect(() => {
-        setFilterUsers(users.filter((item) =>
-            item.email.includes(inputValue) || item.userName.includes(inputValue)))
-    }, [inputValue])
-
-
-
-
+        //[1]검색창 입력하면 입력한 내용을 포함하고 있는 데이터만 필터링
+        let filtered = users.filter((item) =>
+            item.email.includes(inputValue) || item.userName.includes(inputValue)
+        );
+        //[2]정렬 순서 입력하면 입력한 내용을 기반으로 정렬
+        switch (filterSelected) {
+            case "sortByName":
+                filtered = [...filtered].sort((a, b) => a.userName.localeCompare(b.userName));
+                break;
+            case "sortByDate":
+                filtered = [...filtered].sort((a, b) => b.createAt.toDate() - a.createAt.toDate());
+                break;
+        }
+        //[3]navbar 선택에 따라 해당하는 정보만 출력 [전체 | 수강생 | 강사 | 블랙리스트]
+        const selectedIndex = navSelected.findIndex(item => item === true);
+        switch (selectedIndex) {
+            case 0:
+                break;
+            case 1:
+                filtered = filtered.filter(item => item.role === 'student');
+                break;
+            case 2:
+                filtered = filtered.filter(item => item.role === 'instructor');
+                break;
+            case 3:
+                filtered = filtered.filter(item => item.isBlacklist === true);
+                break;
+        }
+        //[4]블랙리스트만 보기 여부 반영
+        if (onlyBlacklist) filtered = filtered.filter(item => item.isBlacklist === true);
+        setFilterUsers(filtered);
+    }, [inputValue, filterSelected, navSelected, onlyBlacklist])
 
 
 
@@ -130,41 +174,41 @@ function Members() {
                     <img src={search} width='20px' height='20px' />
                     <input
                         type="text"
-                        placeholder='이름, 아이디, 이메일, 전화번호로 검색...'
+                        placeholder='이름 또는 이메일로 검색...'
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                     />
                 </div>
                 <select name="member-filter" id="member-filter" onChange={(e) => handleFilter(e)}>
-                    <option value="sortByDate" selected={filterSelected[0]} >가입일 순</option>
-                    <option value="sortByName" selected={filterSelected[1]}>이름 순</option>
+                    <option value="sortByDate">최근 가입 순</option>
+                    <option value="sortByName">이름 순</option>
                 </select>
             </div>
             <div className='admin-members-navbar'>
                 <div
                     className='admin-members-navbar-all'
-                    onClick={() => setNavSelected([true, false, false, false])}
+                    onClick={() => handleNav(0)}
                     style={{ borderBottom: navSelected[0] ? '2px solid #3B82F6' : '' }}
                 >
                     <p style={{ color: navSelected[0] ? '#3B82F6' : '#94A3B8' }}>전체</p>
                 </div>
                 <div
                     className='admin-members-navbar-student'
-                    onClick={() => setNavSelected([false, true, false, false])}
+                    onClick={() => handleNav(1)}
                     style={{ borderBottom: navSelected[1] ? '2px solid #3B82F6' : '' }}
                 >
                     <p style={{ color: navSelected[1] ? '#3B82F6' : '#94A3B8' }}>수강생</p>
                 </div>
                 <div
                     className='admin-members-navbar-instructor'
-                    onClick={() => setNavSelected([false, false, true, false])}
+                    onClick={() => handleNav(2)}
                     style={{ borderBottom: navSelected[2] ? '2px solid #3B82F6' : '' }}
                 >
                     <p style={{ color: navSelected[2] ? '#3B82F6' : '#94A3B8' }}>강사</p>
                 </div>
                 <div
                     className='admin-members-navbar-blacklist'
-                    onClick={() => setNavSelected([false, false, false, true])}
+                    onClick={() => handleNav(3)}
                     style={{ borderBottom: navSelected[3] ? '2px solid #3B82F6' : '' }}
                 >
                     <p style={{ color: navSelected[3] ? '#3B82F6' : '#94A3B8' }}>블랙리스트</p>
@@ -179,7 +223,7 @@ function Members() {
                     }}
                     onClick={() => setOnlyBlacklist(false)}
                 >
-                    블랙리스트 제외
+                    전체 보기
                 </button>
                 <button
                     className='admin-members-filter-button'
@@ -194,11 +238,17 @@ function Members() {
                 <p>{Number(pageNow) * 5 - 4}-{Math.min(Number(pageNow) * 5, total)} / {total}명</p>
             </div>
             <div className='admin-members-list'>
-                {showUsers.map((user, index) => {
+                {showUsers.length !== 0 ? showUsers.map((user) => {
                     return (
-                        <MemberListItem key={index} name={user.userName} id={user.birthDate} role={user.role} email={user.email} date={user.createAt.toDate()} score={user.csScore} isblack={user.isBlacklist} />
+                        <MemberListItem key={user.id} id={user.id} name={user.userName} birth={user.birthDate} role={user.role} email={user.email} date={user.createAt.toDate()} score={user.csScore} isblack={user.isBlacklist} />
                     )
-                })}
+                }) :
+                    <div className='admin-members-nothing'>
+                        <h1>검색된 정보가 없습니다.</h1>
+                        <img src={teemo} width='300px' height='300px' />
+                        <h6>조건이나 검색어를 변경해보세요.</h6>
+                    </div>}
+                { }
                 {/* <MemberListItem name='김태정' id='user01' role='student' email='user01@nexus.com' date='2025.04.01' score='93' isblack='false' />
                 <MemberListItem name='김블랙' id='user02' role='student' email='user02@nexus.com' date='2025.04.04' score='11' isblack='true' />
                 <MemberListItem name='이지경' id='user03' isStrm='true' role='instructor' email='inst99@nexus.com' date='2022.02.11' score='153' isblack='false' />

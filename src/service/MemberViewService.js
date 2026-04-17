@@ -12,7 +12,7 @@
 //         wish: [],
 //         createAt: ""
 //     }
-import { getDoc, doc, setDoc, query, collection, getDocs, where } from "firebase/firestore"
+import { getDoc, doc, setDoc, query, collection, getDocs, where, updateDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.js";
 
 const COLLECTION_NAME = 'users';
@@ -40,7 +40,24 @@ export const getUserList = async () => {
         return posts;
 
     } catch (error) {
-        console.log('회원 목록 조회 오류');
+        // console.log('회원 목록 조회 오류');
+        throw error;
+    }
+}
+
+/**
+ * 특정 회원의 블랙리스트 여부를 관리하는 함수
+ * @param {string} userId - 블랙리스트 여부 변경할 회원의 고유 ID
+ */
+export const toggleBlackList = async (userId, want) => {
+    try {
+        const docRef = doc(db, COLLECTION_NAME, userId);
+        await updateDoc(docRef, {
+            isBlacklist: want
+        });
+        console.log('블랙리스트 변경 완료');
+    } catch (error) {
+        console.log('블랙리스트 변경 오류');
         throw error;
     }
 }

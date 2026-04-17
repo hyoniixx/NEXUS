@@ -1,10 +1,157 @@
+/*전체 레이아웃*/
 .payment-list-item {
     display: flex;
     flex-direction: row;
     gap: 16px;
+    border-radius: 12px;
+    border: 0.701px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    height: 149.353px;
+    padding: 24.695px;
+}
+
+
+/*아이콘 및 완료|미완료 라벨*/
+.payment-list-item-header {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+}
+
+.payment-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.10);
 }
 
 .payment-list-item-status {
-    width: 60px;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
     height: 24px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.payment-list-item-status>p {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.payment-list-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
+
+.payment-list-item-user {
+    display: flex;
+    flex-direction: row;
+    gap: 4.2px;
+    align-items: center;
+}
+
+.payment-list-item-user>h6 {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.payment-list-item-user>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.payment-list-item-title>p {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/*버튼, 금액 내용*/
+.payment-list-item-rightend {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin-left: auto;
+    align-items: center;
+}
+
+/*버튼*/
+.payment-list-item-button {
+    border-radius: 8px;
+    background: #3B82F6;
+    display: flex;
+    padding: 6px 16px 6px 16px;
+    justify-content: center;
+    gap: 10.994px;
+    width: 117px;
+    height: 36px;
+    border: none;
+    align-items: center;
+}
+
+.payment-list-item-button>p {
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/*금액 및 날짜*/
+.payment-list-item-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+.payment-list-item-detail>div>h6 {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.payment-list-item-detail-get,
+.payment-list-item-detail-minus,
+.payment-list-item-detail-result,
+.payment-list-item-detail-date {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: right;
+    align-items: center;
+}
+
+.payment-list-item-detail-date>p {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.payment-list-item-detail-get>p {
+    color: #E8EAF0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.payment-list-item-detail-minus>p {
+    color: #EF4444;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.payment-list-item-detail-result {
+    color: #8B5CF6;
+    font-size: 18px;
+    font-weight: 700;
 }

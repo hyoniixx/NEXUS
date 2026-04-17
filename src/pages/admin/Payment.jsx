@@ -17,7 +17,11 @@ function Payment() {
                 <p>{Number(pageNow) * 5 - 4}-{Math.min(Number(pageNow) * 5, total)}/{Number(total)}개</p>
             </div>
             <div className='payment-list'>
-                <PaymentListItem />
+                <PaymentListItem isCompleted='false' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />
+                <PaymentListItem isCompleted='true' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />
+                <PaymentListItem isCompleted='true' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />
+                <PaymentListItem isCompleted='true' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />
+                <PaymentListItem isCompleted='true' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />
             </div>
         </div>
     )

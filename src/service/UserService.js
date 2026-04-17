@@ -30,16 +30,14 @@ export const createUser = async (newUserInfo) => {
             wish: [],
             createAt: serverTimestamp(),
         })
-        console.log('유저 생성 성공')
     } catch (error) {
-        console.log('유저 생성 실패', error);
         throw error;
     }
 }
 
-export const getUser = async () => {
-    const docSnapShot = await getDoc(doc(db, COLLECTION_NAME, auth.currentUser.uid))
-    console.log('!!!!!!!!!', auth.currentUser.uid);
+export const getUser = async (uid = auth.currentUser.uid) => {
+    const docSnapShot = await getDoc(doc(db, COLLECTION_NAME, uid))
+    console.log('!!!!!!!!!', uid);
     console.log('????????????', docSnapShot.data());
     return docSnapShot.data();
 }

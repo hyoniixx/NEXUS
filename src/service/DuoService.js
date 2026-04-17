@@ -77,9 +77,9 @@ export const createDuo = async (newDuo) => {
   try {
     const duoData = {
       writer: {
-        uid: 1, // 나중에 로그인 유저 uid로 교체
+        uid: newDuo.uid ?? null,
         userName: newDuo.nickname ?? "",
-        profileImage: null,
+        profileImage: newDuo.profileImage ?? null,
         gameName: newDuo.gameName ?? "",
         gameTag: newDuo.gameTag ?? "",
         tier: newDuo.myTier ?? "",
@@ -109,7 +109,7 @@ export const updateDuo = async (docId, updateData) => {
   try {
     const duoData = {
       writer: {
-        uid: updateData.writer?.uid ?? 1,
+        uid: updateData.writer?.uid ?? null,
         userName: updateData.writer?.userName ?? "",
         profileImage: updateData.writer?.profileImage ?? null,
         gameName: updateData.writer?.gameName ?? "",

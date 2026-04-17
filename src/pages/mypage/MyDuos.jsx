@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
@@ -12,9 +12,14 @@ import {
   getDuosByWriterUid,
   updateDuo,
 } from "../../service/DuoService";
+import { userContext } from "../../App";
 
 function MyDuos() {
   const navigate = useNavigate();
+  const { userData, loading } = useContext(userContext);
+
+  const uid = userData?.uid || null;
+  const userName = userData?.userName || "";
 
   const [activeTab, setActiveTab] = useState("my");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -49,10 +54,16 @@ function MyDuos() {
 
   useEffect(() => {
     const fetchMyDuos = async () => {
+      if (!uid) {
+        setMyDuoList([]);
+        setPendingDuoList([]);
+        setCompletedDuoList([]);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
-
-        const uid = 1; // 나중에 로그인 유저 uid로 교체
 
         const [myDuosRaw, allDuosRaw, myApplications] = await Promise.all([
           getDuosByWriterUid(uid),
@@ -80,8 +91,10 @@ function MyDuos() {
       }
     };
 
-    fetchMyDuos();
-  }, []);
+    if (!loading) {
+      fetchMyDuos();
+    }
+  }, [uid, loading]);
 
   const currentList = useMemo(() => {
     if (activeTab === "my") return myDuoList;
@@ -102,14 +115,15 @@ function MyDuos() {
   const handleUpdateDuo = async (updatedDuo) => {
     try {
       const docId = updatedDuo.docId || editingDuo?.docId;
-      if (!docId) return;
+      if (!docId || !uid) return;
 
       const duoData = {
         writer: {
-          uid: 1,
-          userName: updatedDuo.nickname ?? editingDuo?.writer?.userName ?? "",
-          profileImage: null,
-          gameName: "",
+          uid,
+          userName:
+            updatedDuo.nickname ?? editingDuo?.writer?.userName ?? userName,
+          profileImage: editingDuo?.writer?.profileImage ?? null,
+          gameName: updatedDuo.gameName ?? editingDuo?.writer?.gameName ?? "",
           gameTag: updatedDuo.gameTag ?? editingDuo?.writer?.gameTag ?? "",
           tier: updatedDuo.myTier ?? editingDuo?.writer?.tier ?? "",
           line: updatedDuo.myLine ?? editingDuo?.writer?.line ?? "",
@@ -145,6 +159,11 @@ function MyDuos() {
   };
 
   const handleChat = (duo) => {
+    if (!uid || !userName) {
+      alert("로그인 후 채팅 이용이 가능합니다.");
+      return;
+    }
+
     navigate("/chat", {
       state: {
         duoId: duo.docId,
@@ -192,7 +211,7 @@ function MyDuos() {
     deleteModal.closeModal();
   };
 
-  if (isLoading) {
+  if (loading || isLoading) {
     return (
       <div className="myduos-page">
         <div className="myduos-inner">

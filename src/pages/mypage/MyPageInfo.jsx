@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 function MyPageInfo() {
     const { userData, dispatch } = useContext(userContext);
     const navigate = useNavigate();
+    console.log(userData.createAt)
     const TIER_IMAGES = {
         1: tier1,
         2: tier2,
@@ -42,7 +43,7 @@ function MyPageInfo() {
                     <p>이메일: </p><span>{userData.email}</span>
                     <p>생년월일: </p><span>{userData.birthDate}</span>
                     <p>cs 점수: </p><span>{userData.csScore}</span>
-                    <p>가입일: </p><span>{userData.createAt.toDate().toLocaleString()}</span>
+                    <p>가입일: </p><span>{userData?.createAt?.toDate ? userData.createAt.toDate().toLocaleString() : '로딩 중...'}</span>
                 </div>
             </article>
         </section >

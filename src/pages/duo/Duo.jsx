@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DuoItem from "../../components/DuoItem";
 import CreateDuoModal from "../../components/common/CreateDuoModal";
@@ -12,10 +12,16 @@ import {
   deleteDuo,
   getDuos,
 } from "../../service/DuoService";
+import { userContext } from "../../App";
 
 function Duo() {
   const navigate = useNavigate();
-  const [role] = useState("user"); // "user" || "admin"
+  const { userData, loading } = useContext(userContext);
+
+  const role = userData?.role || "";
+  const uid = userData?.uid || null;
+  const userName = userData?.userName || "";
+  const profileImage = userData?.profileImage || null;
   const isAdmin = role === "admin";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -96,7 +102,14 @@ function Duo() {
 
   const handleCreateDuo = async (newDuo) => {
     try {
-      await createDuo(newDuo);
+      const payload = {
+        ...newDuo,
+        uid,
+        nickname: newDuo.nickname || userName,
+        profileImage,
+      };
+
+      await createDuo(payload);
       const data = await getDuos();
       setDuoList(formatDuos(data));
       setIsModalOpen(false);
@@ -132,13 +145,41 @@ function Duo() {
     setOpenFilter("");
   };
 
+  const handleOpenCreateModal = () => {
+    if (!uid || !userName) {
+      setResultModalMessage("로그인 후 듀오 등록이 가능합니다.");
+      setIsResultModalOpen(true);
+      return;
+    }
+
+    setIsModalOpen(true);
+  };
+
+  const handleOpenChat = () => {
+    if (!uid || !userName) {
+      setResultModalMessage("로그인 후 채팅 이용이 가능합니다.");
+      setIsResultModalOpen(true);
+      return;
+    }
+
+    navigate("/chat");
+  };
+
   const handleConfirmApply = async () => {
     if (!selectedDuo) return;
 
+    if (!uid || !userName) {
+      setResultModalMessage("로그인 후 듀오 신청이 가능합니다.");
+      applyDuoModal.closeModal();
+      setSelectedDuo(null);
+      setIsResultModalOpen(true);
+      return;
+    }
+
     try {
       const applicant = {
-        uid: 1, // 나중에 로그인 유저 uid로 교체
-        userName: "테스트유저",
+        uid,
+        userName,
       };
 
       const result = await applyToDuo(selectedDuo, applicant);
@@ -164,11 +205,17 @@ function Duo() {
   const applyDuoModal = useModal(handleConfirmApply);
 
   const handleOpenApplyModal = (duo) => {
+    if (!uid || !userName) {
+      setResultModalMessage("로그인 후 듀오 신청이 가능합니다.");
+      setIsResultModalOpen(true);
+      return;
+    }
+
     setSelectedDuo(duo);
     applyDuoModal.openModal();
   };
 
-  if (isLoading) {
+  if (loading || isLoading) {
     return (
       <div className="duo-page">
         <div className="duo-page-inner">
@@ -202,7 +249,7 @@ function Duo() {
                 <button
                   className="duo-chat-btn"
                   type="button"
-                  onClick={() => navigate("/chat")}
+                  onClick={handleOpenChat}
                 >
                   <img src={duoChatIcon} alt="채팅" className="duo-btn-icon" />
                   <span className="duo-btn-label">채팅</span>
@@ -211,7 +258,7 @@ function Duo() {
                 <button
                   className="duo-create-btn"
                   type="button"
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={handleOpenCreateModal}
                 >
                   <span className="duo-plus">+</span>
                   <span className="duo-btn-label">듀오 신청 등록</span>

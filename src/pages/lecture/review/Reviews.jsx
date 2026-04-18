@@ -9,6 +9,7 @@ import write from '../../../assets/writeIcon.svg'
 import right from '../../../assets/rightIcon.svg'
 import ReviewItem from '../../../components/review/ReviewItem'
 
+
 function Reviews() {
     const { id } = useParams();
     const lecture = {

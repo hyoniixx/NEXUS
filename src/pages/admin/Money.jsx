@@ -1,4 +1,4 @@
-import React, { createContext, use, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import leftArrow from '../../assets/leftArrow.svg'
 import './Money.css'
@@ -44,6 +44,18 @@ function Money() {
     }, [])
     const [searchValue, setSearchValue] = useState(''); //이 값에 따라 요소 렌더링 달라지게
     const [navActive, setNavActive] = useState([true, false]); //NavBar 요소 두개에 대한 속성
+
+    useEffect(() => { //전체 리스트에 변화가 생길때 대시보드 표기 관리하기
+        //대시보드 표기 관리
+        //입금 받은 돈
+        var tempData = moneyList;
+        var totalMoney = 0;
+        tempData.map((item) => totalMoney += Number(item.price));
+        //정산 완료된 돈
+        var complete = 0;
+        tempData.filter((item) => item.completed === 'true' || item.completed === true).map((item) => complete += Number(item.price));
+        setMoneyValue([totalMoney, totalMoney - complete, complete, complete * 0.1]);
+    }, [moneyList])
 
     useEffect(() => {
         setFilteredList(moneyList)

@@ -16,7 +16,15 @@ function Deposit() {
             <div className='deposit-list'>
                 {showList.map((item, index) => {
                     return (
-                        <DepositListItem studentName={item.student} studentId={item.studentEmail} lectureTitle={item.title} price={item.price} date={item.createdAt} />
+                        <DepositListItem
+                            studentName={item.student}
+                            studentId={item.studentEmail}
+                            instructorName={item.instructor}
+                            instructorId={item.instructorEmail}
+                            lectureTitle={item.title}
+                            price={item.price}
+                            date={item.createdAt}
+                        />
                     )
                 })}
                 {/* <DepositListItem studentName='김학생' studentId='student01' lectureTitle='정글의 정석 - 기초편' price='50000' date='2026.04.04 04:44' />

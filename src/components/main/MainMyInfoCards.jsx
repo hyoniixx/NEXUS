@@ -36,7 +36,7 @@ function MainMyInfoCards({ type }) {
             link = 'mypage';
             break;
         case "money":
-            text = "정산 관리";
+            text = "매출 관리";
             image = moneyIcon;
             link = 'admin/money'
             break;

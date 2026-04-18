@@ -35,7 +35,16 @@ function Payment() {
                 {showList.map((item, index) => {
                     return (
                         // <DepositListItem studentName={item.student} studentId={item.studentEmail} lectureTitle={item.title} price={item.price} date={item.createdAt} />
-                        <PaymentListItem isCompleted={item.completed} name={item.instructor} email={item.instructorEmail} title={item.title} price={item.price} date={item.createdAt} id={item.id} />
+                        <PaymentListItem
+                            isCompleted={item.completed}
+                            name={item.instructor}
+                            email={item.instructorEmail}
+                            title={item.title}
+                            price={item.price}
+                            date={item.createdAt}
+                            student={item.student}
+                            studentId={item.studentEmail}
+                            id={item.id} />
                     )
                 })}
                 {/* <PaymentListItem isCompleted='false' name='이상혁' id='inst_faker' title='미드 강의의 정석' price='45000' date='2026.04.04' />

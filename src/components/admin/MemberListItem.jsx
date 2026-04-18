@@ -17,6 +17,7 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
 
     const want = blackNow ? false : true;
     const modal = useModal();
+    const modalText = `${name}님이 블랙리스트에${isblack === true ? "서 제거" : " 추가"}되었습니다.`
     const handleBlackList = async () => {
         await toggleBlackList(id, want);
         modal.openModal('123');
@@ -30,7 +31,7 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
                 closeModal={modal.closeModal}
                 activeModal={modal.activeModal}
                 title='블랙리스트'
-                content={`${name}님이 블랙리스트에 추가되었습니다.`}
+                content={modalText}
                 type='one'
                 color='red'
             />

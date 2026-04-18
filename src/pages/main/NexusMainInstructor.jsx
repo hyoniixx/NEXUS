@@ -1,18 +1,45 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './NexusMainInstructor.css'
 import LectureItem from '../../components/lecture/LectureItem';
 import MainMyInfoCards from '../../components/main/MainMyInfoCards';
 import MainReviewCard from '../../components/main/MainReviewCard';
 import MainStudentCard from '../../components/main/MainStudentCard';
 import tierUp from '../../assets/tierUp.svg'
+import tier1 from "../../assets/tier1.png"
+import tier2 from "../../assets/tier2.png"
+import tier3 from "../../assets/tier3.png"
+import tier4 from "../../assets/tier4.png"
+import tier5 from "../../assets/tier5.png"
+import tier6 from "../../assets/tier6.png"
+import tier7 from "../../assets/tier7.png"
+import tier8 from "../../assets/tier8.png"
+import tier9 from "../../assets/tier9.png"
+import { userContext } from '../../App'
+import { getLectures } from "../../service/LectureService";
+import { useNavigate } from 'react-router-dom'
 
 function NexusMainInstructor() {
-    const user = { userName: '김태완', userTier: 2, userCsScore: 80 };
+    const { userData } = useContext(userContext);
+    const csGradeMap = ['미니언', '대포미니언', '바위게', '칼날부리', '블루', '드래곤', '전령', '바론', '장로드래곤']
+    const csGradeImgMap = [tier1, tier2, tier3, tier4, tier5, tier6, tier7, tier8, tier9]
+    const csGradeUpMap = [0, 31, 51, 71, 101, 201, 301, 501, 1000];
+    const userGradeUp = [userData.csScore - csGradeUpMap[userData.csGrade - 1], csGradeUpMap[userData.csGrade] - userData.csScore]
+    const [lectureList, setLectureList] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const lender = async () => {
+            var tempLectures = await getLectures();
+            setLectureList([tempLectures[0], tempLectures[1], tempLectures[2]]);
+            console.log("!", tempLectures)
+        }
+        lender();
+    }, [])
     return (
         <>
             <div className='main-student-dashboard'>
                 <div className='main-hello'>
-                    <h1>{user.userName}님, </h1>
+                    <h1>{userData.userName}님, </h1>
                     <h1>오늘도 멋진 강의로</h1>
                     <h1>학생들을 만나보세요👌</h1>
                     <p>당신의 경험을 나누세요</p>
@@ -22,12 +49,16 @@ function NexusMainInstructor() {
                         <div className='main-myInfo-profile-top'>
                             <div className='profileImg'>profileImg</div>
                             <div>
-                                <p style={{ color: 'white', fontSize: "22px" }}>{user.userName}님</p>
-                                <p style={{ color: '#3B82F6' }}>현재티어 : {user.userTier}</p>
-                                <p style={{ color: '#94A3B8' }}>현재 CS점수 : {user.userCsScore}</p>
+                                <p style={{ color: 'white', fontSize: "22px" }}>{userData.userName}님</p>
+                                <p style={{ color: '#3B82F6' }}>현재티어 : {csGradeMap[userData.csGrade - 1]}</p>
+                                <p style={{ color: '#94A3B8' }}>현재 CS점수 : {userData.csScore}</p>
                             </div>
                         </div>
-                        <p>내 프로필 보기 →</p>
+                        <p
+                            className='toLink'
+                            onClick={() => navigate('/mypage')}
+                        >내 프로필 보기 →
+                        </p>
                     </div>
                     <div className='main-myInfoCards'>
                         <MainMyInfoCards key='profile' type='profile' />
@@ -42,32 +73,47 @@ function NexusMainInstructor() {
                             <p style={{ color: 'white', fontSize: '20px', fontWeight: 700 }}>내 현재 상태</p>
                         </div>
                         <div className='main-statusNow-bottom'>
-                            <div className='main-statusNow-bottom-img'>img</div>
+                            <img src={csGradeImgMap[userData.csGrade - 1]} className='main-statusNow-bottom-img' />
                             <div className='main-statusNow-bottom-level'>
-                                <h6 style={{ color: 'white' }}>드래곤</h6>
-                                <div className='main-statusNow-bottom-level-gauge' style={{ gridTemplateColumns: '25fr 247fr' }}>
+                                <h6 style={{ color: 'white' }}>{csGradeMap[userData.csGrade - 1]}</h6>
+                                <div className='main-statusNow-bottom-level-gauge' style={{ gridTemplateColumns: `${userGradeUp[0]}fr ${userGradeUp[1]}fr` }}>
                                     <div className='gauge-now' style={{ backgroundColor: "#3B82F6" }}></div>
                                     <div className='gauge-full' style={{ backgroundColor: '#1E293B' }}></div>
                                 </div>
-                                <p style={{ color: '#94A3B8' }}>승격율 : {user.userCsScore}</p>
+                                <p style={{ color: '#94A3B8' }}>승격율 : {(userGradeUp[0] * 100 / (userGradeUp[0] + userGradeUp[1])).toFixed(2)}%</p>
                             </div>
                         </div>
                     </div>
                     <div className='main-statusNext'>
                         <p style={{ color: 'white', fontSize: '20px', fontWeight: 700 }}>다음 등급까지</p>
                         <div className='main-statusNow-bottom-level'>
-                            <h6 style={{ color: 'white' }}>드래곤</h6>
-                            <div className='main-statusNow-bottom-level-gauge' style={{ gridTemplateColumns: '25fr 247fr' }}>
+                            <h6 style={{ color: 'white' }}>{csGradeMap[userData.csGrade]}</h6>
+                            <div className='main-statusNow-bottom-level-gauge' style={{ gridTemplateColumns: `${userGradeUp[0]}fr ${userGradeUp[1]}fr` }}>
                                 <div className='gauge-now' style={{ backgroundColor: "#3B82F6" }}></div>
                                 <div className='gauge-full' style={{ backgroundColor: '#1E293B' }}></div>
                             </div>
-                            <p style={{ color: '#94A3B8' }}>승격율 : {user.userCsScore}</p>
+                            <p style={{ color: '#94A3B8' }}>승격율 : {(userGradeUp[0] * 100 / (userGradeUp[0] + userGradeUp[1])).toFixed(2)}%</p>
                         </div>
                     </div>
                 </div>
                 <div className='main-lectureRecommend'>
                     <h2>내 강의 현황</h2>
                     <div className='main-lectureItems'>
+                        {lectureList.filter(item => item).map((item, index) => {
+                            return (
+                                <LectureItem key={index} lecture={{
+                                    id: item.id = 1,
+                                    instructorName: item.instructorName,
+                                    title: item.title,
+                                    line: item.line,
+                                    level: item.level,
+                                    champion: item.champion,
+                                    rating: item.average,
+                                    reviewCount: item.total,
+                                    price: item.price,
+                                    isLiked: false
+                                }} />)
+                        })}
                         <LectureItem key='1' lecture={{
                             id: 9,
                             instructorName: "Peanut",
@@ -81,7 +127,7 @@ function NexusMainInstructor() {
                             price: 38000,
                             isLiked: false
                         }} />
-                        <LectureItem key='2' lecture={{
+                        {/* <LectureItem key='2' lecture={{
                             id: 9,
                             instructorName: "Peanut",
                             badgeType: "STREAMER",
@@ -93,8 +139,8 @@ function NexusMainInstructor() {
                             reviewCount: 68,
                             price: 38000,
                             isLiked: false
-                        }} />
-                        <LectureItem key='3' lecture={{
+                        }} /> */}
+                        {/* <LectureItem key='3' lecture={{
                             id: 9,
                             instructorName: "Peanut",
                             badgeType: "STREAMER",
@@ -106,7 +152,7 @@ function NexusMainInstructor() {
                             reviewCount: 68,
                             price: 38000,
                             isLiked: false
-                        }} />
+                        }} /> */}
                     </div>
                 </div>
                 <div className='main-bottom'>

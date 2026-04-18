@@ -1,20 +1,34 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import MainMyInfoCards from '../../components/main/MainMyInfoCards'
 import './NexusMainAdmin.css'
 import staticIcon from "../../assets/staticIcon.svg"
 import moneyIcon from "../../assets/moneyIcon.svg"
 import LectureItem from '../../components/lecture/LectureItem'
+import { userContext } from '../../App'
+import { getLectures } from "../../service/LectureService";
+import { useNavigate } from 'react-router-dom'
 
 function NexusMainAdmin() {
-    const user = { userName: '김관리' }
+    const { userData } = useContext(userContext);
     const total = { member: 12345, review: 1234, star: 4.44234 }
     const money = { month: 1234567, increased: 1234 }
     const time = new Date();
+    const [lectureList, setLectureList] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const lender = async () => {
+            var tempLectures = await getLectures();
+            setLectureList([tempLectures[0], tempLectures[1], tempLectures[2]]);
+            console.log("!", tempLectures)
+        }
+        lender();
+    }, [])
 
     return (
         <div className='main-admin-dashboard'>
             <div className='main-hello'>
-                <h1>관리자 {user.userName}님, </h1>
+                <h1>관리자 {userData.userName}님, </h1>
                 <h1>환영합니다🎯</h1>
                 <p>전체 시스템을 관리하고 모니터링하세요</p>
             </div>
@@ -23,7 +37,7 @@ function NexusMainAdmin() {
                     <div className='main-myInfo-profile-top'>
                         <div className='profileImg'>profileImg</div>
                         <div >
-                            <p style={{ color: 'white', fontSize: "22px" }}>{user.userName}님</p>
+                            <p style={{ color: 'white', fontSize: "22px" }}>{userData.userName}님</p>
                         </div>
                     </div>
                     <p>내 프로필 보기 →</p>
@@ -71,7 +85,22 @@ function NexusMainAdmin() {
             <div className='main-lectureRecommend'>
                 <h2>최근 개설된 강의</h2>
                 <div className='main-lectureItems'>
-                    <LectureItem key='1' lecture={{
+                    {lectureList.filter(item => item).map((item, index) => {
+                        return (
+                            <LectureItem key={index} lecture={{
+                                id: item.id = 1,
+                                instructorName: item.instructorName,
+                                title: item.title,
+                                line: item.line,
+                                level: item.level,
+                                champion: item.champion,
+                                rating: item.average,
+                                reviewCount: item.total,
+                                price: item.price,
+                                isLiked: false
+                            }} />)
+                    })}
+                    {/* <LectureItem key='1' lecture={{
                         id: 9,
                         instructorName: "Peanut",
                         badgeType: "STREAMER",
@@ -83,7 +112,7 @@ function NexusMainAdmin() {
                         reviewCount: 68,
                         price: 38000,
                         isLiked: false
-                    }} />
+                    }} /> */}
                     <LectureItem key='2' lecture={{
                         id: 9,
                         instructorName: "Peanut",

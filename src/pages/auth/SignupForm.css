@@ -85,3 +85,13 @@
     border: 0;
     /* 150% */
 }
+
+.a-instructor-first {
+    display: flex;
+    gap: 16px;
+}
+
+.a-instructor-first>div,
+.a-instructor-first input {
+    width: 100%;
+}

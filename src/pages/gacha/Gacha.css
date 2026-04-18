@@ -1,0 +1,574 @@
+.gacha-page {
+  width: 100%;
+  min-height: calc(100vh - 65px);
+  background: #0a0e27;
+  box-sizing: border-box;
+  padding: 32px 0 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.gacha-page-inner {
+  width: 896px;
+  max-width: 896px;
+}
+
+.gacha-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gacha-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 48px;
+  padding: 0;
+}
+
+.gacha-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.gacha-hero-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 30px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.22);
+}
+
+.gacha-title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 42px;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.gacha-title-nexus {
+  background: linear-gradient(90deg, #dbeafe 0%, #60a5fa 45%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gacha-title-treasure {
+  color: #e8eaf0;
+}
+
+.gacha-subtitle {
+  margin: 8px 0 0;
+  color: #94a3b8;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.gacha-ticket-box {
+  width: 100%;
+  height: 62px;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.gacha-ticket-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gacha-ticket-icon {
+  font-size: 16px;
+}
+
+.gacha-ticket-label {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.gacha-ticket-count {
+  color: #3b82f6;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.gacha-draw-box {
+  width: 100%;
+  min-height: 266px;
+  padding: 32px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(139, 92, 246, 0.1) 50%,
+      rgba(99, 102, 241, 0.1) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.gacha-draw-content {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.gacha-draw-orb {
+  width: 128px;
+  height: 128px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1e293b 0%, rgba(30, 41, 59, 0.5) 100%);
+  border: 4px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 50px;
+  box-sizing: border-box;
+}
+
+.gacha-draw-orb.rolling {
+  animation: gacha-spin 0.9s linear infinite;
+  color: #ffffff;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+}
+
+@keyframes gacha-spin {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.06);
+  }
+
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.gacha-draw-button {
+  min-width: 123px;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 24px;
+  cursor: pointer;
+}
+
+.gacha-draw-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.gacha-result-box {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(17, 24, 39, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.gacha-result-grade {
+  color: #e8eaf0;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.gacha-result-title {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 36px;
+  text-align: center;
+}
+
+.gacha-result-desc {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.gacha-error-message {
+  margin-top: -12px;
+  margin-bottom: 24px;
+  color: #f87171;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.gacha-coupon-box,
+.gacha-my-coupon-box,
+.gacha-probability-box {
+  width: 100%;
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.gacha-coupon-box {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.gacha-my-coupon-box {
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.gacha-probability-box {
+  padding: 24px;
+}
+
+.gacha-section-title {
+  color: #e8eaf0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  margin-bottom: 24px;
+}
+
+.gacha-coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.gacha-coupon-card {
+  height: 119px;
+  border: 2px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  color: #e8eaf0;
+  cursor: pointer;
+}
+
+.gacha-coupon-card.active {
+  border: 2px solid rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.gacha-coupon-emoji {
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.gacha-coupon-rate {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.gacha-coupon-grade {
+  font-size: 10px;
+  line-height: 15px;
+  opacity: 0.7;
+}
+
+.gacha-coupon-guide {
+  margin-top: 12px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.gacha-my-coupon-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gacha-my-coupon-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gacha-my-coupon-count-label {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.gacha-my-coupon-count-value {
+  color: #e8eaf0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.gacha-my-coupon-button {
+  min-width: 132px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0 20px;
+  cursor: pointer;
+}
+
+.gacha-probability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gacha-probability-item {
+  min-height: 66px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gacha-probability-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gacha-probability-emoji {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.gacha-probability-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.gacha-probability-grade {
+  color: #e8eaf0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.gacha-probability-reward {
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.gacha-probability-rate {
+  color: #e8eaf0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.gacha-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.gacha-modal {
+  width: 520px;
+  max-width: calc(100vw - 32px);
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.gacha-modal-header {
+  height: 84px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gacha-modal-title {
+  margin: 0;
+  color: #e8eaf0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.gacha-modal-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: #e8eaf0;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gacha-modal-tab-row {
+  padding: 16px 24px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.gacha-modal-tab {
+  flex: 1;
+  height: 42px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #1e293b;
+  color: #94a3b8;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gacha-modal-tab.active {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #e8eaf0;
+}
+
+.gacha-modal-body {
+  padding: 24px;
+  box-sizing: border-box;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.gacha-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gacha-modal-coupon-card {
+  min-height: 78px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.35);
+  padding: 14px 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gacha-modal-coupon-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gacha-modal-coupon-emoji {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.gacha-modal-coupon-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gacha-modal-coupon-title {
+  color: #e8eaf0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.gacha-modal-coupon-meta {
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.gacha-modal-coupon-status {
+  min-width: 74px;
+  height: 30px;
+  border-radius: 999px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gacha-modal-coupon-status.available {
+  background: rgba(59, 130, 246, 0.14);
+  color: #60a5fa;
+}
+
+.gacha-modal-coupon-status.history {
+  background: rgba(139, 92, 246, 0.14);
+  color: #a78bfa;
+}
+
+.gacha-modal-empty {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}

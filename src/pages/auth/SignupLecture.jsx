@@ -1,37 +1,48 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import ChangeInput from '../../components/auth/ChangeInput'
+import FileInput from '../../components/auth/FileInput'
+import useTierFetch from '../../hooks/useTierFetch';
+import { userFormContext } from './SignupForm';
 
 function SignupLecture() {
+
+    const { userTier, fetchTier, loading, error } = useTierFetch();
+    const { userInfo, dispatch } = useContext(userFormContext)
+    console.log('TTTTTT', userTier);
+
+    useEffect(() => {
+        ['DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'].find((tier) => userTier.tier === tier) ?
+            dispatch({ type: 'CHANGEINPUT', payload: { name: 'instructorCertification', value: true } }) :
+            dispatch({ type: 'CHANGEINPUT', payload: { name: 'instructorCertification', value: false } })
+    }, [userTier])
+
     return (
         <>
             <article>
                 <h5>강사 인증 정보</h5>
                 <p>강사로 활동하시려면 추가 인증이 필요합니다.</p>
             </article>
-            <article>
+            <article className='a-instructor-first'>
                 <div>
-                    <label>롤 게임 닉네임</label>
-                    <input className='a-signup-input' />
-                    <p></p>
+                    <ChangeInput mode='롤 게임 닉네임' message='롤 게임 닉네임을 입력해주세요.' />
                 </div>
                 <div>
-                    <label>태그라인</label>
-                    <input className='a-signup-input' />
-                    <p></p>
+                    <ChangeInput mode='태그라인' message='ex) #kr1' />
                 </div>
             </article>
-            <button className='a-signup-btn'>티어 인증</button>
-            <label >티어 인증 이미지</label>
-            <input hidden />
-            <div>
-                <img />
-            </div>
-            <label className='a-signup-input'>이미지 업로드</label>
-            <label>프로/스트리머 인증(선택)</label>
-            <input hidden />
-            <div>
-                <img />
-            </div>
-            <label className='a-signup-input'>인증 자료 업로드</label>
+
+            {
+                userInfo.instructorCertification ?
+                    <>
+                        <FileInput mode='티어 인증 이미지' message='게임 내 티어를 확인할 수 있는 스크린샷을 첨부해주세요 (관리자 검토 후 승인)' />
+                        <FileInput mode='프로/스트리머 인증(선택)' message='프로게이머 또는 스트리머라면 인증 자료를 첨부해주세요 (선택사항)' />
+                    </>
+                    :
+                    <>
+                        <p className='a-user-form-p'>{error || '티어 인증을 진행해주세요.(DIAMOND 이상)'}</p>
+                        <button type='button' className='a-signup-btn' onClick={() => fetchTier(userInfo.gameName, userInfo.gameTag)}>{loading ? '확인 중...' : '티어 인증'}</button>
+                    </>
+            }
 
         </>
     )

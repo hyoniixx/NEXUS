@@ -3,6 +3,7 @@ import { userContext } from '../../App'
 import './MyPage.css';
 import MyPageInfo from './MyPageInfo';
 import MyPageMenu from '../../components/mypage/MyPageMenu';
+import Footer from '../../layout/Footer';
 
 
 
@@ -39,6 +40,7 @@ function MyPage() {
                         <MyPageMenu menu={duoMenu} />
                     </section>}
             </main>
+            <Footer />
         </div>
     )
 }

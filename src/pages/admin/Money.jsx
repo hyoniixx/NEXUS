@@ -43,7 +43,7 @@ function Money() {
         render();
     }, [])
     const [searchValue, setSearchValue] = useState(''); //이 값에 따라 요소 렌더링 달라지게
-    const [navActive, setNavActive] = useState([true, false]); //NavBar 요소 두개에 대한 속성
+    const [navActive, setNavActive] = useState([false, false]); //NavBar 요소 두개에 대한 속성
 
     useEffect(() => { //전체 리스트에 변화가 생길때 대시보드 표기 관리하기
         //대시보드 표기 관리
@@ -159,9 +159,15 @@ function Money() {
                 <NavLink to='payment' className={`${navActive[1] ? "admin-money-nav-active" : "admin-money-nav-default"}`} onClick={() => setNavActive([false, true])}>정산</NavLink>
             </div>
             <div className='admin-money-content'>
-                <PageContext.Provider value={{ pageNow, setPageNow, total, setPages, setMoneyList, showList, filteredList, setFilteredList, moneyList }}>
-                    <Outlet />
-                </PageContext.Provider >
+                {navActive[0] || navActive[1] ? (
+                    <PageContext.Provider value={{ pageNow, setPageNow, total, setPages, setMoneyList, showList, filteredList, setFilteredList, moneyList }}>
+                        <Outlet />
+                    </PageContext.Provider >
+                ) : (
+                    <div className='admin-money-nothing'>
+                        <h1>조회할 메뉴를 선택해주세요.</h1>
+                    </div>
+                )}
             </div>
             <div className='deposit-pagination'>
                 <button className='deposit-page-button' onClick={() => handlePageNow(pagination[0] - 5)} disabled={!canClick[0]}><img src={right} alt="" width='5px' height='10px' style={{ transform: 'scaleX(-1)' }} /></button>

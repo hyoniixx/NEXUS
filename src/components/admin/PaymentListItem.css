@@ -100,6 +100,10 @@
     align-items: center;
 }
 
+.payment-list-item-button:hover {
+    cursor: pointer;
+}
+
 .payment-list-item-button>p {
     color: #FFF;
     text-align: center;

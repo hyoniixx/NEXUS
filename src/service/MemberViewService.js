@@ -19,7 +19,7 @@ const COLLECTION_NAME = 'users';
 
 /**
  * 전체 회원 목록 조회하는 함수
- * @returns {Array} 조회된 게시글 배열 (각 게시글 객체에 ID 포함)
+ * @returns {Array} 조회된 회원 배열 (각 회원 객체에 ID 포함)
  */
 
 export const getUserList = async () => {
@@ -48,6 +48,7 @@ export const getUserList = async () => {
 /**
  * 특정 회원의 블랙리스트 여부를 관리하는 함수
  * @param {string} userId - 블랙리스트 여부 변경할 회원의 고유 ID
+ * @param {boolean} want - 블랙리스트를 어떤 상태로 변경할 것인지
  */
 export const toggleBlackList = async (userId, want) => {
     try {

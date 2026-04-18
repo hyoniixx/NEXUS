@@ -5,41 +5,83 @@ import './Money.css'
 import MoneyDashboardItem from '../../components/admin/MoneyDashboardItem'
 import searchIcon from '../../assets/searchIcon.svg'
 import right from '../../assets/rightIcon.svg'
+import { getMoneyList, createMoney } from '../../service/MoneyManagement.js'
 
 export const PageContext = createContext(); //페이지네이션 요소 뿌리기 반영을 위한것. -> Deposit, Payment
 
 function Money() {
-    const [searchValue, setSearchValue] = useState(''); //이 값에 따라 요소 렌더링 달라지게
-    const [navActive, setNavActive] = useState([true, false]); //NavBar 요소 두개에 대한 속성
-    useEffect(() => {
-
-    }, [searchValue])
-
-    console.log(PageContext);
-
-
-    const lecture = {
-        id: 123,
-        title: '정글에서 살아남기',
-        star: {
-            "1": 2,
-            "2": 6,
-            "3": 12,
-            "4": 10,
-            "5": 20,
-            total: 212
-        }
-    }
-
-    const total = lecture.star.total; //전체 데이터 수
+    const [moneyList, setMoneyList] = useState([]); //돈 관련 내역 전부 불러오기
+    const [total, setTotal] = useState(1) //전체 데이터 수
     const [pageNow, setPageNow] = useState(1); //현재 선택된 페이지
-    const [pages, setPages] = useState(100); //전체 페이지수
+    const [pages, setPages] = useState(1); //전체 페이지수
     const [pagination, setPagination] = useState([1, 0, 0, 0, 0]); //페이지네이션
     const [pageSelected, setPageSelected] = useState([true, false, false, false, false]) //페이지 아이템들 상태 관리(눌려있는지)
     const [canClick, setCanClick] = useState([false, true]) //좌우 이동 버튼 활성화 관리
+    const [moneyValue, setMoneyValue] = useState([0, 0, 0, 0]) //대시보드 표기할 값들
+    const [filteredList, setFilteredList] = useState([]); //셀렉트태그(필터링)에 의해 걸러진 데이터들
+    const [showList, setShowList] = useState([]); //페이지네이션에 의해 표시할 데이터들
+
+    useEffect(() => { //최초 마운트 시 전체 돈 관련 내역 불러오기
+        const render = async () => {
+            const tempData = await getMoneyList();
+            setMoneyList(tempData);
+            setTotal(tempData.length);
+            setFilteredList(tempData);
+            //페이지네이션
+            var temp = tempData.filter((item, index) => index >= pageNow * 5 - 5 && index <= pageNow * 5 - 1)
+            setShowList(temp);
+
+            //대시보드 표기 관리
+            //입금 받은 돈
+            var totalMoney = 0;
+            tempData.map((item) => totalMoney += Number(item.price));
+            //정산 완료된 돈
+            var complete = 0;
+            tempData.filter((item) => item.completed === 'true' || item.completed === true).map((item) => complete += Number(item.price));
+            setMoneyValue([totalMoney, totalMoney - complete, complete, complete * 0.1]);
+        }
+        render();
+    }, [])
+    const [searchValue, setSearchValue] = useState(''); //이 값에 따라 요소 렌더링 달라지게
+    const [navActive, setNavActive] = useState([true, false]); //NavBar 요소 두개에 대한 속성
+
+    useEffect(() => { //전체 리스트에 변화가 생길때 대시보드 표기 관리하기
+        //대시보드 표기 관리
+        //입금 받은 돈
+        var tempData = moneyList;
+        var totalMoney = 0;
+        tempData.map((item) => totalMoney += Number(item.price));
+        //정산 완료된 돈
+        var complete = 0;
+        tempData.filter((item) => item.completed === 'true' || item.completed === true).map((item) => complete += Number(item.price));
+        setMoneyValue([totalMoney, totalMoney - complete, complete, complete * 0.1]);
+    }, [moneyList])
 
     useEffect(() => {
-        const tempPage = Math.ceil(lecture.star.total / 5); //전체 페이지 수 지정(올림)
+        setFilteredList(moneyList)
+    }, [navActive])
+
+    useEffect(() => { //검색값 및 페이지 선택에 변화가 생길때 전체 리스트 및 표시할 내역 변경
+        //검색값 필터링
+        var tempData = filteredList.filter((item) => item.student?.includes(searchValue)
+            || item.studentEmail?.includes(searchValue)
+            || item.instructor?.includes(searchValue)
+            || item.instructorEmail?.includes(searchValue)
+            || item.title?.includes(searchValue));
+        //페이지네이션
+        var temp = tempData.slice(pageNow * 5 - 5, pageNow * 5)
+        setTotal(tempData.length);
+        setShowList(temp);
+    }, [searchValue, pageNow, moneyList, filteredList])
+
+    useEffect(() => {
+        setPageNow(1);
+    }, [filteredList])
+    // console.log(PageContext);
+
+
+    useEffect(() => {
+        const tempPage = Math.ceil(total / 5); //전체 페이지 수 지정(올림)
         setPages(tempPage);
         if (tempPage < 5) {
             var temp = [0, 0, 0, 0, 0];
@@ -48,7 +90,7 @@ function Money() {
             };
             setPagination(temp);
         }
-    }, [])
+    }, [total])
 
 
     //현재 선택된 페이지를 변경하기 : 페이지 이동 버튼에 이벤트 걸려있음
@@ -86,6 +128,7 @@ function Money() {
     useEffect(() => {
         setPageNow(1)
     }, [navActive])
+
     return (
         <div className='admin-money-layout'>
             <div className='admin-money-header'>
@@ -97,10 +140,10 @@ function Money() {
                 <p>수강생 입금 내역과 강사 정산을 관리합니다.</p>
             </div>
             <div className='admin-money-dashboard'>
-                <MoneyDashboardItem type="getMoney" value='123123' />
-                <MoneyDashboardItem type="wait" value='123123' />
-                <MoneyDashboardItem type="completed" value='123123' />
-                <MoneyDashboardItem type="total" value='123123' />
+                <MoneyDashboardItem type="getMoney" value={moneyValue[0]} />
+                <MoneyDashboardItem type="wait" value={moneyValue[1]} />
+                <MoneyDashboardItem type="completed" value={moneyValue[2]} />
+                <MoneyDashboardItem type="total" value={moneyValue[3]} />
             </div>
             <div className='admin-money-search'>
                 <img src={searchIcon} alt="" width="20" height="20" />
@@ -116,7 +159,7 @@ function Money() {
                 <NavLink to='payment' className={`${navActive[1] ? "admin-money-nav-active" : "admin-money-nav-default"}`} onClick={() => setNavActive([false, true])}>정산</NavLink>
             </div>
             <div className='admin-money-content'>
-                <PageContext.Provider value={{ pageNow, setPageNow, total, setPages }}>
+                <PageContext.Provider value={{ pageNow, setPageNow, total, setPages, setMoneyList, showList, filteredList, setFilteredList, moneyList }}>
                     <Outlet />
                 </PageContext.Provider >
             </div>

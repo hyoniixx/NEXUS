@@ -44,3 +44,17 @@
     flex-direction: column;
     gap: 12px;
 }
+
+/*검색 결과 없을때*/
+.deposit-nothing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.deposit-nothing>h1 {
+    font-size: 40px;
+    color: #94A3B8;
+    font-weight: 450;
+}

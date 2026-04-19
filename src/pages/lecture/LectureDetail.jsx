@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import './LectureDetail.css'
 import star from '../../assets/star.svg'
@@ -10,15 +10,108 @@ import hart from '../../assets/like_filled_badge.png'
 import emptyHart from '../../assets/like_empty_badge.png'
 import probadge from '../../assets/probadge.png'
 import strmbadge from '../../assets/strmbadge.png'
+import tier1 from '../../assets/tier1.png'
+import tier2 from '../../assets/tier2.png'
+import tier3 from '../../assets/tier3.png'
 import tier4 from '../../assets/tier4.png'
+import tier5 from '../../assets/tier5.png'
+import tier6 from '../../assets/tier6.png'
+import tier7 from '../../assets/tier7.png'
+import tier8 from '../../assets/tier8.png'
+import tier9 from '../../assets/tier9.png'
+import { getLectureById } from '../../service/LectureService.js'
+import { userContext } from '../../App.jsx'
+import { getUser } from '../../service/UserService.js'
+import lectureDefault from '../../assets/lectureDefaultImage.png'
 
 function LectureDetail() {
-    const lectureId = useParams().id; //url 기준 강의 ID 받아옴
+    const { id } = useParams(); //url 기준 강의 ID 받아옴
     const [isOn, setIsOn] = useState(false); //수강 상태 관리
     const [isWished, setIsWished] = useState(false); //찜하기 눌렀는지 여부
     const [badge, setBadge] = useState({ pro: true, streamer: true }) //강사 정보 받아와서 프로,스트리머 여부 객체에 담기
-    const navigate = useNavigate();
-    // console.log(lectureId);
+    const [lectureData, setLectureData] = useState({}); //강의 정보 불러오기
+    const navigate = useNavigate(); //이동하기
+    const { userData } = useContext(userContext); // 로그인한 회원정보
+    const [role, setRole] = useState(''); //로그인한 회원의 role값
+    const [lecture, setLecture] = useState({ //강의 데이터 초기셋팅
+        title: '',
+        description: '',
+        image: null,
+        instructorName: '',
+        instructorId: '',
+        badgeType: '',
+        level: '',
+        line: '',
+        champion: [],
+        price: 0,
+        lectureCount: 0,
+        curriculum: [],
+        star: { average: 0, total: 0 },
+        lectureStatus: '',
+    })
+    const [instructor, setInstructor] = useState({
+        userName: '',
+        csGrade: 1
+    });
+    const csMap = {
+        1: tier1,
+        2: tier2,
+        3: tier3,
+        4: tier4,
+        5: tier5,
+        6: tier6,
+        7: tier7,
+        8: tier8,
+        9: tier9
+    }
+
+    useEffect(() => {//
+        const render = async () => {
+            const temp = await getLectureById(id);
+            setLectureData(temp);
+            console.log('?', temp);
+        }
+        render();
+    }, [])
+
+    useEffect(() => {//회원정보 불러왔을때 오른쪽 버튼 내용 변경하기 위해
+        setRole(userData.role);
+    }, [userData])
+
+    useEffect(() => {
+        if (!lectureData) return;
+        setLecture({
+            title: lectureData.title ?? '',
+            description: lectureData.description ?? '',
+            image: null,
+            instructorName: lectureData.instructorName ?? '',
+            instructorId: lectureData.instructorId ?? '',
+            badgeType: lectureData.badgeType ?? '',
+            level: lectureData.level ?? '',
+            line: lectureData.line ?? '',
+            champion: lectureData.champion ?? [],
+            price: lectureData.price ?? 0,
+            lectureCount: lectureData.lectureCount ?? 0,
+            curriculum: lectureData.curriculum ?? [],
+            star: lectureData.star ?? { average: 0 },
+            lectureStatus: lectureData.lectureStatus ?? '',
+        });
+        setInstructor(getUser(lectureData.instructorId));
+    }, [lectureData])
+
+    /*
+        champion: ['제라스']
+        createdAt: Timestamp {seconds: 1776402737, nanoseconds: 84000000}
+        curriculum: (3) ['dddd', 'dddd', 'dddd']
+        description: "미드 제라스 꿀팁 및 라인전 강의"
+        docId: "6Rh40FZEuvhEyixL0s9V"
+        level: "ADVANCED"
+        line: "MID"
+        price: 500000
+        time: 1
+        title: "미드 제라스로 마스터 가기"
+        uid: 1
+    */
     return (
         <div className='detail-layout'>
             <p className='toLectureList'>← 강의 목록으로</p>
@@ -29,26 +122,24 @@ function LectureDetail() {
                             <div className='detail-head-profileImg'>img</div>
                             <div className='detail-head-profileDetail'>
                                 <div className='detail-head-profileName'>
-                                    <p>페이커 선생님</p>
-                                    <img src={probadge} className='badge' style={{ display: `${badge.pro ? 'flex' : 'none'}` }} />
-                                    <img src={strmbadge} className='badge' style={{ display: `${badge.streamer ? 'flex' : 'none'}` }} />
+                                    <p>{lectureData.instructorName}</p>
+                                    <img src={probadge} className='badge' style={{ display: `${lectureData.badgeType === 'PRO' ? 'flex' : 'none'}` }} />
+                                    <img src={strmbadge} className='badge' style={{ display: `${lectureData.badgeType === 'STREAMER' ? 'flex' : 'none'}` }} />
                                 </div>
                                 <div className='detail-head-profileTier'>
-                                    <img src={tier4} className='tierBadge' />
+                                    <img src={csMap[Number(instructor.csGrade)]} className='detail-head-tierBadge' width='30px' height='30px' />
                                     <p>칼날부리</p>
                                 </div>
                             </div>
                         </div>
                         <div className='detail-head-title'>
-                            <h6>다이아 돌파를 위한 미드 라이너 마스터 클래스</h6>
+                            <h6>{lectureData.title}</h6>
                         </div>
-                        <div className='detail-head-image'>
-                            이미지
-                        </div>
+                        {<img src={lectureData.image || lectureDefault} className='detail-head-image' />}
                     </div>
                     <div className='detail-intro'>
                         <h6>강의 소개</h6>
-                        <p>프로게이머 Faker의 실전 미드 라인 강의. 라인전 운영부터 로밍 타이밍, 한타 포지셔닝까지 완벽 마스터.</p>
+                        <p>{lectureData.description}</p>
                     </div>
                     <div className='detail-info'>
                         <div className='detail-info-head'>
@@ -57,11 +148,11 @@ function LectureDetail() {
                         <div className='detail-info-content'>
                             <div className='detail-info-time'>
                                 <h6>수업 시간</h6>
-                                <p>1시간</p>
+                                <p>{lectureData.lectureCount}시간</p>
                             </div>
                             <div className='detail-info-diff'>
                                 <h6>난이도</h6>
-                                <p>중급</p>
+                                <p>{lectureData.level}</p>
                             </div>
                             <div className='detail-info-star'>
                                 <h6>평점</h6>

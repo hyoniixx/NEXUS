@@ -7,18 +7,44 @@ import LectureItem from '../../components/lecture/LectureItem'
 import { userContext } from '../../App'
 import { getLectures } from "../../service/LectureService";
 import { useNavigate } from 'react-router-dom'
+import { getUserList } from '../../service/MemberViewService.js';
+import { getMoneyList } from '../../service/MoneyManagement.js'
 
 function NexusMainAdmin() {
     const { userData } = useContext(userContext);
-    const total = { member: 12345, review: 1234, star: 4.44234 }
-    const money = { month: 1234567, increased: 1234 }
+    const [total, setTotal] = useState({ member: 0, review: 1234, star: 4.44234 });
+    const [money, setMoney] = useState({ month: 0, total: 0 })
     const time = new Date();
     const [lectureList, setLectureList] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         const lender = async () => {
-            var tempLectures = await getLectures();
+            const tempLectures = await getLectures(); //강의정보
+            const tempUser = await getUserList(); //유저정보
+            const tempMoney = await getMoneyList(); //매출정보
+            //유저정보, 리뷰정보, 
+            setTotal({
+                ...total,
+                member: tempUser.length
+            })
+            //총 매출 계산
+            var tempTotalMoney = 0;
+            tempMoney.map((item) => tempTotalMoney += Number(item.price))
+            //이번달 매출 계산
+            var tempThisMoney = 0;
+            tempMoney
+                .filter((item) => {
+                    const date = new Date(item.createdAt); // 문자열 → Date 변환
+                    return date.getFullYear() === time.getFullYear()
+                        && date.getMonth() === time.getMonth();
+                })
+                .forEach((item) => tempThisMoney += Number(item.price));
+            setMoney({
+                ...money,
+                total: tempTotalMoney,
+                month: tempThisMoney
+            })
             setLectureList([tempLectures[0], tempLectures[1], tempLectures[2]]);
             console.log("!", tempLectures)
         }
@@ -76,9 +102,9 @@ function NexusMainAdmin() {
                         <p style={{ color: 'white', fontSize: '20px', fontWeight: 700 }}>수익 통계</p>
                     </div>
                     <div className='main-staticMoney-bottom'>
-                        <p>이번달 총 매출({time.toLocaleDateString()} 기준)</p>
-                        <h2>₩ {Number(money.month).toLocaleString()}</h2>
-                        <h6>전달 대비 +₩{Number(money.increased).toLocaleString()}</h6>
+                        <p>총 매출({time.toLocaleDateString()} 기준)</p>
+                        <h2>₩ {Number(money.total).toLocaleString()}</h2>
+                        <h6>이번달 매출 +₩ {Number(money.month).toLocaleString()}</h6>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import React from 'react'
 import './DepositListItem.css'
 import moneyIcon from '../../assets/moneyDollar.svg'
 
-function DepositListItem({ studentName, studentId, lectureTitle, price, date }) {
+function DepositListItem({ studentName, studentId, lectureTitle, price, date, instructorName, instructorId }) {
     return (
         <div className='deposit-list-item'>
             <div className='deposit-list-item-header'>
@@ -14,7 +14,7 @@ function DepositListItem({ studentName, studentId, lectureTitle, price, date }) 
                     <p>{studentId}</p>
                 </div>
                 <div className='deposit-list-item-title'>
-                    <p>{lectureTitle}</p>
+                    <p>{lectureTitle} - {instructorName} ({instructorId})</p>
                 </div>
             </div>
             <div className='deposit-list-item-detail'>

@@ -111,6 +111,19 @@
     text-decoration: none;
 }
 
+/*입금|정산 즉 navbar를 안골랐을때*/
+.admin-money-nothing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.admin-money-nothing>h1 {
+    font-size: 40px;
+    color: #94A3B8;
+    font-weight: 450;
+}
 
 /*페이지네이션*/
 .deposit-pagination {

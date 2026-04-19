@@ -185,6 +185,19 @@
     margin-bottom: 0;
 }
 
+/*조회된 리뷰가 없을때*/
+.review-list-nothing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-list-nothing>h1 {
+    color: #94A3B8;
+    font-size: 33px;
+    font-weight: 550;
+}
+
 /*
 페이지 이동
 */

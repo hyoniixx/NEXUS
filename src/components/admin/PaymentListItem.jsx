@@ -7,7 +7,7 @@ import { payComplete } from '../../service/MoneyManagement.js'
 import useModal from '../../hooks/useModal'
 import Modal from '../common/Modal'
 
-function PaymentListItem({ isCompleted, name, id, email, title, price, date }) {
+function PaymentListItem({ isCompleted, name, id, email, title, price, date, student, studentId }) {
     const modal = useModal();
     const modalText = `정산이 완료되었습니다.`
 
@@ -56,7 +56,7 @@ function PaymentListItem({ isCompleted, name, id, email, title, price, date }) {
                         <p>({email})</p>
                     </div>
                     <div className='payment-list-item-title'>
-                        <p>{title}</p>
+                        <p>{title} - {student} ({studentId})</p>
                     </div>
                 </div>
                 <div className='payment-list-item-rightend'>

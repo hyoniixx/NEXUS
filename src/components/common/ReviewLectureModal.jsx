@@ -6,7 +6,7 @@ import fill from '../../assets/filledStar.svg'
 
 function ReviewLectureModal({ isModal, onClose, writer, type, before }) {
     if (!isModal) return null;
-    //type : view, create, edit
+    //type : view | create | edit
     var header = '후기 조회';
     var btnColor = ['#EF4444', '#3B82F6'];
     var btnText = ["삭제", "수정"]

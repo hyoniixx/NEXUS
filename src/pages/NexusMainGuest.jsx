@@ -1,6 +1,8 @@
 import React from 'react'
 import './NexusMainGuest.css'
+import { useNavigate } from 'react-router-dom'
 function NexusMainGuest() {
+    const navigate = useNavigate();
     return (
         <>
             <div className='main-guest-top' >
@@ -13,8 +15,8 @@ function NexusMainGuest() {
                     <p>프로게이머와 스트리머에게 직접 배우는</p>
                     <p>리그오브레전드 1:1 코칭 서비스</p>
                     <div>
-                        <button>시작하기</button>
-                        <button> 로그인</button>
+                        <button onClick={() => navigate('login')}>시작하기</button>
+                        <button onClick={() => navigate('login')}> 로그인</button>
                     </div>
                 </div>
             </div >

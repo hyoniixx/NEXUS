@@ -209,7 +209,10 @@ function Reviews() {
                         <p>후기 작성</p>
                     </button>
                     <div className='review-filter-page'>
-                        <p>{pageNow * 5 - 4}-{Math.min(pageNow * 5, reviewData.total)}/{reviewData.total}개</p>
+                        <p>
+                            {pageNow * 5 - 4}-
+                            {Math.min(pageNow * 5, total)}/{total}개
+                        </p>
                     </div>
                 </div>
                 <div className='review-list'>

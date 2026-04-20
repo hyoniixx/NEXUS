@@ -7,6 +7,11 @@
     padding-right: 276.64px;
     margin-top: 30px;
     margin-bottom: 32px;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 /*강의 상세보기로 돌아가기*/
@@ -136,6 +141,25 @@
 }
 
 .review-filter-my>p {
+    color: #3B82F6;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.review-filter-my-selected {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    height: 40.637px;
+    align-items: center;
+    border-radius: 8px;
+    background: #b0c1dd;
+    padding-left: 16px;
+    padding-right: 16px;
+    border: 0.795px solid black;
+}
+
+.review-filter-my-selected>p {
     color: #3B82F6;
     font-size: 16px;
     font-weight: 600;

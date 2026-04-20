@@ -5,21 +5,41 @@ import ReviewLectureModal from '../common/ReviewLectureModal';
 
 
 
-function ReviewItem({ name, content, date, star }) {
+function ReviewItem({ review, currentUserId, role, triggerRefresh }) {//name, content, date, star
     const stars = [false, false, false, false, false];
+    const { userName, content, createdAt, star } = review;
+    const isMine = review.uid === currentUserId;
+
+    let modalType = 'view';
+
+    if (role === 'admin') {
+        modalType = 'edit'; // 강제 삭제 가능하게
+    } else if (role === 'instructor') {
+        modalType = 'view'; // 무조건 조회
+    } else {
+        modalType = isMine ? 'edit' : 'view';
+    }
+
     for (let i = 0; i < Number(star); i++) {
         stars[i] = true
     }
     const [isModal, setIsModal] = useState(false);
     return (
         <>
-            <ReviewLectureModal isModal={isModal} onClose={() => setIsModal(false)} lectureId='123' writer='김수강' type='edit' before='' />
+            <ReviewLectureModal
+                isModal={isModal}
+                onClose={() => setIsModal(false)}
+                review={review}
+                currentUserId={currentUserId}
+                type={modalType}
+                triggerRefresh={triggerRefresh}   // 🔥 추가
+            />
             <div className='review-page-list-items' onClick={() => setIsModal(!isModal)}>
                 <div className='review-page-list-item-header'>
                     <img className='review-page-list-item-profile' />
                     <div className='review-page-list-item-middle'>
-                        <h6>{name}</h6>
-                        <p>{date}</p>
+                        <h6>{userName}</h6>
+                        <p>{createdAt}</p>
                     </div>
                     <div className='review-page-list-item-star'>
                         {stars.map((item) => {

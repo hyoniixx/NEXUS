@@ -72,7 +72,6 @@ export const getLectureById = async (docId) => {
     }
 
     const data = snapshot.data();
-
     return {
       docId: snapshot.id,
       ...data,

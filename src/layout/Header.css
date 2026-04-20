@@ -17,6 +17,15 @@
     z-index: 998;
 }
 
+.l-header * {
+    color: white;
+    text-decoration: none;
+}
+
+.l-header .active {
+    text-decoration: underline
+}
+
 .l-header-links {
     color: #E8EAF0;
     font-family: Inter;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LectureItem from "../../components/lecture/LectureItem";
 import "./Wish.css";
@@ -7,8 +7,10 @@ import {
   getWishLecturesByUid,
   removeWishByUid,
 } from "../../service/WishService";
+import { userContext } from "../../App";
 
 function Wish() {
+  const { userData, dispatch } = useContext(userContext);
   const navigate = useNavigate();
   const [lectures, setLectures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,10 +39,10 @@ function Wish() {
         setIsLoading(true);
 
         // 🔥 나중에 로그인 유저 uid로 교체
-        const uid = 1;
+        const uid = userData.uid;
 
         const data = await getWishLecturesByUid(uid);
-
+        console.log(data)
         const formatted = data.map((lecture) => ({
           docId: lecture.docId,
           lectureId: lecture.docId,
@@ -75,7 +77,7 @@ function Wish() {
   const handleRemoveWish = async (lectureId) => {
     try {
       // 🔥 나중에 로그인 유저 uid로 교체
-      const uid = 1;
+      const uid = userData.uid;
 
       const targetLecture = lectures.find(
         (lecture) => lecture.docId === lectureId,

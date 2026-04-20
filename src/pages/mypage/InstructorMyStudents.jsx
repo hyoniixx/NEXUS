@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./InstructorMyStudents.css";
 import StudentItem from "../../components/mypage/StudentItem";
 import { getEnrollmentsByInstructorId } from "../../service/EnrollmentService";
+import { userContext } from "../../App";
 
 function InstructorMyStudents() {
   const [statusFilter, setStatusFilter] = useState("전체");
@@ -12,6 +13,8 @@ function InstructorMyStudents() {
   const [isSortFilterOpen, setIsSortFilterOpen] = useState(false);
   const statusFilterRef = useRef(null);
   const sortFilterRef = useRef(null);
+  const { userData, dispatch } = useContext(userContext);
+
 
   const getLectureStatus = (item) => {
     if (item.hasReview) return "수강 완료";
@@ -59,7 +62,7 @@ function InstructorMyStudents() {
         setIsLoading(true);
 
         // 🔥 나중에 로그인한 강사 uid로 교체
-        const instructorId = 1;
+        const instructorId = userData.uid;
 
         const data = await getEnrollmentsByInstructorId(instructorId);
 
@@ -142,9 +145,8 @@ function InstructorMyStudents() {
             >
               <span>{statusFilter}</span>
               <span
-                className={`instructor-my-students-filter-arrow ${
-                  isStatusFilterOpen ? "open" : ""
-                }`}
+                className={`instructor-my-students-filter-arrow ${isStatusFilterOpen ? "open" : ""
+                  }`}
               >
                 ▾
               </span>
@@ -156,9 +158,8 @@ function InstructorMyStudents() {
                   <button
                     key={option}
                     type="button"
-                    className={`instructor-my-students-filter-item ${
-                      statusFilter === option ? "active" : ""
-                    }`}
+                    className={`instructor-my-students-filter-item ${statusFilter === option ? "active" : ""
+                      }`}
                     onClick={() => {
                       setStatusFilter(option);
                       setIsStatusFilterOpen(false);
@@ -185,9 +186,8 @@ function InstructorMyStudents() {
             >
               <span>{sortFilter}</span>
               <span
-                className={`instructor-my-students-filter-arrow ${
-                  isSortFilterOpen ? "open" : ""
-                }`}
+                className={`instructor-my-students-filter-arrow ${isSortFilterOpen ? "open" : ""
+                  }`}
               >
                 ▾
               </span>
@@ -199,9 +199,8 @@ function InstructorMyStudents() {
                   <button
                     key={option}
                     type="button"
-                    className={`instructor-my-students-filter-item ${
-                      sortFilter === option ? "active" : ""
-                    }`}
+                    className={`instructor-my-students-filter-item ${sortFilter === option ? "active" : ""
+                      }`}
                     onClick={() => {
                       setSortFilter(option);
                       setIsSortFilterOpen(false);

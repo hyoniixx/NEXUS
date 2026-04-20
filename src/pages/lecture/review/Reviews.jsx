@@ -83,7 +83,11 @@ function Reviews() {
 
         const sliced = sorted.slice(pageNow * 5 - 5, pageNow * 5);
         setShowData(sliced);
-    }, [filter, pageNow, reviewData])
+    }, [filter, pageNow, reviewData, isMyReview, userData])
+
+    useEffect(() => {
+        setPageNow(1);
+    }, [filter, isMyReview]);
 
     // 대시보드 별 나열
     const stars = [false, false, false, false, false];
@@ -115,6 +119,31 @@ function Reviews() {
         setCanClick([leftTemp, rightTemp]);
     }, [pageNow, pages])
 
+    useEffect(() => {
+        if (!reviewData) return;
+
+        let filtered = [...reviewData.reviews];
+
+        if (isMyReview && userData?.uid) {
+            filtered = filtered.filter(r => r.uid === userData.uid);
+        }
+
+        const newTotal = filtered.length;
+        setTotal(newTotal);
+
+        const tempPage = Math.ceil(newTotal / 5) || 1;
+        setPages(tempPage);
+
+        // pagination 초기화
+        let temp = [0, 0, 0, 0, 0];
+        for (let i = 0; i < Math.min(5, tempPage); i++) {
+            temp[i] = i + 1;
+        }
+        setPagination(temp);
+
+        setPageNow(1); // ⭐ 여기서 같이 초기화
+    }, [reviewData, isMyReview, userData]);
+
     if (!reviewData) return <div>로딩 중...</div>
 
     return (
@@ -145,7 +174,7 @@ function Reviews() {
                         <p>총 {reviewData.total}개의 후기</p>
                     </div>
                     <div className='review-dashboard-star'>
-                        {reviewData.total ? (
+                        {reviewData.star.total ? (
                             <p>아직 후기가 없습니다.</p>
                         ) : (
                             <>
@@ -166,7 +195,7 @@ function Reviews() {
                         <option value="increase">평점 낮은 순</option>
                     </select>
                     <button
-                        className='review-filter-my'
+                        className={isMyReview ? 'review-filter-my-selected' : 'review-filter-my'}
                         onClick={() => setIsMyReview(prev => !prev)}
                     >
                         <img src={people} alt="" width="16" height="16" />

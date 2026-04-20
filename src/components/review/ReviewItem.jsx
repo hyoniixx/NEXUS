@@ -7,7 +7,7 @@ import ReviewLectureModal from '../common/ReviewLectureModal';
 
 function ReviewItem({ review, currentUserId }) {//name, content, date, star
     const stars = [false, false, false, false, false];
-    const { name, content, date, star } = review;
+    const { userName, content, createdAt, star } = review;
     const isMine = review.uid === currentUserId;
     for (let i = 0; i < Number(star); i++) {
         stars[i] = true
@@ -26,8 +26,8 @@ function ReviewItem({ review, currentUserId }) {//name, content, date, star
                 <div className='review-page-list-item-header'>
                     <img className='review-page-list-item-profile' />
                     <div className='review-page-list-item-middle'>
-                        <h6>{name}</h6>
-                        <p>{date}</p>
+                        <h6>{userName}</h6>
+                        <p>{createdAt}</p>
                     </div>
                     <div className='review-page-list-item-star'>
                         {stars.map((item) => {

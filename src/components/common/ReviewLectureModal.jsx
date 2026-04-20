@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './ReviewLectureModal.css'
 import close from '../../assets/reviewModalClose.svg'
 import empty from '../../assets/grayStar.svg'
 import fill from '../../assets/filledStar.svg'
+import { userContext } from '../../App'
 
 function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
     if (!isModal) return null;
@@ -10,6 +11,8 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
     var header = '후기 조회';
     var btnColor = ['#EF4444', '#3B82F6'];
     var btnText = ["삭제", "수정"]
+    const before = review?.content || '';
+    const { userData } = useContext(userContext)
     switch (type) {
         case 'view':
             header = '후기 조회'
@@ -31,7 +34,7 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
     }
 
     const [star, setStar] = useState(review?.star || 0);
-    const [text, setText] = useState(review?.content || '');
+    const [text, setText] = useState(before || '');
     const handleText = (e) => {
         if (e.target.value.length <= 200) {
             setText(e.target.value)
@@ -55,7 +58,7 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
                         <p>작성자</p>
                         <div className='review-modal-profile'>
                             <img src="" width='40px' height='40px' />
-                            <p>{review?.userName}</p>
+                            <p>{type === 'create' ? userData.userName : review?.userName}</p>
                         </div>
                     </div>
                     <div className='review-modal-star'>
@@ -64,27 +67,27 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
                             <img
                                 src={star > 0 ? fill : empty}
                                 width="32" height="32"
-                                onClick={() => setStar(1)}
+                                onClick={type === 'view' ? '' : () => setStar(1)}
                             />
                             <img
                                 src={star > 1 ? fill : empty}
                                 width="32" height="32"
-                                onClick={() => setStar(2)}
+                                onClick={type === 'view' ? '' : () => setStar(2)}
                             />
                             <img
                                 src={star > 2 ? fill : empty}
                                 width="32" height="32"
-                                onClick={() => setStar(3)}
+                                onClick={type === 'view' ? '' : () => setStar(3)}
                             />
                             <img
                                 src={star > 3 ? fill : empty}
                                 width="32" height="32"
-                                onClick={() => setStar(4)}
+                                onClick={type === 'view' ? '' : () => setStar(4)}
                             />
                             <img
                                 src={star > 4 ? fill : empty}
                                 width="32" height="32"
-                                onClick={() => setStar(5)}
+                                onClick={type === 'view' ? '' : () => setStar(5)}
                             />
                             <p>{star === 0 ? '선택 안 됨' : `${star}점`}</p>
                         </div>
@@ -101,7 +104,7 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
                             </textarea>
                         ) : (
                             <div className='review-modal-content-text' style={{ height: '164.5px' }}>
-                                {before}
+                                {before || ''}
                             </div>
                         )}
 

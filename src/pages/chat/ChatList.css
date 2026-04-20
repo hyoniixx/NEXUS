@@ -2,7 +2,7 @@
     border-radius: 12px;
     border: 0.716px solid rgba(148, 163, 184, 0.20);
     background: #111827;
-    height: 600px;
+    height: 550px;
     width: 30%;
     max-width: 360px;
     flex: auto 1;
@@ -36,7 +36,7 @@
 .c-chat-room-ct {
     overflow-y: scroll;
     -ms-overflow-style: none;
-    height: 450px;
+    height: 470px;
 }
 
 .c-chat-room-ct::-webkit-scrollbar {

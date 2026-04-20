@@ -50,9 +50,7 @@ function SignupLecture() {
                         <button
                             disabled={tierBtn}
                             type='button'
-                            className={
-                                tierBtn ?
-                                    'a-signup-btn-disabled' : 'a-signup-btn '}
+                            className='a-signup-btn'
                             onClick={
                                 () => fetchTier(userInfo.gameName, userInfo.gameTag)}>
                             {loading ? '확인 중...' : '티어 인증'}

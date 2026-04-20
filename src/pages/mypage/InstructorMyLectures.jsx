@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LectureItem from "../../components/lecture/LectureItem";
 import "./InstructorMyLectures.css";
 import { getLecturesByInstructorId } from "../../service/LectureService";
+import { userContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 function InstructorMyLectures() {
   const [lectures, setLectures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { userData, dispatch } = useContext(userContext);
+
+  const navigate = useNavigate();
   const levelLabelMap = {
     BEGINNER: "초급",
     INTERMEDIATE: "중급",
@@ -23,6 +28,9 @@ function InstructorMyLectures() {
 
   const getLevelLabel = (value) => levelLabelMap[value] || value;
   const getLineLabel = (value) => lineLabelMap[value] || value;
+  const handleMoveLectureDetail = (docId) => {
+    navigate(`/lecture/${docId}`);
+  };
 
   useEffect(() => {
     const fetchMyLectures = async () => {
@@ -30,7 +38,7 @@ function InstructorMyLectures() {
         setIsLoading(true);
 
         // 🔥 나중에 로그인 유저 uid로 바꿔야 함
-        const uid = 1;
+        const uid = userData.uid;
 
         const data = await getLecturesByInstructorId(uid);
 
@@ -81,17 +89,22 @@ function InstructorMyLectures() {
 
       <div className="instructor-my-lectures-grid">
         {lectures.map((lecture) => (
-          <LectureItem
+          <div
             key={lecture.docId}
-            lecture={{
-              ...lecture,
-              line: getLineLabel(lecture.line),
-              level: getLevelLabel(lecture.level),
-              rating: lecture.star?.average || 0,
-              reviewCount: lecture.total || 0,
-            }}
-            showLike={false}
-          />
+            onClick={() => handleMoveLectureDetail(lecture.docId)}
+            style={{ cursor: "pointer" }}
+          >
+            <LectureItem
+              lecture={{
+                ...lecture,
+                line: getLineLabel(lecture.line),
+                level: getLevelLabel(lecture.level),
+                rating: lecture.star?.average || 0,
+                reviewCount: lecture.total || 0,
+              }}
+              showLike={false}
+            />
+          </div>
         ))}
       </div>
     </div>

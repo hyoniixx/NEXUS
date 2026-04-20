@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LectureList.css";
 import LectureItem from "../../components/lecture/LectureItem";
@@ -10,6 +10,7 @@ import {
   getWishLecturesByUid,
   toggleWishByUid,
 } from "../../service/WishService";
+import { userContext } from "../../App";
 
 function LectureList() {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ function LectureList() {
   const levelDropdownRef = useRef(null);
   const lineDropdownRef = useRef(null);
   const [lectures, setLectures] = useState([]);
+
+  const { userData, dispatch } = useContext(userContext);
+
 
   const convertLevel = (level) => {
     if (level === "BEGINNER") return "초급";
@@ -91,42 +95,53 @@ function LectureList() {
 
   useEffect(() => {
     const fetchLectures = async () => {
+      // 1. userData가 로드될 때까지 대기
+      if (!userData || !userData.uid) {
+        return;
+      }
+
       try {
-        const uid = 1;
+        const uid = userData.uid;
         const [data, wishLectures] = await Promise.all([
           getLectures(),
           getWishLecturesByUid(uid),
         ]);
 
+        // 2. [중요] wishLectures가 객체 배열이든 ID 배열이든 대응할 수 있도록 처리
+        // DB의 'wish' 배열에 담긴 문자열과 정확히 비교하기 위해 docId만 추출합니다.
         const wishDocIds = new Set(
-          wishLectures.map((lecture) => lecture.docId),
+          wishLectures.map((lecture) =>
+            typeof lecture === "string" ? lecture : (lecture.docId || lecture.id)
+          )
         );
 
-        const formatted = data.map((lecture) => ({
-          docId: lecture.docId || lecture.lectureId || "",
-          lectureId: lecture.docId || lecture.lectureId || "",
-          uid: lecture.uid ?? null,
-          title: lecture.title || "",
-          price: Number(lecture.price) || 0,
-          createdAt: lecture.createdAt || null,
+        const formatted = data.map((lecture) => {
+          // 3. 현재 강의의 고유 ID 추출 (DB의 wish 배열에 있는 값과 일치해야 함)
+          const currentId = lecture.docId || lecture.id || lecture.lectureId || "";
 
-          instructorName: lecture.instructorName || "강사",
-          badgeType: lecture.badgeType || "PRO",
+          return {
+            ...lecture,
+            docId: currentId,
+            lectureId: currentId,
+            uid: lecture.uid ?? null,
+            title: lecture.title || "",
+            price: Number(lecture.price) || 0,
+            createdAt: lecture.createdAt || null,
+            instructorName: lecture.instructorName || "강사",
+            badgeType: lecture.badgeType || "PRO",
+            line: convertLine(lecture.line),
+            level: convertLevel(lecture.level),
+            champion: Array.isArray(lecture.champion)
+              ? lecture.champion
+              : lecture.champion ? [lecture.champion] : [],
+            star: lecture.star?.average || 0,
+            total: lecture.total || 0,
+            time: lecture.time ?? null,
 
-          line: convertLine(lecture.line),
-          level: convertLevel(lecture.level),
-
-          champion: Array.isArray(lecture.champion)
-            ? lecture.champion
-            : lecture.champion
-              ? [lecture.champion]
-              : [],
-
-          star: lecture.star?.average || 0,
-          total: lecture.total || 0,
-          time: lecture.time ?? null,
-          isLiked: wishDocIds.has(lecture.docId),
-        }));
+            // 4. [핵심] DB wish 배열에 현재 강의 ID가 포함되어 있는지 확인
+            isLiked: wishDocIds.has(currentId),
+          };
+        });
 
         setLectures(formatted);
       } catch (err) {
@@ -135,11 +150,12 @@ function LectureList() {
     };
 
     fetchLectures();
-  }, []);
+    // 5. [중요] userData가 업데이트될 때마다(로그인 완료 시 등) 다시 실행되도록 설정
+  }, [userData?.uid]);
 
   const handleToggleLike = async (docId) => {
     try {
-      const uid = 1;
+      const uid = userData.uid;
       const targetLecture = lectures.find((lecture) => lecture.docId === docId);
 
       if (!targetLecture) return;
@@ -380,9 +396,8 @@ function LectureList() {
             >
               <button
                 type="button"
-                className={`lecture-list-select lecture-list-champion-button ${
-                  isChampionOpen ? "open" : ""
-                }`}
+                className={`lecture-list-select lecture-list-champion-button ${isChampionOpen ? "open" : ""
+                  }`}
                 onClick={() => setIsChampionOpen((prev) => !prev)}
               >
                 <span>
@@ -403,9 +418,8 @@ function LectureList() {
 
                   <button
                     type="button"
-                    className={`lecture-list-champion-option all ${
-                      championType === "all" ? "selected" : ""
-                    }`}
+                    className={`lecture-list-champion-option all ${championType === "all" ? "selected" : ""
+                      }`}
                     onClick={handleChampionReset}
                   >
                     전체 보기
@@ -417,9 +431,8 @@ function LectureList() {
                         <button
                           type="button"
                           key={champion}
-                          className={`lecture-list-champion-option ${
-                            championType === champion ? "selected" : ""
-                          }`}
+                          className={`lecture-list-champion-option ${championType === champion ? "selected" : ""
+                            }`}
                           onClick={() => handleChampionSelect(champion)}
                         >
                           {champion}
@@ -477,9 +490,8 @@ function LectureList() {
           <div className="lecture-list-filter-right">
             <button
               type="button"
-              className={`filter-button streamer ${
-                badgeFilter === "STREAMER" ? "active" : ""
-              }`}
+              className={`filter-button streamer ${badgeFilter === "STREAMER" ? "active" : ""
+                }`}
               onClick={() => handleBadgeFilterClick("STREAMER")}
             >
               <img
@@ -492,9 +504,8 @@ function LectureList() {
 
             <button
               type="button"
-              className={`filter-button pro ${
-                badgeFilter === "PRO" ? "active" : ""
-              }`}
+              className={`filter-button pro ${badgeFilter === "PRO" ? "active" : ""
+                }`}
               onClick={() => handleBadgeFilterClick("PRO")}
             >
               <img src={proBadge} alt="프로" className="filter-button-icon" />

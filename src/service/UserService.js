@@ -12,7 +12,7 @@
 //         wish: [],
 //         createAt: ""
 //     }
-import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "../firebase/config.js";
 
 
@@ -20,7 +20,7 @@ const COLLECTION_NAME = 'users';
 
 export const createUser = async (newUserInfo) => {
     try {
-        await setDoc(doc(db, COLLECTION_NAME, newUserInfo.uid), {
+        const createData = {
             ...newUserInfo.userInfo,
             isBlacklist: false,
             csScore: 10,
@@ -30,11 +30,33 @@ export const createUser = async (newUserInfo) => {
             wish: [],
             createAt: serverTimestamp(),
             gachaTicketCount: 1
+        }
+
+        if (newUserInfo.userInfo.role === 'instructor') {
+            createData.isApproval = false;
+        }
+
+        await setDoc(doc(db, COLLECTION_NAME, newUserInfo.uid), {
+            ...createData
         })
     } catch (error) {
         throw error;
     }
 }
+
+
+export const updateUser = async (uid, updateData) => {
+    try {
+        const userRef = doc(db, COLLECTION_NAME, uid);
+        await updateDoc(userRef, updateData);
+
+        return true;
+    } catch (error) {
+        console.error("사용자 정보 수정 실패:", error);
+        throw error;
+        return false;
+    }
+};
 
 export const getUser = async (uid = auth.currentUser.uid) => {
     const docSnapShot = await getDoc(doc(db, COLLECTION_NAME, uid))
@@ -52,10 +74,34 @@ export const getUserEmail = async (email) => {
     )
     const docSnapShot = await getDocs(q);
 
-    console.log(docSnapShot.docs);
     if (docSnapShot.docs.length !== 0) {
-        return '이미 사용중인 이메일입니다.'
+        return 'error'
     }
 
-    return '사용 가능한 이메일입니다.';
+    return 'sucess';
 }
+
+export const getUserEmailLecture = async (email) => {
+    try {
+        const q = query(
+            collection(db, COLLECTION_NAME),
+            where('email', '==', email)
+        )
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+            return [];
+        }
+
+        const data = querySnapshot.docs.map(doc => ({
+            ...doc.data()
+        }));
+
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+

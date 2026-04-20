@@ -3,7 +3,7 @@ import './Login.css';
 import activeEye from '../../assets/activeEye.svg'
 import noneActiveEye from '../../assets/noneActiveEye.svg'
 import { login } from '../../service/AuthService';
-import { getUser } from '../../service/UserService';
+import { getUser, getUserEmailLecture } from '../../service/UserService';
 import { userContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
 import useModal from '../../hooks/useModal';
@@ -29,6 +29,8 @@ function Login() {
 
     const sucesssModal = useModal();
     const errorModal = useModal();
+    const approvalModal = useModal();
+    const blackModal = useModal();
 
 
     const handleLoginBtn = async (e) => {
@@ -41,6 +43,17 @@ function Login() {
 
         try {
             loginDispatch({ type: 'LOADING' })
+            console.log(loginInfo.email)
+            const approval = await getUserEmailLecture(loginInfo.email)
+            if (approval.length && approval[0].isBlacklist) {
+                console.log('bbbbbb')
+                blackModal.openModal();
+                return;
+            } else if (approval.length && approval[0].role === 'instructor' && !approval[0].isApproval) {
+                console.log('aaaaa')
+                approvalModal.openModal();
+                return;
+            }
             await login(loginInfo.email, loginInfo.password)
             const userInfo = await getUser();
             dispatch({ type: 'SET_USER_DATA', payload: userInfo });
@@ -96,6 +109,22 @@ function Login() {
                 activeModal={errorModal.activeModal}
                 title='로그인'
                 content={loginInfo.errorMessage}
+                type='one'
+            />
+            <Modal
+                isModal={approvalModal.isModal}
+                closeModal={approvalModal.closeModal}
+                activeModal={approvalModal.activeModal}
+                title='로그인'
+                content={'관리자의 승인을 기다려주세요.'}
+                type='one'
+            />
+            <Modal
+                isModal={blackModal.isModal}
+                closeModal={blackModal.closeModal}
+                activeModal={blackModal.activeModal}
+                title='로그인'
+                content={'접근 불가한 계정입니다.'}
                 type='one'
             />
         </div>

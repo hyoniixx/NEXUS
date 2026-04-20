@@ -1,0 +1,27 @@
+.m-edit-profile {
+    padding-top: 16px;
+}
+
+.m-edit-btn {
+    margin-top: 24px;
+}
+
+
+.m-edit-cancel-btn {
+    margin-top: 10px;
+    background: #1A1F3A !important;
+    color: #94A3B8 !important;
+    border-radius: 8px;
+    display: flex;
+    padding: 9.788px 0 14.181px 0;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    border: 0;
+}

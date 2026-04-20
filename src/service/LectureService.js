@@ -12,14 +12,10 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase/config.js";
+import { createReviewField } from "./ReviewService";
 
 const COLLECTION_NAME = "lectures";
 
-/* =========================
-   유틸 함수
-========================= */
-
-// 배열 → 객체
 const curriculumArrayToObject = (curriculum) => {
   if (!Array.isArray(curriculum)) return {};
 
@@ -29,7 +25,6 @@ const curriculumArrayToObject = (curriculum) => {
   }, {});
 };
 
-// 객체 → 배열
 const curriculumObjectToArray = (curriculum) => {
   if (!curriculum || typeof curriculum !== "object") return [""];
 
@@ -68,10 +63,6 @@ export const getLectures = async () => {
   }
 };
 
-/* =========================
-   단일 조회
-========================= */
-
 export const getLectureById = async (docId) => {
   try {
     const snapshot = await getDoc(doc(db, COLLECTION_NAME, docId));
@@ -94,10 +85,6 @@ export const getLectureById = async (docId) => {
   }
 };
 
-/* =========================
-   강사별 조회 (🔥 중요)
-========================= */
-
 export const getLecturesByInstructorId = async (uid) => {
   try {
     const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
@@ -115,16 +102,12 @@ export const getLecturesByInstructorId = async (uid) => {
   }
 };
 
-/* =========================
-   생성
-========================= */
-
 export const createLecture = async (newLecture) => {
   try {
     const { image, ...rest } = newLecture;
 
     const lectureData = {
-      uid: 1, // 🔥 나중에 로그인 유저로 교체
+      uid: rest.uid ?? 1,
       title: rest.title,
       level: rest.level,
       champion: Array.isArray(rest.champion) ? rest.champion : [],
@@ -133,12 +116,21 @@ export const createLecture = async (newLecture) => {
       curriculum: curriculumArrayToObject(rest.curriculum),
       time: safeNumber(rest.lectureCount),
       price: safeNumber(rest.price),
+      instructor: rest.instructor ?? "",
+      instructorId: rest.instructorId ?? "",
       createdAt: serverTimestamp(),
     };
 
     const lectureRef = await addDoc(
       collection(db, COLLECTION_NAME),
       lectureData,
+    );
+
+    await createReviewField(
+      lectureRef.id,
+      lectureData.title,
+      lectureData.instructor,
+      lectureData.instructorId,
     );
 
     console.log("강의 생성 완료:", lectureRef.id);
@@ -149,10 +141,6 @@ export const createLecture = async (newLecture) => {
     throw error;
   }
 };
-
-/* =========================
-   수정
-========================= */
 
 export const updateLecture = async (docId, updateData) => {
   try {
@@ -167,6 +155,8 @@ export const updateLecture = async (docId, updateData) => {
       curriculum: curriculumArrayToObject(rest.curriculum),
       time: safeNumber(rest.lectureCount),
       price: safeNumber(rest.price),
+      instructor: rest.instructor ?? "",
+      instructorId: rest.instructorId ?? "",
     };
 
     await updateDoc(doc(db, COLLECTION_NAME, docId), lectureData);
@@ -178,10 +168,6 @@ export const updateLecture = async (docId, updateData) => {
     throw error;
   }
 };
-
-/* =========================
-   삭제
-========================= */
 
 export const deleteLecture = async (docId) => {
   try {

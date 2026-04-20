@@ -9,6 +9,7 @@ import { getLectures } from "../../service/LectureService";
 import { useNavigate } from 'react-router-dom'
 import { getUserList } from '../../service/MemberViewService.js';
 import { getMoneyList } from '../../service/MoneyManagement.js'
+import { getReviewTotal } from '../../service/ReviewService.js'
 
 function NexusMainAdmin() {
     const { userData } = useContext(userContext);
@@ -53,6 +54,10 @@ function NexusMainAdmin() {
 
     return (
         <div className='main-admin-dashboard'>
+            <button
+                onClick={() => getReviewTotal}>
+                asdf
+            </button>
             <div className='main-hello'>
                 <h1>관리자 {userData.userName}님, </h1>
                 <h1>환영합니다🎯</h1>

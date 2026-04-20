@@ -64,4 +64,24 @@ export const toggleBlackList = async (userId, want) => {
 }
 
 
+/**
+ * 특정 회원의 승인 여부를 관리하는 함수
+ * @param {string} userId - 승인 여부 변경할 회원의 고유 ID
+ */
+export const instructorApproval = async (userId) => {
+    try {
+        const docRef = doc(db, COLLECTION_NAME, userId);
+        await updateDoc(docRef, {
+            isApproval: true
+        });
+        console.log('강사 승인 완료');
+    } catch (error) {
+        console.log('강사 승인 오류');
+        throw error;
+    }
+}
+
+
 // console.log(db)
+
+

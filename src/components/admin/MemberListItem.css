@@ -173,29 +173,47 @@
     font-weight: 600;
 }
 
+/*버튼들*/
+.member-list-item-button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 /*블랙리스트 버튼*/
-.member-list-black-button:hover {
+.member-list-black-button:hover,
+.member-list-approval-button:hover {
     cursor: pointer;
 }
 
-.member-list-black-button {
+.member-list-black-button,
+.member-list-approval-button {
     display: flex;
-    padding: 6.994px 12.994px 8.98px 11.992px;
+    padding: 8px 12.994px 8px 11.992px;
     justify-content: center;
     align-items: flex-end;
     gap: 6.99px;
     border-radius: 8px;
     border: none;
+    height: 30px;
 }
 
 .member-list-black-button>img {
     margin-bottom: 1px;
 }
 
-.member-list-black-button>p {
+.member-list-black-button>p,
+.member-list-approval-button>p {
     /**/
     text-align: center;
     font-size: 14px;
     font-weight: 600;
-    margin-top: 2px;
+}
+
+.member-list-approval-button>p {
+    color: #3B82F6;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
 }

@@ -254,7 +254,7 @@ function Reviews() {
                                 review={review}
                                 currentUserId={userData?.uid}
                                 role={role}
-                                triggerRefresh={() => setRefresh(prev => !prev)}   // 🔥 추가
+                                triggerRefresh={() => setRefresh(prev => !prev)}
                             />
                         ))
                     )

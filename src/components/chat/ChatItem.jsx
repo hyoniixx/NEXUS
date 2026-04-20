@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import './ChatItem.css';
+import { userContext } from '../../App';
 // import { updateChat } from '../../service/ChatService';
 // import { chatContext } from '../../pages/chat/Chat';
 //말풍선
@@ -12,7 +13,8 @@ function ChatItem({
 }) {
     // const { currentChatInfo } = useContext(chatContext);
 
-    const myuid = 'asdf';
+    const { userData } = useContext(userContext);
+    const myuid = userData.uid;
 
     return (
         <div className={fromMemberId === 'admin' ? 'c-chat-admin' : (fromMemberId === myuid ? 'c-chat-blue' : 'c-chat-black')}>

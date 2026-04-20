@@ -32,7 +32,10 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const docSnapShot = await getUser(user.uid);
+        console.log('!!!!!!!!!!', docSnapShot)
         dispatch({ type: 'SET_USER_DATA', payload: docSnapShot })
+      } else {
+        dispatch({ type: 'INIT_USER_DATA' })
       }
       setLoading(false);
     })

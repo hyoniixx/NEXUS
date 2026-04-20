@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import './ChatRoom.css'
 import { chatContext } from '../../pages/chat/Chat';
+import { userContext } from '../../App';
 //채팅방 왼쪽에있는 방 하나하나
 function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants }) {
     const { setCurrentChatInfo } = useContext(chatContext);
-    const myuid = 'asdf';
+    const { userData } = useContext(userContext);
+    const myuid = userData.uid;
     const keys = Object.keys(participantInfo);
     const opponent = keys.find(k => k !== myuid)
 

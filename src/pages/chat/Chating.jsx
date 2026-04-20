@@ -8,9 +8,12 @@ import { db } from '../../firebase/config'
 import { createMessage } from '../../service/MessageService'
 import ChatButton from '../../components/chat/ChatButton'
 import { updateChat } from '../../service/ChatService'
+import { userContext } from '../../App'
 
 function Chating() {
-    const myuid = 'asdf';
+    const { userData } = useContext(userContext);
+
+    const myuid = userData.uid;
 
     const { currentChatInfo } = useContext(chatContext);
     const [messages, setMessages] = useState([])

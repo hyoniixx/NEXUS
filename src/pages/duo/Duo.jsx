@@ -13,6 +13,7 @@ import {
   getDuos,
 } from "../../service/DuoService";
 import { userContext } from "../../App";
+import { createChat } from "../../service/ChatService";
 
 function Duo() {
   const navigate = useNavigate();
@@ -183,9 +184,37 @@ function Duo() {
       };
 
       const result = await applyToDuo(selectedDuo, applicant);
+      const chatData = {
+        type: "duo",
+        refId: selectedDuo.docId,
+        participants: [
+          selectedDuo.writer.uid,
+          uid
+        ],
+        participantInfo: {
+          [selectedDuo.writer.uid]: {
+            nickname: selectedDuo.writer.userName,
+            role: "host"
+          },
+          [uid]: {
+            nickname: userName,
+            role: "guest"
+          }
+        },
+        status: {
+          [selectedDuo.writer.uid]: '전',
+          [uid]: '전'
+        },
+        unreadCount: {
+          [selectedDuo.writer.uid]: 0,
+          [uid]: 0
+        }
+      }
 
       if (result.isNew) {
+        console.log('ssssss', selectedDuo)
         setResultModalMessage("듀오 신청이 완료되었습니다.");
+        await createChat(chatData)
       } else {
         setResultModalMessage("이미 신청한 듀오입니다.");
       }
@@ -233,9 +262,8 @@ function Duo() {
       <div className="duo-page">
         <div className="duo-page-inner">
           <div
-            className={`duo-top-section ${
-              isAdmin ? "duo-top-section-admin" : ""
-            }`}
+            className={`duo-top-section ${isAdmin ? "duo-top-section-admin" : ""
+              }`}
           >
             <div className="duo-title-wrap">
               <h1 className="duo-title">듀오 매칭</h1>
@@ -277,9 +305,8 @@ function Duo() {
                 >
                   <span>{selectedTier}</span>
                   <span
-                    className={`duo-filter-arrow ${
-                      openFilter === "tier" ? "open" : ""
-                    }`}
+                    className={`duo-filter-arrow ${openFilter === "tier" ? "open" : ""
+                      }`}
                   >
                     ▾
                   </span>
@@ -291,9 +318,8 @@ function Duo() {
                       <button
                         key={option}
                         type="button"
-                        className={`duo-filter-item ${
-                          selectedTier === option ? "active" : ""
-                        }`}
+                        className={`duo-filter-item ${selectedTier === option ? "active" : ""
+                          }`}
                         onClick={() => handleSelectTier(option)}
                       >
                         {option}
@@ -311,9 +337,8 @@ function Duo() {
                 >
                   <span>{selectedLine}</span>
                   <span
-                    className={`duo-filter-arrow ${
-                      openFilter === "line" ? "open" : ""
-                    }`}
+                    className={`duo-filter-arrow ${openFilter === "line" ? "open" : ""
+                      }`}
                   >
                     ▾
                   </span>
@@ -325,9 +350,8 @@ function Duo() {
                       <button
                         key={option}
                         type="button"
-                        className={`duo-filter-item ${
-                          selectedLine === option ? "active" : ""
-                        }`}
+                        className={`duo-filter-item ${selectedLine === option ? "active" : ""
+                          }`}
                         onClick={() => handleSelectLine(option)}
                       >
                         {option}
@@ -369,9 +393,8 @@ function Duo() {
           closeModal={applyDuoModal.closeModal}
           activeModal={applyDuoModal.activeModal}
           title="듀오 신청"
-          content={`${
-            selectedDuo?.writer?.userName || selectedDuo?.nickname || ""
-          }님에게 듀오를 신청하시겠습니까?`}
+          content={`${selectedDuo?.writer?.userName || selectedDuo?.nickname || ""
+            }님에게 듀오를 신청하시겠습니까?`}
           type="two"
           color="blue"
         />

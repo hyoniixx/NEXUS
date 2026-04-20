@@ -5,6 +5,7 @@ import { deleteChat, updateChat } from '../../service/ChatService'
 import { createMessage, deleteMessage } from '../../service/MessageService'
 import setUpdataData from '../../reducer/chatButtonReducer'
 import ReviewDuo from '../common/ReviewDuoModal'
+import { userContext } from '../../App'
 
 
 
@@ -33,8 +34,10 @@ function ChatButton() {
     const navigate = useNavigate();
     const [isModal, setIsModal] = useState(false);
 
-    const myuid = 'asdf';
-    const myNickname = '정프로'
+    const { userData } = useContext(userContext);
+
+    const myuid = userData.uid;
+    const myNickname = userData.userName;
 
     useEffect(() => {
 

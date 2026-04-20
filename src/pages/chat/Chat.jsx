@@ -1,12 +1,15 @@
 import Chating from './Chating';
 import ChatList from './ChatList';
 import './Chat.css'
-import { createContext, useState } from "react"
+import { createContext, useContext, useState } from "react"
 import leftArrow from '../../assets/leftArrow.svg';
+import { userContext } from '../../App';
 
 export const chatContext = createContext();
 
 function Chat() {
+    const { userData } = useContext(userContext);
+
     const [currentChatInfo, setCurrentChatInfo] = useState({
         currentChatType: '',
         currentChatId: '',
@@ -18,8 +21,7 @@ function Chat() {
         currentUnreadCount: {}
     });
 
-    // 나중에 전역 콘텍스트로 받아올 사용자 자신의 uid
-    const myuid = 'asdf';
+    const myuid = userData.uid;
 
     return (
         <div className='c-chat'>

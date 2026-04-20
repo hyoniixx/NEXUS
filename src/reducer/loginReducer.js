@@ -31,7 +31,6 @@ function setLoginInfo(state, action) {
                 errorMessage: '너무 많은 로그인 시도가 있었습니다. 잠시 후 다시 시도해주세요.'
             }
         case 'INIT':
-            console.log('3')
             return {
                 email: '',
                 password: '',

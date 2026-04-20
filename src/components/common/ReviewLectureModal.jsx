@@ -4,7 +4,7 @@ import close from '../../assets/reviewModalClose.svg'
 import empty from '../../assets/grayStar.svg'
 import fill from '../../assets/filledStar.svg'
 
-function ReviewLectureModal({ isModal, onClose, writer, type, before }) {
+function ReviewLectureModal({ isModal, onClose, review, currentUserId, type }) {
     if (!isModal) return null;
     //type : view | create | edit
     var header = '후기 조회';
@@ -30,16 +30,12 @@ function ReviewLectureModal({ isModal, onClose, writer, type, before }) {
             break;
     }
 
-    const [star, setStar] = useState(0);
-    const [text, setText] = useState(before !== '' || before !== null ? before : '')
+    const [star, setStar] = useState(review?.star || 0);
+    const [text, setText] = useState(review?.content || '');
     const handleText = (e) => {
         if (e.target.value.length <= 200) {
             setText(e.target.value)
         }
-    }
-
-    const closeModal = () => {
-        setOpened(false);
     }
 
     return (
@@ -59,7 +55,7 @@ function ReviewLectureModal({ isModal, onClose, writer, type, before }) {
                         <p>작성자</p>
                         <div className='review-modal-profile'>
                             <img src="" width='40px' height='40px' />
-                            <p>{writer}</p>
+                            <p>{review?.userName}</p>
                         </div>
                     </div>
                     <div className='review-modal-star'>
@@ -117,6 +113,7 @@ function ReviewLectureModal({ isModal, onClose, writer, type, before }) {
                         <button
                             style={{ backgroundColor: '#1E293B', width: '398.572px' }}
                             onClick={onClose}
+
                         >닫기</button>
                     ) : type === 'create' ? (
                         <>

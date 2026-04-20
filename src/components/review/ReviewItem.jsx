@@ -5,15 +5,23 @@ import ReviewLectureModal from '../common/ReviewLectureModal';
 
 
 
-function ReviewItem({ name, content, date, star }) {
+function ReviewItem({ review, currentUserId }) {//name, content, date, star
     const stars = [false, false, false, false, false];
+    const { name, content, date, star } = review;
+    const isMine = review.uid === currentUserId;
     for (let i = 0; i < Number(star); i++) {
         stars[i] = true
     }
     const [isModal, setIsModal] = useState(false);
     return (
         <>
-            <ReviewLectureModal isModal={isModal} onClose={() => setIsModal(false)} lectureId='123' writer='김수강' type='edit' before='' />
+            <ReviewLectureModal
+                isModal={isModal}
+                onClose={() => setIsModal(false)}
+                review={review}
+                currentUserId={currentUserId}
+                type={isMine ? 'edit' : 'view'}
+            />
             <div className='review-page-list-items' onClick={() => setIsModal(!isModal)}>
                 <div className='review-page-list-item-header'>
                     <img className='review-page-list-item-profile' />

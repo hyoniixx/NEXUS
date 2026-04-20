@@ -7,6 +7,10 @@
     margin-right: 266.67px;
 }
 
+.detail-layout>button:hover {
+    cursor: pointer;
+}
+
 /*링크*/
 .toLectureList {
     color: #94A3B8;
@@ -87,7 +91,7 @@
     text-align: center;
     font-size: 16px;
     font-weight: 600;
-    line-height: 24px;
+    line-height: 48px;
 }
 
 .detail-box-bottom-button {

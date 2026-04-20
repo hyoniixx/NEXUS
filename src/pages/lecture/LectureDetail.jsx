@@ -20,20 +20,21 @@ import tier7 from '../../assets/tier7.png'
 import tier8 from '../../assets/tier8.png'
 import tier9 from '../../assets/tier9.png'
 import { getLectureById } from '../../service/LectureService.js'
+import { getReviews } from '../../service/ReviewService.js'
 import { userContext } from '../../App.jsx'
-import { getUser } from '../../service/UserService.js'
+import { getUser, updateUser } from '../../service/UserService.js'
 import lectureDefault from '../../assets/lectureDefaultImage.png'
+import LecturePayment from '../../components/lecture-detail/LecturePayment.jsx'
 
 function LectureDetail() {
-    const { id } = useParams(); //url 기준 강의 ID 받아옴
-    const [isOn, setIsOn] = useState(false); //수강 상태 관리
-    const [isWished, setIsWished] = useState(false); //찜하기 눌렀는지 여부
-    const [badge, setBadge] = useState({ pro: true, streamer: true }) //강사 정보 받아와서 프로,스트리머 여부 객체에 담기
-    const [lectureData, setLectureData] = useState({}); //강의 정보 불러오기
-    const navigate = useNavigate(); //이동하기
-    const { userData } = useContext(userContext); // 로그인한 회원정보
-    const [role, setRole] = useState(''); //로그인한 회원의 role값
-    const [lecture, setLecture] = useState({ //강의 데이터 초기셋팅
+    const { id } = useParams();
+    const [isWished, setIsWished] = useState(false);
+    const [badge, setBadge] = useState({ pro: true, streamer: true })
+    const [lectureData, setLectureData] = useState(null);
+    const navigate = useNavigate();
+    const { userData, dispatch } = useContext(userContext);
+    const [role, setRole] = useState('');
+    const [lecture, setLecture] = useState({
         title: '',
         description: '',
         image: null,
@@ -49,32 +50,71 @@ function LectureDetail() {
         star: { average: 0, total: 0 },
         lectureStatus: '',
     })
-    const [instructor, setInstructor] = useState({
-        userName: '',
-        csGrade: 1
-    });
-    const csMap = {
-        1: tier1,
-        2: tier2,
-        3: tier3,
-        4: tier4,
-        5: tier5,
-        6: tier6,
-        7: tier7,
-        8: tier8,
-        9: tier9
+    const [review, setReview] = useState(null);
+    const [instructor, setInstructor] = useState({ userName: '', csGrade: 1 });
+    const [pageMode, setPageMode] = useState('guest');
+    const [isPaymentModal, setIsPaymentModal] = useState(false);
+    const [renderKey, setRenderKey] = useState(0); // 리렌더 트리거
+
+    const csMap = { 1: tier1, 2: tier2, 3: tier3, 4: tier4, 5: tier5, 6: tier6, 7: tier7, 8: tier8, 9: tier9 }
+    const diffMap = { BEGINNER: "초급", INTERMEDIATE: "중급", ADVANCED: "심화" }
+
+    const handleEnroll = () => {
+        setIsPaymentModal(true);
     }
 
-    useEffect(() => {//
+    const handlePaymentSuccess = () => {
+        setPageMode('student_on');
+        setRenderKey(prev => prev + 1); // 리렌더 트리거
+    }
+
+    const handleWish = async () => {
+        if (!userData?.uid) return;
+        const currentWish = userData.wish || [];
+        let updatedWish;
+
+        if (isWished) {
+            updatedWish = currentWish.filter(w => w !== id);
+        } else {
+            updatedWish = [...currentWish, id];
+        }
+
+        await updateUser(userData.uid, { wish: updatedWish });
+        dispatch({ type: 'SET_USER_DATA', payload: { ...userData, wish: updatedWish } });
+        setIsWished(!isWished);
+    }
+
+    useEffect(() => {
+        if (!userData || !lectureData) return;
+
+        if (userData.role === 'admin') {
+            setPageMode('admin');
+        } else if (userData.role === 'instructor') {
+            if (lectureData.uid === userData.uid) {
+                setPageMode('instructor');
+            }
+        } else if (userData.role === 'student') {
+            const isEnrolled = userData.lectures?.includes(id);
+            setPageMode(isEnrolled ? 'student_on' : 'student_off');
+        }
+
+        // 찜 여부 확인
+        const wished = userData.wish?.includes(id) ?? false;
+        setIsWished(wished);
+
+    }, [userData, lectureData, renderKey])
+
+    useEffect(() => {
         const render = async () => {
             const temp = await getLectureById(id);
+            const tempReview = await getReviews(id);
             setLectureData(temp);
-            console.log('?', temp);
+            setReview(tempReview);
         }
         render();
     }, [])
 
-    useEffect(() => {//회원정보 불러왔을때 오른쪽 버튼 내용 변경하기 위해
+    useEffect(() => {
         setRole(userData.role);
     }, [userData])
 
@@ -86,6 +126,7 @@ function LectureDetail() {
             image: null,
             instructorName: lectureData.instructorName ?? '',
             instructorId: lectureData.instructorId ?? '',
+            instructorEmail: lectureData.instructorEmail ?? "",
             badgeType: lectureData.badgeType ?? '',
             level: lectureData.level ?? '',
             line: lectureData.line ?? '',
@@ -96,120 +137,170 @@ function LectureDetail() {
             star: lectureData.star ?? { average: 0 },
             lectureStatus: lectureData.lectureStatus ?? '',
         });
-        setInstructor(getUser(lectureData.instructorId));
+        const fetchInstructor = async () => {
+            const tempInstructor = await getUser(lectureData.instructorId);
+            setInstructor(tempInstructor);
+        }
+        fetchInstructor();
     }, [lectureData])
 
-    /*
-        champion: ['제라스']
-        createdAt: Timestamp {seconds: 1776402737, nanoseconds: 84000000}
-        curriculum: (3) ['dddd', 'dddd', 'dddd']
-        description: "미드 제라스 꿀팁 및 라인전 강의"
-        docId: "6Rh40FZEuvhEyixL0s9V"
-        level: "ADVANCED"
-        line: "MID"
-        price: 500000
-        time: 1
-        title: "미드 제라스로 마스터 가기"
-        uid: 1
-    */
+    if (!lectureData || !lecture.title) return <div>로딩 중...</div>
+    if (!userData) return;
+
     return (
-        <div className='detail-layout'>
-            <p className='toLectureList'>← 강의 목록으로</p>
-            <div className='detail-content-layout'>
-                <div className='detail'>
-                    <div className='detail-head'>
-                        <div className='detail-head-profile'>
-                            <div className='detail-head-profileImg'>img</div>
-                            <div className='detail-head-profileDetail'>
-                                <div className='detail-head-profileName'>
-                                    <p>{lectureData.instructorName}</p>
-                                    <img src={probadge} className='badge' style={{ display: `${lectureData.badgeType === 'PRO' ? 'flex' : 'none'}` }} />
-                                    <img src={strmbadge} className='badge' style={{ display: `${lectureData.badgeType === 'STREAMER' ? 'flex' : 'none'}` }} />
-                                </div>
-                                <div className='detail-head-profileTier'>
-                                    <img src={csMap[Number(instructor.csGrade)]} className='detail-head-tierBadge' width='30px' height='30px' />
-                                    <p>칼날부리</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='detail-head-title'>
-                            <h6>{lectureData.title}</h6>
-                        </div>
-                        {<img src={lectureData.image || lectureDefault} className='detail-head-image' />}
-                    </div>
-                    <div className='detail-intro'>
-                        <h6>강의 소개</h6>
-                        <p>{lectureData.description}</p>
-                    </div>
-                    <div className='detail-info'>
-                        <div className='detail-info-head'>
-                            <p>강의 정보</p>
-                        </div>
-                        <div className='detail-info-content'>
-                            <div className='detail-info-time'>
-                                <h6>수업 시간</h6>
-                                <p>{lectureData.lectureCount}시간</p>
-                            </div>
-                            <div className='detail-info-diff'>
-                                <h6>난이도</h6>
-                                <p>{lectureData.level}</p>
-                            </div>
-                            <div className='detail-info-star'>
-                                <h6>평점</h6>
-                                <div className='detail-info-star-content'>
-                                    <img src={star} style={{ width: '16px', height: '16px', color: 'white' }} />
-                                    <p>4.4</p>
-                                    <h5>(123개 리뷰)</h5>
+        <>
+            <LecturePayment
+                isModal={isPaymentModal}
+                onClose={() => setIsPaymentModal(false)}
+                price={lecture.price}
+                title={lecture.title}
+                instructorId={lecture.instructorId}
+                instructorEmail={lecture.instructorEmail}
+                lectureId={id}
+                onPaymentSuccess={handlePaymentSuccess}
+            />
+            <div className='detail-layout'>
+                <p className='toLectureList'>← 강의 목록으로</p>
+                <div className='detail-content-layout'>
+                    <div className='detail'>
+                        <div className='detail-head'>
+                            <div className='detail-head-profile'>
+                                <div className='detail-head-profileImg'>img</div>
+                                <div className='detail-head-profileDetail'>
+                                    <div className='detail-head-profileName'>
+                                        <p>{lectureData.instructorName}</p>
+                                        <img src={probadge} className='badge' style={{ display: `${lectureData.badgeType === 'PRO' ? 'flex' : 'none'}` }} />
+                                        <img src={strmbadge} className='badge' style={{ display: `${lectureData.badgeType === 'STREAMER' ? 'flex' : 'none'}` }} />
+                                    </div>
+                                    <div className='detail-head-profileTier'>
+                                        <img src={csMap[Number(instructor?.csGrade)]} className='detail-head-tierBadge' width='30px' height='30px' />
+                                        <p>칼날부리</p>
+                                    </div>
                                 </div>
                             </div>
+                            <div className='detail-head-title'>
+                                <h6>{lectureData.title}</h6>
+                            </div>
+                            {<img src={lectureData.image || lectureDefault} className='detail-head-image' />}
                         </div>
-                    </div>
-                    <div className='detail-curriculum'>
-                        <div className='detail-curriculum-head'>
-                            <img src={book} alt="" width="19" height="20" />
-                            <p>커리큘럼</p>
+                        <div className='detail-intro'>
+                            <h6>강의 소개</h6>
+                            <p>{lectureData.description}</p>
                         </div>
-                        <div className='detail-curriculum-list'>
-                            <CurriculumItem index='1' content='1회차 수업 내용' />
-                            <CurriculumItem index='2' content='2회차 수업 내용' />
-                            <CurriculumItem index='3' content='3회차 수업 내용' />
-                        </div>
-                    </div>
-                    <div className='detail-review'>
-                        <div className='detail-review-head'>
-                            <p>수강생 후기</p>
-                            <div>
-                                <p onClick={() => navigate(`reviews`)}>전체 보기</p>
-                                <img src={rightArrow} alt="" width="6" height="10" />
+                        <div className='detail-info'>
+                            <div className='detail-info-head'>
+                                <p>강의 정보</p>
+                            </div>
+                            <div className='detail-info-content'>
+                                <div className='detail-info-time'>
+                                    <h6>수업 시간</h6>
+                                    <p>{lectureData.time}시간</p>
+                                </div>
+                                <div className='detail-info-diff'>
+                                    <h6>난이도</h6>
+                                    <p>{diffMap[lectureData.level]}</p>
+                                </div>
+                                <div className='detail-info-star'>
+                                    <h6>평점</h6>
+                                    <div className='detail-info-star-content'>
+                                        <img src={star} style={{ width: '16px', height: '16px', color: 'white' }} />
+                                        <p>{review?.star?.average ?? 0}</p>
+                                        <h5>(123개 리뷰)</h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className='detail-review-list'>
-                            <LectureReviewItem name='김수강' content='좋은 강의입니다.' star='4' />
+                        <div className='detail-curriculum'>
+                            <div className='detail-curriculum-head'>
+                                <img src={book} alt="" width="19" height="20" />
+                                <p>커리큘럼</p>
+                            </div>
+                            <div className='detail-curriculum-list'>
+                                {lecture.curriculum.map((item, index) => (
+                                    <CurriculumItem key={index} index={index + 1} content={item} />
+                                ))}
+                            </div>
                         </div>
+                        <div className='detail-review'>
+                            <div className='detail-review-head'>
+                                <p>수강생 후기</p>
+                                <div>
+                                    <p onClick={() => navigate(`reviews`)}>전체 보기</p>
+                                    <img src={rightArrow} alt="" width="6" height="10" />
+                                </div>
+                            </div>
+                            <div className='detail-review-list'>
+                                <LectureReviewItem name={review?.reviews[0]?.userName ?? ""} content={review?.reviews[0]?.content ?? ""} star={review?.reviews[0]?.star ?? 0} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='detail-box'>
+                        <h2>{lectureData.price?.toLocaleString()}원</h2>
+
+                        {pageMode === 'student_off' && (
+                            <>
+                                <button className='detail-box-top-button' onClick={handleEnroll}>
+                                    수강 신청하기
+                                </button>
+                                <button onClick={handleWish} className='detail-box-bottom-button'>
+                                    {isWished
+                                        ? <><img src={hart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 취소</p></>
+                                        : <><img src={emptyHart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 하기</p></>
+                                    }
+                                </button>
+                            </>
+                        )}
+
+                        {pageMode === 'student_on' && (
+                            <>
+                                <button
+                                    className='detail-box-top-on'
+                                >
+                                    <p>수강 중(채팅하기)</p>
+                                </button>
+                                <button onClick={handleWish} className='detail-box-bottom-button'>
+                                    {isWished
+                                        ? <><img src={hart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 취소</p></>
+                                        : <><img src={emptyHart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 하기</p></>
+                                    }
+                                </button>
+                            </>
+                        )}
+
+                        {pageMode === 'instructor' && (
+                            <>
+                                <button className='detail-box-top-button' onClick={() => navigate(`/edit-lecture/${id}`)}>
+                                    수정하기
+                                </button>
+                                <button className='detail-box-bottom-button' onClick={() => setIsDeleteModal(true)}>
+                                    삭제하기
+                                </button>
+                            </>
+                        )}
+
+                        {pageMode === 'admin' && (
+                            <button className='detail-box-bottom-button' onClick={() => setIsDeleteModal(true)}>
+                                삭제하기
+                            </button>
+                        )}
+
+                        {pageMode === 'guest' && (
+                            <>
+                                <button className='detail-box-top-button' onClick={() => navigate('/login')}>
+                                    로그인 후 수강 신청
+                                </button>
+                                <button onClick={handleWish} className='detail-box-bottom-button'>
+                                    {isWished
+                                        ? <><img src={hart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 취소</p></>
+                                        : <><img src={emptyHart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 하기</p></>
+                                    }
+                                </button>
+                            </>
+                        )}
                     </div>
                 </div>
-                <div className='detail-box'>
-                    <h2>55,000원</h2>
-                    <button
-                        onClick={() => setIsOn(!isOn)}
-                        disabled={isOn ? true : false}
-                        className='detail-box-top-button'
-                        style={{ display: `${isOn ? 'none' : 'default'}` }}
-                    >
-                        {isOn ? "수강 중" : "수강 신청하기"}
-                    </button>
-                    <div className='detail-box-top-on' style={{ display: `${!isOn ? 'none' : 'flex'}` }}>
-                        <p>수강 중</p>
-                    </div>
-                    <button
-                        onClick={() => setIsWished(!isWished)}
-                        className='detail-box-bottom-button'
-                    >
-                        {isWished ? <><img src={hart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 취소</p></> : <><img src={emptyHart} width='15px' height='15px' style={{ marginTop: '4px' }} /><p>찜 하기</p></>}
-                    </button>
-                </div>
-            </div >
-        </div>
+            </div>
+        </>
     )
 }
 

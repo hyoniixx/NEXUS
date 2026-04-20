@@ -1,0 +1,139 @@
+.payment-modal-background {
+    background: rgba(0, 0, 0, 0.50);
+    z-index: 900;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-modal-box {
+    z-index: 999;
+    width: 448px;
+    border-radius: 16px;
+    border: 0.716px solid rgba(148, 163, 184, 0.20);
+    background: #111827;
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 84px;
+    border-bottom: 0.716px solid rgba(148, 163, 184, 0.20);
+}
+
+.payment-modal-header>h1 {
+    color: #E8EAF0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.payment-modal-header>img:hover {
+    cursor: pointer;
+}
+
+.payment-modal-body {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-bottom: 0.716px solid rgba(148, 163, 184, 0.20);
+}
+
+.payment-modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.payment-modal-label {
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.payment-modal-value {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.payment-modal-price {
+    color: #3B82F6;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.payment-modal-price-inline {
+    color: #3B82F6;
+    font-weight: 700;
+}
+
+.payment-modal-notice {
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.10);
+    padding: 12px 16px;
+}
+
+.payment-modal-notice>p {
+    color: #EF4444;
+    font-size: 13px;
+}
+
+.payment-modal-confirm-text {
+    color: #E8EAF0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.8;
+    text-align: center;
+    padding: 12px 0;
+}
+
+.payment-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+}
+
+.payment-btn-cancel {
+    width: 193px;
+    height: 48px;
+    border-radius: 8px;
+    background: #1E293B;
+    border: none;
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.payment-btn-primary {
+    width: 193px;
+    height: 48px;
+    border-radius: 8px;
+    background: #3B82F6;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.payment-btn-cancel:hover {
+    background: #263548;
+}
+
+.payment-btn-primary:hover {
+    background: #2563EB;
+}

@@ -1,7 +1,6 @@
 function setUserData(state, action) {
     switch (action.type) {
         case 'SET_USER_DATA':
-            console.log('222222', action.payload);
             return {
                 ...action.payload
             }

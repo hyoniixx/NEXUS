@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import ChatRoom from "../../components/chat/ChatRoom"
 import './ChatList.css'
 import { collection, doc, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { userContext } from "../../App";
 
 
 function ChatList() {
     const [chats, setChats] = useState([]);
     const [chatCategory, setChatCategory] = useState('all');
 
-    const myuid = 'asdf';
+    const { userData } = useContext(userContext);
+
+    const myuid = userData.uid || '';
 
     useEffect(() => {
         let q;

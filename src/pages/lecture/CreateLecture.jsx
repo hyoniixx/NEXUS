@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LectureForm from "../../components/lecture/LectureForm";
 import Modal from "../../components/common/Modal";
 import useModal from "../../hooks/useModal";
 import { createLecture } from "../../service/LectureService";
+import { userContext } from "../../App";
 import "./CreateLecture.css";
 
 function CreateLecture() {
   const navigate = useNavigate();
+  const { userData } = useContext(userContext);
+
   const [pendingLecture, setPendingLecture] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,6 +36,9 @@ function CreateLecture() {
 
       await createLecture({
         ...lectureWithoutImage,
+        uid: userData?.uid ?? 1,
+        instructor: userData?.userName ?? "",
+        instructorId: userData?.email ?? "",
       });
 
       createLectureModal.closeModal();

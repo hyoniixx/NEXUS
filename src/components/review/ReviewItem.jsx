@@ -5,10 +5,21 @@ import ReviewLectureModal from '../common/ReviewLectureModal';
 
 
 
-function ReviewItem({ review, currentUserId }) {//name, content, date, star
+function ReviewItem({ review, currentUserId, role, triggerRefresh }) {//name, content, date, star
     const stars = [false, false, false, false, false];
     const { userName, content, createdAt, star } = review;
     const isMine = review.uid === currentUserId;
+
+    let modalType = 'view';
+
+    if (role === 'admin') {
+        modalType = 'edit'; // 강제 삭제 가능하게
+    } else if (role === 'instructor') {
+        modalType = 'view'; // 무조건 조회
+    } else {
+        modalType = isMine ? 'edit' : 'view';
+    }
+
     for (let i = 0; i < Number(star); i++) {
         stars[i] = true
     }
@@ -20,7 +31,8 @@ function ReviewItem({ review, currentUserId }) {//name, content, date, star
                 onClose={() => setIsModal(false)}
                 review={review}
                 currentUserId={currentUserId}
-                type={isMine ? 'edit' : 'view'}
+                type={modalType}
+                triggerRefresh={triggerRefresh}   // 🔥 추가
             />
             <div className='review-page-list-items' onClick={() => setIsModal(!isModal)}>
                 <div className='review-page-list-item-header'>

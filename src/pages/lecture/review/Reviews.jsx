@@ -17,7 +17,21 @@ function Reviews() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [reviewData, setReviewData] = useState(null);
+
     const { userData } = useContext(userContext);
+    const role = userData?.role;
+    const isEnrolled = userData?.lectures?.includes(id);
+
+    const isAdmin = role === 'admin';
+    const isInstructor = role === 'instructor';
+    const isStudent = role === 'student';
+    // 작성 가능 여부
+    const canCreate = isStudent && isEnrolled;
+    // 수정 가능 여부
+    const canEdit = isStudent && review?.uid === userData?.uid;
+    // 삭제 가능 여부
+    const canDelete = isAdmin || (isStudent && review?.uid === userData?.uid);
+
     const [average, setAverage] = useState(0);
     const [intAverage, setIntAverage] = useState(0);
     const [pageNow, setPageNow] = useState(1);
@@ -30,6 +44,7 @@ function Reviews() {
     const [showData, setShowData] = useState([]);
     const [isMyReview, setIsMyReview] = useState(false);
     const [isCreateModal, setIsCreateModal] = useState(false);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {// 최초 마운트 시 리뷰 데이터 불러오기
         const render = async () => {
@@ -38,6 +53,14 @@ function Reviews() {
         }
         render();
     }, [])
+
+    useEffect(() => { //리뷰 데이터 변동 생길때 리렌더 될수있게
+        const render = async () => {
+            const temp = await getReviews(id);
+            setReviewData(temp);
+        }
+        render();
+    }, [refresh]);
 
     useEffect(() => {// reviewData가 불러와지면 평균, 페이지네이션 초기화
         if (!reviewData) return;
@@ -63,7 +86,6 @@ function Reviews() {
 
         let sorted = [...reviewData.reviews];
 
-        // 🔥 내 후기 필터
         if (isMyReview && userData?.uid) {
             sorted = sorted.filter(r => r.uid === userData.uid);
         }
@@ -153,6 +175,7 @@ function Reviews() {
                 onClose={() => setIsCreateModal(false)}
                 writer={userData?.userName}
                 type="create"
+                triggerRefresh={() => setRefresh(prev => !prev)}
             />
             <div className='review-layout'>
                 <div className='review-back' onClick={() => navigate(`/lecture/${id}`)}>
@@ -194,20 +217,24 @@ function Reviews() {
                         <option value="decrease">평점 높은 순</option>
                         <option value="increase">평점 낮은 순</option>
                     </select>
-                    <button
-                        className={isMyReview ? 'review-filter-my-selected' : 'review-filter-my'}
-                        onClick={() => setIsMyReview(prev => !prev)}
-                    >
-                        <img src={people} alt="" width="16" height="16" />
-                        <p>내 후기 보기</p>
-                    </button>
-                    <button
-                        className='review-filter-write'
-                        onClick={() => setIsCreateModal(true)}
-                    >
-                        <img src={write} alt="" width="16" height="16" />
-                        <p>후기 작성</p>
-                    </button>
+                    {role === 'student' && (
+                        <button
+                            className={isMyReview ? 'review-filter-my-selected' : 'review-filter-my'}
+                            onClick={() => setIsMyReview(prev => !prev)}
+                        >
+                            <img src={people} alt="" width="16" height="16" />
+                            <p>내 후기 보기</p>
+                        </button>
+                    )}
+                    {role === 'student' && userData.lectures?.includes(id) && (
+                        <button
+                            className='review-filter-write'
+                            onClick={() => setIsCreateModal(true)}
+                        >
+                            <img src={write} alt="" width="16" height="16" />
+                            <p>후기 작성</p>
+                        </button>
+                    )}
                     <div className='review-filter-page'>
                         <p>
                             {pageNow * 5 - 4}-
@@ -226,6 +253,8 @@ function Reviews() {
                                 key={review.reviewId}
                                 review={review}
                                 currentUserId={userData?.uid}
+                                role={role}
+                                triggerRefresh={() => setRefresh(prev => !prev)}   // 🔥 추가
                             />
                         ))
                     )

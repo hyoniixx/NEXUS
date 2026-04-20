@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./StudentMyLectures.css";
 import LectureItem from "../../components/lecture/LectureItem";
 import { getEnrollmentsByStudentId } from "../../service/EnrollmentService";
-import { getLectures } from "../../service/LectureService";
+import { getLectureById, getLectures } from "../../service/LectureService";
+import { userContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 function StudentMyLectures() {
   const [filter, setFilter] = useState("all");
@@ -10,6 +12,10 @@ function StudentMyLectures() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterDropdownRef = useRef(null);
+
+  const { userData, dispatch } = useContext(userContext);
+
+  const navigate = useNavigate();
 
   const levelLabelMap = {
     BEGINNER: "초급",
@@ -56,51 +62,23 @@ function StudentMyLectures() {
 
   useEffect(() => {
     const fetchMyLectures = async () => {
+      if (!userData?.lectures || userData.lectures.length === 0) {
+        setLectures([]);
+        return;
+      }
+
       try {
         setIsLoading(true);
 
-        const studentId = 1;
-
-        const enrollments = await getEnrollmentsByStudentId(studentId);
-        const allLectures = await getLectures();
-
-        const mergedLectures = enrollments
-          .map((enrollment) => {
-            const matchedLecture = allLectures.find(
-              (lecture) => lecture.docId === enrollment.lectureId,
-            );
-
-            if (!matchedLecture) return null;
-
-            return {
-              docId: matchedLecture.docId,
-              lectureId: enrollment.lectureId,
-              instructorId:
-                matchedLecture.uid ?? enrollment.instructorId ?? null,
-              instructorName:
-                enrollment.instructorName ||
-                matchedLecture.instructorName ||
-                "강사",
-              badgeType: matchedLecture.badgeType || "PRO",
-              title: matchedLecture.title || enrollment.lectureTitle || "",
-              line: matchedLecture.line || "",
-              level: matchedLecture.level || "",
-              champion: Array.isArray(matchedLecture.champion)
-                ? matchedLecture.champion
-                : matchedLecture.champion
-                  ? [matchedLecture.champion]
-                  : [],
-              star: matchedLecture.star || { average: 0 },
-              total: matchedLecture.total || 0,
-              price: matchedLecture.price || 0,
-              reviewStatus: enrollment.hasReview ? "done" : "pending",
-              enrolledAt: enrollment.enrolledAt || "",
-              paymentStatus: enrollment.paymentStatus || "",
-            };
+        const myLectureList = await Promise.all(
+          userData.lectures.map(async (lectureId) => {
+            const myLecture = await getLectureById(lectureId);
+            return myLecture;
           })
-          .filter(Boolean);
+        );
 
-        setLectures(mergedLectures);
+        console.log("내 강의 목록:", myLectureList);
+        setLectures(myLectureList);
       } catch (error) {
         console.error("내 신청 강의 불러오기 오류", error);
       } finally {
@@ -109,7 +87,7 @@ function StudentMyLectures() {
     };
 
     fetchMyLectures();
-  }, []);
+  }, [userData?.lectures]);
 
   const filteredLectures =
     filter === "all"
@@ -136,6 +114,10 @@ function StudentMyLectures() {
     );
   }
 
+  const handleMoveLectureDetail = (docId) => {
+    navigate(`/lecture/${docId}`);
+  };
+
   return (
     <section className="student-my-lectures-page">
       <div className="student-my-lectures-inner">
@@ -156,9 +138,8 @@ function StudentMyLectures() {
             >
               <span>{selectedFilterLabel}</span>
               <span
-                className={`student-my-lectures-filter-arrow ${
-                  isFilterOpen ? "open" : ""
-                }`}
+                className={`student-my-lectures-filter-arrow ${isFilterOpen ? "open" : ""
+                  }`}
               >
                 ▾
               </span>
@@ -170,9 +151,8 @@ function StudentMyLectures() {
                   <button
                     key={option.value}
                     type="button"
-                    className={`student-my-lectures-filter-item ${
-                      filter === option.value ? "active" : ""
-                    }`}
+                    className={`student-my-lectures-filter-item ${filter === option.value ? "active" : ""
+                      }`}
                     onClick={() => {
                       setFilter(option.value);
                       setIsFilterOpen(false);
@@ -194,18 +174,24 @@ function StudentMyLectures() {
 
         <div className="student-my-lectures-grid">
           {filteredLectures.map((lecture) => (
-            <LectureItem
+            <div
               key={lecture.docId}
-              lecture={{
-                ...lecture,
-                line: getLineLabel(lecture.line),
-                level: getLevelLabel(lecture.level),
-                rating: lecture.star?.average || 0,
-                reviewCount: lecture.total || 0,
-              }}
-              cardType="myLecture"
-              onChatClick={(id) => console.log("채팅 이동", id)}
-            />
+              onClick={() => handleMoveLectureDetail(lecture.docId)}
+              style={{ cursor: "pointer" }}
+            >
+              <LectureItem
+                key={lecture.docId}
+                lecture={{
+                  ...lecture,
+                  line: getLineLabel(lecture.line),
+                  level: getLevelLabel(lecture.level),
+                  rating: lecture.star?.average || 0,
+                  reviewCount: lecture.total || 0,
+                }}
+                cardType="myLecture"
+                onChatClick={() => navigate('/chat')}
+              />
+            </div>
           ))}
         </div>
       </div>

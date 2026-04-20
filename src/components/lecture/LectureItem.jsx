@@ -90,13 +90,12 @@ function LectureItem({
 
   return (
     <article
-      className={`lecture-item-card ${
-        cardType === "myLecture"
-          ? "lecture-item-card-my"
-          : cardType === "wish"
-            ? "lecture-item-card-wish"
-            : ""
-      }`}
+      className={`lecture-item-card ${cardType === "myLecture"
+        ? "lecture-item-card-my"
+        : cardType === "wish"
+          ? "lecture-item-card-wish"
+          : ""
+        }`}
     >
       <div className="lecture-item-header">
         <div className="lecture-item-instructor-box">
@@ -104,7 +103,7 @@ function LectureItem({
 
           <div className="lecture-item-instructor-info">
             <span className="lecture-item-instructor-name">
-              {lecture.instructorName}
+              {lecture.instructor}
             </span>
 
             <img

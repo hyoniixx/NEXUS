@@ -25,6 +25,7 @@ import { userContext } from '../../App.jsx'
 import { getUser, updateUser } from '../../service/UserService.js'
 import lectureDefault from '../../assets/lectureDefaultImage.png'
 import LecturePayment from '../../components/lecture-detail/LecturePayment.jsx'
+import { createChat } from '../../service/ChatService.js'
 
 function LectureDetail() {
     const { id } = useParams();
@@ -40,6 +41,7 @@ function LectureDetail() {
         image: null,
         instructorName: '',
         instructorId: '',
+        instructorUid: '',
         badgeType: '',
         level: '',
         line: '',
@@ -64,8 +66,38 @@ function LectureDetail() {
         setIsPaymentModal(true);
     }
 
-    const handlePaymentSuccess = () => {
+    const handlePaymentSuccess = async () => {
+        console.log(lecture.instructorName)
+        const chatData = {
+            type: "lecture",
+            refId: id,
+            participants: [
+                lecture.instructorUid,
+                userData.uid
+            ],
+            participantInfo: {
+                [lecture.instructorUid]: {
+                    nickname: lecture.instructorName,
+                    role: "instructor"
+                },
+                [userData.uid]: {
+                    nickname: userData.userName,
+                    role: "student"
+                }
+            },
+            status: {
+                [lecture.instructorUid]: '전',
+                [userData.uid]: '전'
+            },
+            unreadCount: {
+                [lecture.instructorUid]: 0,
+                [userData.uid]: 0
+            }
+        }
+
+        console.log(chatData)
         setPageMode('student_on');
+        await createChat(chatData)
         setRenderKey(prev => prev + 1); // 리렌더 트리거
     }
 
@@ -129,6 +161,7 @@ function LectureDetail() {
             image: null,
             instructorName: lectureData.instructor ?? '',
             instructorId: lectureData.instructorId ?? '',
+            instructorUid: lectureData.uid ?? '',
             instructorEmail: lectureData.instructorEmail ?? "",
             badgeType: lectureData.badgeType ?? '',
             level: lectureData.level ?? '',

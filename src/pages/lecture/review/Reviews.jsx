@@ -28,10 +28,9 @@ function Reviews() {
     // 작성 가능 여부
     const canCreate = isStudent && isEnrolled;
     // 수정 가능 여부
-    const canEdit = isStudent && review?.uid === userData?.uid;
+    // const canEdit = isStudent && review?.uid === userData?.uid;
     // 삭제 가능 여부
-    const canDelete = isAdmin || (isStudent && review?.uid === userData?.uid);
-
+    // const canDelete = isAdmin || (isStudent && review?.uid === userData?.uid);
     const [average, setAverage] = useState(0);
     const [intAverage, setIntAverage] = useState(0);
     const [pageNow, setPageNow] = useState(1);

@@ -57,6 +57,7 @@ function LectureDetail() {
     const [renderKey, setRenderKey] = useState(0); // 리렌더 트리거
 
     const csMap = { 1: tier1, 2: tier2, 3: tier3, 4: tier4, 5: tier5, 6: tier6, 7: tier7, 8: tier8, 9: tier9 }
+    const csTextMap = { 1: '미니언', 2: '대포미니언', 3: '바위게', 4: '칼날부리', 5: '블루', 6: '드래곤', 7: '전령', 8: '바론', 9: '장로드래곤' }
     const diffMap = { BEGINNER: "초급", INTERMEDIATE: "중급", ADVANCED: "심화" }
 
     const handleEnroll = () => {
@@ -92,6 +93,8 @@ function LectureDetail() {
         } else if (userData.role === 'instructor') {
             if (lectureData.uid === userData.uid) {
                 setPageMode('instructor');
+            } else {
+                setPageMode('instructor_not_mine')
             }
         } else if (userData.role === 'student') {
             const isEnrolled = userData.lectures?.includes(id);
@@ -124,7 +127,7 @@ function LectureDetail() {
             title: lectureData.title ?? '',
             description: lectureData.description ?? '',
             image: null,
-            instructorName: lectureData.instructorName ?? '',
+            instructorName: lectureData.instructor ?? '',
             instructorId: lectureData.instructorId ?? '',
             instructorEmail: lectureData.instructorEmail ?? "",
             badgeType: lectureData.badgeType ?? '',
@@ -138,7 +141,7 @@ function LectureDetail() {
             lectureStatus: lectureData.lectureStatus ?? '',
         });
         const fetchInstructor = async () => {
-            const tempInstructor = await getUser(lectureData.instructorId);
+            const tempInstructor = await getUser(lectureData.uid);
             setInstructor(tempInstructor);
         }
         fetchInstructor();
@@ -154,13 +157,13 @@ function LectureDetail() {
                 onClose={() => setIsPaymentModal(false)}
                 price={lecture.price}
                 title={lecture.title}
-                instructorId={lecture.instructorId}
-                instructorEmail={lecture.instructorEmail}
+                instructorId={lecture.instructorName}
+                instructorEmail={lecture.instructorId}
                 lectureId={id}
                 onPaymentSuccess={handlePaymentSuccess}
             />
             <div className='detail-layout'>
-                <p className='toLectureList'>← 강의 목록으로</p>
+                <p className='toLectureList' onClick={() => navigate('/lecture-list')}>← 강의 목록으로</p>
                 <div className='detail-content-layout'>
                     <div className='detail'>
                         <div className='detail-head'>
@@ -168,13 +171,13 @@ function LectureDetail() {
                                 <div className='detail-head-profileImg'>img</div>
                                 <div className='detail-head-profileDetail'>
                                     <div className='detail-head-profileName'>
-                                        <p>{lectureData.instructorName}</p>
+                                        <p>{lectureData.instructor}</p>
                                         <img src={probadge} className='badge' style={{ display: `${lectureData.badgeType === 'PRO' ? 'flex' : 'none'}` }} />
                                         <img src={strmbadge} className='badge' style={{ display: `${lectureData.badgeType === 'STREAMER' ? 'flex' : 'none'}` }} />
                                     </div>
                                     <div className='detail-head-profileTier'>
                                         <img src={csMap[Number(instructor?.csGrade)]} className='detail-head-tierBadge' width='30px' height='30px' />
-                                        <p>칼날부리</p>
+                                        <p>{csTextMap[Number(instructor?.csGrade)]}</p>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +208,7 @@ function LectureDetail() {
                                     <div className='detail-info-star-content'>
                                         <img src={star} style={{ width: '16px', height: '16px', color: 'white' }} />
                                         <p>{review?.star?.average ?? 0}</p>
-                                        <h5>(123개 리뷰)</h5>
+                                        <h5>({review?.total ?? 0}개 리뷰)</h5>
                                     </div>
                                 </div>
                             </div>
@@ -256,7 +259,7 @@ function LectureDetail() {
                                 <button
                                     className='detail-box-top-on'
                                 >
-                                    <p>수강 중(채팅하기)</p>
+                                    <p>수강 중</p>
                                 </button>
                                 <button onClick={handleWish} className='detail-box-bottom-button'>
                                     {isWished
@@ -276,6 +279,12 @@ function LectureDetail() {
                                     삭제하기
                                 </button>
                             </>
+                        )}
+
+                        {pageMode === 'instructor_not_mine' && (
+                            <div>
+
+                            </div>
                         )}
 
                         {pageMode === 'admin' && (

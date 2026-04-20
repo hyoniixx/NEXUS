@@ -26,15 +26,23 @@ function NexusMainInstructor() {
     const userGradeUp = [userData.csScore - csGradeUpMap[userData.csGrade - 1], csGradeUpMap[userData.csGrade] - userData.csScore]
     const [lectureList, setLectureList] = useState([]);
     const navigate = useNavigate();
+    const [myLectures, setMyLectures] = useState([]);
 
     useEffect(() => {
         const lender = async () => {
             var tempLectures = await getLectures();
             setLectureList([tempLectures[0], tempLectures[1], tempLectures[2]]);
             console.log("!", tempLectures)
+            var tempMyLectures = [];
+            if (userData.lectures) {
+                tempLectures.filter((item) =>
+                    item.instructorId === userData.email
+                ).map((item) => tempMyLectures.push(item));
+                setMyLectures(tempMyLectures)
+            }
         }
         lender();
-    }, [])
+    }, [userData])
     return (
         <>
             <div className='main-student-dashboard'>
@@ -99,22 +107,30 @@ function NexusMainInstructor() {
                 <div className='main-lectureRecommend'>
                     <h2>내 강의 현황</h2>
                     <div className='main-lectureItems'>
-                        {lectureList.filter(item => item).map((item, index) => {
-                            return (
-                                <LectureItem key={index} lecture={{
-                                    id: item.id = 1,
-                                    instructorName: item.instructorName,
-                                    title: item.title,
-                                    line: item.line,
-                                    level: item.level,
-                                    champion: item.champion,
-                                    rating: item.average,
-                                    reviewCount: item.total,
-                                    price: item.price,
-                                    isLiked: false
-                                }} />)
-                        })}
-                        <LectureItem key='1' lecture={{
+                        {!myLectures ? (
+                            myLectures.map((item, index) => {
+                                return (
+                                    <LectureItem key={index} lecture={{
+                                        id: item.id = 1,
+                                        instructorName: item.instructorName,
+                                        title: item.title,
+                                        line: item.line,
+                                        level: item.level,
+                                        champion: item.champion,
+                                        rating: item.average,
+                                        reviewCount: item.total,
+                                        price: item.price,
+                                    }} />)
+                            })
+                        ) : (
+                            <article className='duoCard' style={{ width: "100%", display: 'flex', paddingLeft: '10px' }}>
+                                <h3 className='lecture-item-title' style={{ marginLeft: '10px' }}>
+                                    현재 등록한 강의가 없습니다.
+                                </h3>
+                            </article>
+                        )}
+
+                        {/* <LectureItem key='1' lecture={{
                             id: 9,
                             instructorName: "Peanut",
                             badgeType: "STREAMER",
@@ -126,7 +142,7 @@ function NexusMainInstructor() {
                             reviewCount: 68,
                             price: 38000,
                             isLiked: false
-                        }} />
+                        }} /> */}
                         {/* <LectureItem key='2' lecture={{
                             id: 9,
                             instructorName: "Peanut",
@@ -159,7 +175,7 @@ function NexusMainInstructor() {
                     <div className='main-bottom-reviews'>
                         <div className='main-bottom-reviews-head'>
                             <h2>최근 수강생 후기</h2>
-                            <p className='toLink'>관리</p>
+                            <p className='toLink' onClick={() => navigate('/mypage/instructor')}>관리</p>
                         </div>
                         <div className='main-bottom-reviews-dashboard'>
                             <div>
@@ -180,7 +196,7 @@ function NexusMainInstructor() {
                     <div className='main-bottom-students'>
                         <div className='main-bottom-students-head'>
                             <h2>최근 강의</h2>
-                            <p className='toLink'>관리</p>
+                            <p className='toLink' onClick={() => navigate('/mypage/instructor')}>관리</p>
                         </div>
                         <div className='students-card-list'>
                             <MainStudentCard image='' name='김학생' date='2026.03.12' status='1' />

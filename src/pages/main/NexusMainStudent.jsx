@@ -15,7 +15,7 @@ import tier9 from "../../assets/tier9.png"
 import MainLectureCard from '../../components/main/MainLectureCard'
 import MainDuoCard from '../../components/main/MainDuoCard'
 import { userContext } from '../../App'
-import { getLectures } from "../../service/LectureService";
+import { getLectureById, getLectures } from "../../service/LectureService";
 import { getDuos } from "../../service/DuoService";
 import { useNavigate } from 'react-router-dom'
 
@@ -28,6 +28,10 @@ function NexusMainStudent() {
     const [lectureList, setLectureList] = useState([]);
     const [duoList, setDuoList] = useState([]);
     const navigate = useNavigate();
+    const [lectureForCard, setLectureForCard] = useState();
+    const randomDuo = duoList.length > 0
+        ? duoList[Math.floor(Math.random() * duoList.length)]
+        : null;
 
     useEffect(() => {
         const lender = async () => {
@@ -35,11 +39,15 @@ function NexusMainStudent() {
             var tempDuos = await getDuos();
             setLectureList([tempLectures[0], tempLectures[1], tempLectures[2]]);
             setDuoList([tempDuos[0], tempDuos[1], tempDuos[2]]);
-            console.log("!", tempLectures)
-            console.log("?", tempDuos)
+            var tempLectureCard = await getLectureById(userData.lectures[0])
+            setLectureForCard(tempLectureCard)
+            // console.log("!", tempLectures)
+            // console.log("?", tempDuos)
+            console.log("??", tempLectureCard)
+            // console.log("!!", duoList)
         }
         lender();
-    }, [])
+    }, [userData])
     return (
         <div className='main-student-dashboard'>
             <div className='main-hello'>
@@ -118,7 +126,7 @@ function NexusMainStudent() {
                                 isLiked: false
                             }} />)
                     })}
-                    <LectureItem key='2' lecture={{
+                    {/* <LectureItem key='2' lecture={{
                         id: 9,
                         instructorName: "Peanut",
                         badgeType: "STREAMER",
@@ -130,7 +138,7 @@ function NexusMainStudent() {
                         reviewCount: 68,
                         price: 38000,
                         isLiked: false
-                    }} />
+                    }} /> */}
                     {/* <LectureItem key='3' lecture={{
                         id: 9,
                         instructorName: "Peanut",
@@ -152,20 +160,36 @@ function NexusMainStudent() {
                         <h2>최근 올라온 듀오</h2>
                         <p className='toLink' onClick={() => navigate('/duo')}>듀오 리스트 보기</p>
                     </div>
-                    {duoList.filter(item => item).filter((item) => item.isMatched)[0]}
-                    <MainDuoCard
-                        image=''
-                        name={duoList[Math.ceil(Math.random() * duoList.length)]?.writer.userName}
-                        content={duoList[Math.ceil(Math.random() * duoList.length)]?.content}
-                        wanted={duoList[Math.ceil(Math.random() * duoList.length)]?.wishDuo.line}
-                    />
+                    {randomDuo && (
+                        <MainDuoCard
+                            image=''
+                            name={randomDuo.writer.userName}
+                            content={randomDuo.content}
+                            wanted={randomDuo.wishDuo.line}
+                        />
+                    )}
                 </div>
                 <div className='main-bottom-lecture'>
                     <div className='main-bottom-lecture-head'>
                         <h2>최근 내 강의</h2>
                         <p className='toLink' onClick={() => navigate('/lecture-list')}>강의 목록 보기</p>
                     </div>
-                    <MainLectureCard key='1' title='마스터 클래스 탑 강의' status='진행중' instructor='김 코치 선생' type='화상' />
+                    {userData.lectures ? (
+                        <MainLectureCard
+                            key={userData.lectures[0]}
+                            title={lectureForCard?.title}
+                            status='진행중'
+                            instructor={lectureForCard?.instructor}
+                            type={lectureForCard?.time}
+                        />
+                    ) : (
+                        <div className='lectureCard'>
+                            <div className='lectureContent'>
+                                <h3>최근 신청한 강의가 없습니다.</h3>
+                            </div>
+                        </div>
+                    )}
+
                 </div>
 
             </div>

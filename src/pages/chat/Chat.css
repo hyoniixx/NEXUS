@@ -1,7 +1,7 @@
 .c-chat {
     padding: 0 149.84px;
     padding-bottom: 24px;
-    
+
 }
 
 .c-chat-main {
@@ -12,4 +12,26 @@
 .c-chat-chatsection {
     display: flex;
     gap: 17.43px;
+}
+
+.c-chat-back-btn {
+    gap: 11px;
+    display: flex;
+    align-items: center;
+    color: #94A3B8;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    /* 150% */
+    border: 0;
+    background: #0A0E27;
+    margin-bottom: 18px;
+}
+
+.c-chat-back-btn>img {
+    width: 19.991px;
+    height: 19.991px;
 }

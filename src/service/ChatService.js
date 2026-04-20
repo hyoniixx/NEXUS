@@ -137,11 +137,11 @@ const createChat = async () => {
             participantInfo: {
                 asdf: {
                     nickname: "정프로",
-                    role: "guest"
+                    role: "host"
                 },
                 fdsa: {
                     nickname: "박프로",
-                    role: "host"
+                    role: "guest"
                 }
             },
             createdAt: serverTimestamp(),

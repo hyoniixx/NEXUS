@@ -87,3 +87,12 @@
 .c-modal-btn-no {
     background: #1E293B;
 }
+
+.c-modal-btn-disable {
+    background: #1E293B;
+    color: #94A3B8 !important;
+}
+
+.c-modal-btn-select {
+    background: #131a25 !important;
+}

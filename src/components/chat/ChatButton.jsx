@@ -5,7 +5,6 @@ import { deleteChat, updateChat } from '../../service/ChatService'
 import { createMessage, deleteMessage } from '../../service/MessageService'
 import setUpdataData from '../../reducer/chatButtonReducer'
 import ReviewDuo from '../common/ReviewDuoModal'
-// import { updateChat } from '../../service/ChatService'
 
 
 
@@ -18,7 +17,9 @@ function ChatButton() {
         currentChatStatus,
         currentChatI,
         currentParticipants,
+        currentChatOpponent
     } = currentChatInfo
+
 
     const [copyCurrentParticipants, setCopyCurrentParticipants] = useState(currentParticipants)
     const [copyCurrentChatStatus, setCopyCurrentChatStatus] = useState(currentChatStatus)
@@ -30,6 +31,8 @@ function ChatButton() {
         sendMessage: ''
     })
     const navigate = useNavigate();
+    const [isModal, setIsModal] = useState(false);
+
     const myuid = 'asdf';
     const myNickname = '정프로'
 
@@ -77,7 +80,7 @@ function ChatButton() {
                 } else if (copyCurrentChatStatus[myuid] === '전') {
                     return { text: ['듀오 거절', '듀오 승낙'], color: ['red', 'blue'], clickEvent: ['CANCEL_DUO', 'AGREE_DUO'] };
                 } else if (copyCurrentChatStatus[myuid] === '중') {
-                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO', modal: 'true' };
+                    return { text: '듀오 완료', color: 'purple', clickEvent: 'MODAL_DUO' };
                 } else if (copyCurrentChatStatus[myuid] === '후') {
                     return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
@@ -89,7 +92,7 @@ function ChatButton() {
                 } else if (copyCurrentChatStatus[myuid] === '전') {
                     return { text: '듀오 취소', color: 'red', clickEvent: 'CANCEL_DUO' };
                 } else if (copyCurrentChatStatus[myuid] === '중') {
-                    return { text: '듀오 완료', color: 'purple', clickEvent: 'COMPLETE_DUO', modal: 'true' };
+                    return { text: '듀오 완료', color: 'purple', clickEvent: 'MODAL_DUO' };
                 } else if (copyCurrentChatStatus[myuid] === '후') {
                     return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
@@ -149,8 +152,10 @@ function ChatButton() {
             return;
         }
 
-        if (clickEvent === 'COMPLETE_DUO') {
-
+        if (clickEvent === 'MODAL_DUO') {
+            console.log('듀오 모달')
+            setIsModal(true);
+            return;
         }
 
         dispatch({
@@ -173,7 +178,7 @@ function ChatButton() {
             </>) : (
                 <button className={`c-chat-${btn.color}button`} onClick={() => handleUpdateChat(btn.clickEvent)}>{btn.text}</button>
             )}
-            {/* <ReviewDuo /> */}
+            {isModal && <ReviewDuo handleUpdateChat={handleUpdateChat} clickEvent='COMPLETE_DUO' setIsModal={setIsModal} />}
         </div>
     )
 }

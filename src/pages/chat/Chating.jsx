@@ -17,6 +17,16 @@ function Chating() {
     const [newMessage, setNewMessage] = useState('')
     const [loading, setLoading] = useState(false);
     const [copyCurrentChatUnReadOpponent, setCopyCurrentChatUnReadOpponent] = useState(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId])
+
+    // useEffect(() => {
+    //     //현재 보고 있는 채팅 읽음 처리
+    //     if (currentChatInfo.currentChatId) {
+    //         updateChat(currentChatInfo.currentChatId, {
+    //             [`unreadCount.${myuid}`]: 0
+    //         })
+    //     }
+    // })
+
     //전체 메시지 중 roomId가 일치하는 메시지만 받아오는 함수
     useEffect(() => {
         setCopyCurrentChatUnReadOpponent(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId]);
@@ -92,7 +102,7 @@ function Chating() {
                 })}
             </article>
             <article className='c-chat-chating-bottom'>
-                <input placeholder='메세지를 입력하세요.' value={newMessage.content} onChange={(e) => setNewMessage(e.target.value)} />
+                <input placeholder='메세지를 입력하세요.' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
                 <button onClick={handleCreateChat}><img src={sendBtn} /></button>
             </article>
         </section >

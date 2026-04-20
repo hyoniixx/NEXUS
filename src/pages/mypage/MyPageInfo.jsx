@@ -1,4 +1,4 @@
-import React, { useContext, useDebugValue } from 'react'
+import React, { useContext, useDebugValue, useState } from 'react'
 import { userContext } from '../../App';
 import tier1 from '../../assets/tier1.png'
 import tier2 from '../../assets/tier2.png'
@@ -11,9 +11,11 @@ import tier8 from '../../assets/tier8.png'
 import tier9 from '../../assets/tier9.png'
 import myProfile from '../../assets/myPageProfile.svg'
 import { useNavigate } from 'react-router-dom';
+import TiersModal from '../../components/common/TiersModal';
 
 function MyPageInfo() {
     const { userData, dispatch } = useContext(userContext);
+    const [isModal, setIsModal] = useState(false)
     const navigate = useNavigate();
     console.log(userData.createAt)
     const TIER_IMAGES = {
@@ -36,8 +38,8 @@ function MyPageInfo() {
             <article >
                 <div className='m-myPage-myInfo-top'>
                     <h4>{userData.userName}</h4>
-                    <img src={TIER_IMAGES[userData.csGrade]} />
-                    <button onClick={() => navigate('edit-profile')}>프로필 수정</button>
+                    <img src={TIER_IMAGES[userData.csGrade]} onClick={() => setIsModal(true)} />
+                    <button onClick={() => navigate('check-password')}>프로필 수정</button>
                 </div>
                 <div className='m-myPage-myInfo-bottom'>
                     <p>이메일: </p><span>{userData.email}</span>
@@ -46,6 +48,9 @@ function MyPageInfo() {
                     <p>가입일: </p><span>{userData?.createAt?.toDate ? userData.createAt.toDate().toLocaleString() : '로딩 중...'}</span>
                 </div>
             </article>
+            {isModal &&
+                <TiersModal setIsModal={setIsModal} />
+            }
         </section >
     )
 }

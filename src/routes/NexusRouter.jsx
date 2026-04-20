@@ -26,6 +26,8 @@ import Money from "../pages/admin/Money";
 import Members from "../pages/admin/Members";
 import Deposit from "../pages/admin/Deposit";
 import Payment from "../pages/admin/Payment";
+import SignupComp from "../pages/auth/SignupComp";
+import CheckPassword from "../pages/mypage/CheckPassword";
 
 export const NexusRouter = createBrowserRouter([
     {
@@ -96,10 +98,18 @@ export const NexusRouter = createBrowserRouter([
                 path: 'signup',
                 element: <Signup />
             },
+            {
+                path: 'signupcomp/:role',
+                element: <SignupComp />
+            },
             //마이페이지
             {
                 path: 'mypage',
                 element: <MyPage />
+            },
+            {
+                path: 'mypage/check-password',
+                element: <CheckPassword />
             },
             {
                 path: 'mypage/edit-profile',

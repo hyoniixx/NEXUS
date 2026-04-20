@@ -1,9 +1,11 @@
-import React, { useContext } from 'react'
-import { userFormContext } from '../../pages/auth/SignupForm'
+import React, { useContext, useEffect } from 'react'
+import { UserFormContext } from '../../context/UserFormContext';
 
 function RoleSelect({ mode, message }) {
 
-    const { userInfo, dispatch } = useContext(userFormContext);
+    const { userInfo, dispatch } = useContext(UserFormContext);
+
+
 
     return (
         <>

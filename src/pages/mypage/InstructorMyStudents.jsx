@@ -67,6 +67,8 @@ function InstructorMyStudents() {
         const enrollData = await getEnrollment(instructorId)
         console.log(enrollData)
         setEnrollments(enrollData);
+
+
       } catch (error) {
         console.error("수강생 목록 불러오기 실패", error);
       } finally {
@@ -208,6 +210,8 @@ function InstructorMyStudents() {
           <StudentItem
             key={item.id}
             student={{
+              lectureId: item.lectureId,
+              studentId: item.studentId,
               name: item.studentName,
               lecture: item.lectureTitle,
               status: item.chatStatus,

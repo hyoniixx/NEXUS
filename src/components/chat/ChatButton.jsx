@@ -189,9 +189,7 @@ function ChatButton() {
         }
 
         if (clickEvent === 'CANCEL_DUO') {
-            console.log('1111111111', currentEnrollmentId)
             await deleteDuoApplication(currentEnrollmentId)
-            console.log('44444444444', currentEnrollmentId)
         }
 
         dispatch({

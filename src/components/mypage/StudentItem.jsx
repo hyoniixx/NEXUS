@@ -37,9 +37,17 @@ function StudentItem({ student }) {
       <button
         type="button"
         className="student-chat-btn"
-        onClick={() => navigate("/chat")}
+        onClick={() => navigate("/chat", {
+          state: {
+            id: student.lectureId,
+            studentId: student.studentId
+          },
+        })}
       >
-        <img src={msgIcon} alt="채팅" className="student-chat-icon" />
+        <img src={msgIcon}
+          alt="채팅"
+          className="student-chat-icon"
+        />
         <span>채팅하기</span>
       </button>
     </div>

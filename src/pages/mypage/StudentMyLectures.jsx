@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./StudentMyLectures.css";
 import LectureItem from "../../components/lecture/LectureItem";
 import { getEnrollmentsByStudentId } from "../../service/EnrollmentService";
-import { getLectureById, getLectures } from "../../service/LectureService";
+import { getLectureById } from "../../service/LectureService";
+import { getMyReviewsStudent } from "../../service/ReviewService";
 import { userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 
@@ -13,8 +14,7 @@ function StudentMyLectures() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterDropdownRef = useRef(null);
 
-  const { userData, dispatch } = useContext(userContext);
-
+  const { userData } = useContext(userContext);
   const navigate = useNavigate();
 
   const levelLabelMap = {
@@ -32,8 +32,8 @@ function StudentMyLectures() {
     SUPPORT: "서폿",
   };
 
-  const getLevelLabel = (value) => levelLabelMap[value] || value;
-  const getLineLabel = (value) => lineLabelMap[value] || value;
+  const getLevelLabel = (value) => levelLabelMap[value] || value || "";
+  const getLineLabel = (value) => lineLabelMap[value] || value || "";
 
   const filterOptions = [
     { value: "all", label: "전체" },
@@ -62,41 +62,79 @@ function StudentMyLectures() {
 
   useEffect(() => {
     const fetchMyLectures = async () => {
-      if (!userData?.lectures || userData.lectures.length === 0) {
+      if (!userData?.uid || !userData?.userName) {
         setLectures([]);
+        setIsLoading(false);
         return;
       }
 
       try {
         setIsLoading(true);
 
-        const myLectureList = await Promise.all(
-          userData.lectures.map(async (lectureId) => {
-            const myLecture = await getLectureById(lectureId);
-            return myLecture;
-          })
+        // 1. 내 수강 신청 목록 조회
+        const enrollments = await getEnrollmentsByStudentId(userData.uid);
+
+        if (!enrollments || enrollments.length === 0) {
+          setLectures([]);
+          return;
+        }
+
+        // 2. 내가 작성한 리뷰 목록 조회
+        const myReviews = await getMyReviewsStudent(userData.userName);
+
+        // lectureId 기준으로 빠르게 찾기 위한 Set
+        const reviewedLectureIdSet = new Set(
+          myReviews.map((reviewGroup) => String(reviewGroup.lectureId)),
         );
 
-        console.log("내 강의 목록:", myLectureList);
-        setLectures(myLectureList);
+        // 3. 수강 신청 목록 기반으로 강의 상세 조회
+        const lectureList = await Promise.all(
+          enrollments.map(async (enrollment) => {
+            const lecture = await getLectureById(enrollment.lectureId);
+
+            if (!lecture) return null;
+
+            const lectureId = String(lecture.docId);
+            const hasReview = reviewedLectureIdSet.has(lectureId);
+
+            return {
+              ...lecture,
+              enrollmentId: enrollment.docId,
+              enrollmentCreatedAt: enrollment.createdAt ?? null,
+              chatStatus: enrollment.chatStatus ?? "수강 전",
+              lectureTitle: enrollment.lectureTitle ?? lecture.title ?? "",
+              reviewStatus: hasReview ? "done" : "pending",
+            };
+          }),
+        );
+
+        // null 제거
+        const validLectureList = lectureList.filter(Boolean);
+
+        setLectures(validLectureList);
       } catch (error) {
         console.error("내 신청 강의 불러오기 오류", error);
+        setLectures([]);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchMyLectures();
-  }, [userData?.lectures]);
+  }, [userData?.uid, userData?.userName]);
 
-  const filteredLectures =
-    filter === "all"
-      ? lectures
-      : lectures.filter((lecture) => lecture.reviewStatus === filter);
+  const filteredLectures = useMemo(() => {
+    if (filter === "all") return lectures;
+    return lectures.filter((lecture) => lecture.reviewStatus === filter);
+  }, [lectures, filter]);
 
-  const doneCount = lectures.filter(
-    (lecture) => lecture.reviewStatus === "done",
-  ).length;
+  const doneCount = useMemo(() => {
+    return lectures.filter((lecture) => lecture.reviewStatus === "done").length;
+  }, [lectures]);
+
+  const handleMoveLectureDetail = (docId) => {
+    navigate(`/lecture/${docId}`);
+  };
 
   if (isLoading) {
     return (
@@ -113,10 +151,6 @@ function StudentMyLectures() {
       </section>
     );
   }
-
-  const handleMoveLectureDetail = (docId) => {
-    navigate(`/lecture/${docId}`);
-  };
 
   return (
     <section className="student-my-lectures-page">
@@ -173,30 +207,45 @@ function StudentMyLectures() {
         </div>
 
         <div className="student-my-lectures-grid">
-          {filteredLectures.map((lecture) => (
+          {filteredLectures.length > 0 ? (
+            filteredLectures.map((lecture) => (
+              <div
+                key={lecture.enrollmentId || lecture.docId}
+                onClick={() => handleMoveLectureDetail(lecture.docId)}
+                style={{ cursor: "pointer" }}
+              >
+                <LectureItem
+                  lecture={{
+                    ...lecture,
+                    line: getLineLabel(lecture.line),
+                    level: getLevelLabel(lecture.level),
+                    rating: lecture.star?.average || 0,
+                    reviewCount: lecture.total || 0,
+                  }}
+                  cardType="myLecture"
+                  onChatClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/chat", {
+                      state: {
+                        id: lecture.docId,
+                        enrollmentId: lecture.enrollmentId,
+                      },
+                    });
+                  }}
+                />
+              </div>
+            ))
+          ) : (
             <div
-              key={lecture.docId}
-              onClick={() => handleMoveLectureDetail(lecture.docId)}
-              style={{ cursor: "pointer" }}
+              style={{
+                color: "#94A3B8",
+                fontSize: "18px",
+                paddingTop: "40px",
+              }}
             >
-              <LectureItem
-                key={lecture.docId}
-                lecture={{
-                  ...lecture,
-                  line: getLineLabel(lecture.line),
-                  level: getLevelLabel(lecture.level),
-                  rating: lecture.star?.average || 0,
-                  reviewCount: lecture.total || 0,
-                }}
-                cardType="myLecture"
-                onChatClick={() => navigate("/chat", {
-                  state: {
-                    id: lecture.docId
-                  },
-                })}
-              />
+              표시할 강의가 없습니다.
             </div>
-          ))}
+          )}
         </div>
       </div>
     </section>

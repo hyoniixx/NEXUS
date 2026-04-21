@@ -11,7 +11,7 @@ function MainLectureCard({
             </div>
             <div className='lectureInfo'>
                 <p className='lectureInstructor'>{instructor}</p>
-                <p className='lectureType'>· {type}</p>
+                <p className='lectureType'>· {type}시간</p>
             </div>
         </div>
     )

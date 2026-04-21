@@ -9,6 +9,7 @@ import { getLectures } from "../../service/LectureService";
 import { useNavigate } from 'react-router-dom'
 import { getUserList } from '../../service/MemberViewService.js';
 import { getMoneyList } from '../../service/MoneyManagement.js'
+import { getReviewTotal } from '../../service/ReviewService.js'
 
 function NexusMainAdmin() {
     const { userData } = useContext(userContext);
@@ -23,6 +24,8 @@ function NexusMainAdmin() {
             const tempLectures = await getLectures(); //강의정보
             const tempUser = await getUserList(); //유저정보
             const tempMoney = await getMoneyList(); //매출정보
+            const tempReview = await getReviewTotal(); //후기정보
+            console.log('t', tempReview)
             //유저정보, 리뷰정보, 
             setTotal({
                 ...total,

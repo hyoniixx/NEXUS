@@ -95,20 +95,13 @@ function LectureList() {
 
   useEffect(() => {
     const fetchLectures = async () => {
-      // 1. userData가 로드될 때까지 대기
-      if (!userData || !userData.uid) {
-        return;
-      }
-
       try {
-        const uid = userData.uid;
-        const [data, wishLectures] = await Promise.all([
-          getLectures(),
-          getWishLecturesByUid(uid),
-        ]);
+        const uid = userData?.uid;
 
-        // 2. [중요] wishLectures가 객체 배열이든 ID 배열이든 대응할 수 있도록 처리
-        // DB의 'wish' 배열에 담긴 문자열과 정확히 비교하기 위해 docId만 추출합니다.
+        // 강의는 항상 불러오고, wish는 로그인한 경우에만
+        const data = await getLectures();
+        const wishLectures = uid ? await getWishLecturesByUid(uid) : [];
+
         const wishDocIds = new Set(
           wishLectures.map((lecture) =>
             typeof lecture === "string" ? lecture : (lecture.docId || lecture.id)
@@ -116,9 +109,7 @@ function LectureList() {
         );
 
         const formatted = data.map((lecture) => {
-          // 3. 현재 강의의 고유 ID 추출 (DB의 wish 배열에 있는 값과 일치해야 함)
           const currentId = lecture.docId || lecture.id || lecture.lectureId || "";
-
           return {
             ...lecture,
             docId: currentId,
@@ -137,8 +128,6 @@ function LectureList() {
             star: lecture.star?.average || 0,
             total: lecture.total || 0,
             time: lecture.time ?? null,
-
-            // 4. [핵심] DB wish 배열에 현재 강의 ID가 포함되어 있는지 확인
             isLiked: wishDocIds.has(currentId),
           };
         });
@@ -151,7 +140,7 @@ function LectureList() {
 
     fetchLectures();
     // 5. [중요] userData가 업데이트될 때마다(로그인 완료 시 등) 다시 실행되도록 설정
-  }, [userData?.uid]);
+  }, [userData?.uid ?? null]);
 
   const handleToggleLike = async (docId) => {
     try {

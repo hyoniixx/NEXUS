@@ -14,12 +14,13 @@ function Members() {
     const [pages, setPages] = useState(1); //전체 페이지수
     const [pagination, setPagination] = useState([1, 0, 0, 0, 0]); //페이지네이션
     const [pageSelected, setPageSelected] = useState([true, false, false, false, false]) //페이지 아이템들 상태 관리(눌려있는지)
-    const [canClick, setCanClick] = useState([false, true]) //좌우 이동 버튼 활성화 관리
+    const canClick = [pageNow > 1, pageNow < pages];
 
     const navigate = useNavigate(); //뒤로가기 연결
 
     const [navSelected, setNavSelected] = useState([true, false, false, false]); //navBar, 전체 | 수강생 | 강사 | 블랙리스트
     const [onlyBlacklist, setOnlyBlacklist] = useState(false); //false: 블랙리스트제외 | true : 블랙리스트만 보기
+    const [onlyUnapproved, setOnlyUnapproved] = useState(false); // true : 미승인 강사만 보기
     const [inputValue, setInputValue] = useState(''); //검색창
     const [filterSelected, setFilterSelected] = useState([true, false]); //정렬 기준
 
@@ -37,11 +38,15 @@ function Members() {
 
     //navbar 건드릴때 : 상태값 변경하고, 1페이지로 이동
     const handleNav = (num) => {
+        // 기존 코드 유지
         if (num === 3) {
             setOnlyBlacklist(true)
         } else if (onlyBlacklist && navSelected[3]) {
             setOnlyBlacklist(false)
         };
+
+        setOnlyUnapproved(false);
+
         var temp = [false, false, false, false];
         temp[num] = true;
         setNavSelected(temp);
@@ -52,17 +57,19 @@ function Members() {
     //유저정보 불러오기(최초 1회 마운트 시점)
     useEffect(() => {
         const initiallize = async () => {
-            var a = await getUserList();
+            var temp = await getUserList();
+            var a = temp.filter((item) => item.role !== 'admin')
             setUsers(a);
             setTotal(a.length);
             setFilterUsers(a);
+            console.log('?', a)
         }
         initiallize();
     }, [])
 
     //데이터 불러온 뒤, 총 회원수 알아낸거 바탕으로 페이지네이션 구성
     useEffect(() => {
-        setTotal(users.length);
+        // setTotal(users.length);
         const tempPage = Math.ceil(total / 5); //전체 페이지 수 지정(올림)
         setPages(tempPage);
         if (tempPage < 5) {
@@ -83,11 +90,12 @@ function Members() {
     정렬순서 및 navbar 선택 시 1페이지로 이동하게 하는 것은 onclick 이벤트에 추가함.
     */
     useEffect(() => {
-        //[1]검색창 입력하면 입력한 내용을 포함하고 있는 데이터만 필터링
+        //[1]검색
         let filtered = users.filter((item) =>
             item.email.includes(inputValue) || item.userName.includes(inputValue)
         );
-        //[2]정렬 순서 입력하면 입력한 내용을 기반으로 정렬
+
+        //[2]정렬
         switch (filterSelected) {
             case "sortByName":
                 filtered = [...filtered].sort((a, b) => a.userName.localeCompare(b.userName));
@@ -96,11 +104,10 @@ function Members() {
                 filtered = [...filtered].sort((a, b) => b.createAt.toDate() - a.createAt.toDate());
                 break;
         }
-        //[3]navbar 선택에 따라 해당하는 정보만 출력 [전체 | 수강생 | 강사 | 블랙리스트]
+
+        //[3]navbar 필터
         const selectedIndex = navSelected.findIndex(item => item === true);
         switch (selectedIndex) {
-            case 0:
-                break;
             case 1:
                 filtered = filtered.filter(item => item.role === 'student');
                 break;
@@ -111,10 +118,24 @@ function Members() {
                 filtered = filtered.filter(item => item.isBlacklist === true);
                 break;
         }
-        //[4]블랙리스트만 보기 여부 반영
-        if (onlyBlacklist) filtered = filtered.filter(item => item.isBlacklist === true);
+
+        //[4]블랙리스트만 보기
+        if (onlyBlacklist) {
+            filtered = filtered.filter(item => item.isBlacklist === true);
+        }
+
+        //[5]미승인 강사 필터 
+        if (onlyUnapproved) {
+            filtered = filtered.filter(
+                item => item.role === 'instructor' && item.isApproval === false
+            );
+        }
+
         setFilterUsers(filtered);
-    }, [inputValue, filterSelected, navSelected, onlyBlacklist])
+        setTotal(filtered.length);
+        setPageNow(1);
+
+    }, [inputValue, filterSelected, navSelected, onlyBlacklist, onlyUnapproved]);
 
 
 
@@ -147,10 +168,9 @@ function Members() {
         if (pageNow < pages) {
             rightTemp = true;
         } else { rightTemp = false; }
-        setCanClick([leftTemp, rightTemp]);
 
         //현재 페이지에 표시할 멤버리스트아이템 내역 관리
-        var tempShow = filterUsers.slice(pageNow * 5 - 5, 5);
+        var tempShow = filterUsers.slice(pageNow * 5 - 5, pageNow * 5);
         setShowUsers(tempShow);
     }, [pageNow, pages, filterUsers, users])
 
@@ -219,9 +239,12 @@ function Members() {
                     className='admin-members-filter-button'
                     style={{
                         display: navSelected[3] ? "none" : "flex",
-                        background: !onlyBlacklist ? "#3B82F6" : "#1E293B"
+                        background: !onlyBlacklist && !onlyUnapproved ? "#3B82F6" : "#1E293B"
                     }}
-                    onClick={() => setOnlyBlacklist(false)}
+                    onClick={() => {
+                        setOnlyBlacklist(false);
+                        setOnlyUnapproved(false);
+                    }}
                 >
                     전체 보기
                 </button>
@@ -231,16 +254,32 @@ function Members() {
                         display: navSelected[3] ? "none" : "flex",
                         background: onlyBlacklist ? "#3B82F6" : "#1E293B"
                     }}
-                    onClick={() => setOnlyBlacklist(true)}
+                    onClick={() => {
+                        setOnlyBlacklist(true);
+                        setOnlyUnapproved(false);
+                    }}
                 >
                     블랙리스트만 보기
+                </button>
+                <button
+                    className='admin-members-filter-button'
+                    style={{
+                        display: navSelected[2] ? "flex" : "none",
+                        background: onlyUnapproved ? "#3B82F6" : "#1E293B"
+                    }}
+                    onClick={() => {
+                        setOnlyUnapproved(true);
+                        setOnlyBlacklist(false);
+                    }}
+                >
+                    미승인 강사만 보기
                 </button>
                 <p>{Number(pageNow) * 5 - 4}-{Math.min(Number(pageNow) * 5, total)} / {total}명</p>
             </div>
             <div className='admin-members-list'>
                 {showUsers.length !== 0 ? showUsers.map((user) => {
                     return (
-                        <MemberListItem key={user.id} id={user.id} name={user.userName} birth={user.birthDate} role={user.role} email={user.email} date={user.createAt.toDate()} score={user.csScore} isblack={user.isBlacklist} />
+                        <MemberListItem key={user.id} id={user.id} name={user.userName} birth={user.birthDate} role={user.role} email={user.email} date={user.createAt.toDate()} score={user.csScore} isblack={user.isBlacklist} isApproval={user.isApproval || undefined} />
                     )
                 }) :
                     <div className='admin-members-nothing'>

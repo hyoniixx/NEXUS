@@ -64,4 +64,54 @@ export const toggleBlackList = async (userId, want) => {
 }
 
 
+/**
+ * 특정 회원의 승인 여부를 관리하는 함수
+ * @param {string} userId - 승인 여부 변경할 회원의 고유 ID
+ */
+export const instructorApproval = async (userId) => {
+    try {
+        const docRef = doc(db, COLLECTION_NAME, userId);
+        await updateDoc(docRef, {
+            isApproval: true
+        });
+        console.log('강사 승인 완료');
+    } catch (error) {
+        console.log('강사 승인 오류');
+        throw error;
+    }
+}
+
+
 // console.log(db)
+
+/**
+ * 
+ * @param {*} lectureId -강의의 아이디
+ * @returns {[user,user]} -해당 강의를 수강중인 회원 배열
+ */
+export const getUsersByLectureId = async (lectureId) => {
+    try {
+        const q = query(
+            collection(db, COLLECTION_NAME),
+            where('role', '!=', 'admin')
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        const users = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        // 🔥 핵심: lectures 배열에 lectureId 포함된 유저만 필터
+        const filteredUsers = users.filter(user =>
+            Array.isArray(user.lectures) &&
+            user.lectures.includes(lectureId)
+        );
+
+        return filteredUsers;
+
+    } catch (error) {
+        throw error;
+    }
+};

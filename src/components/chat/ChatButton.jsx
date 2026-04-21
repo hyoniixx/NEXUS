@@ -6,7 +6,9 @@ import { createMessage, deleteMessage } from '../../service/MessageService'
 import setUpdataData from '../../reducer/chatButtonReducer'
 import ReviewDuo from '../common/ReviewDuoModal'
 import { userContext } from '../../App'
-import { updateDuoApplicationStatus, updateDuoMatched } from '../../service/DuoService'
+import { deleteDuoApplication, updateDuoApplicationStatus, updateDuoMatched } from '../../service/DuoService'
+import { deleteEnrollment, updateEnrollment } from '../../service/EnrollmentService'
+import { updateUser } from '../../service/UserService'
 
 
 
@@ -20,7 +22,8 @@ function ChatButton() {
         currentChatI,
         currentParticipants,
         currentChatOpponent,
-        currentRefId
+        currentRefId,
+        currentEnrollmentId
     } = currentChatInfo
 
 
@@ -37,7 +40,7 @@ function ChatButton() {
     const [isModal, setIsModal] = useState(false);
 
     const { userData } = useContext(userContext);
-
+    console.log('csccscsscs', currentEnrollmentId);
     const myuid = userData.uid;
     const myNickname = userData.userName;
 
@@ -166,6 +169,29 @@ function ChatButton() {
         if (clickEvent === 'AGREE_DUO') {
             console.log(currentRefId)
             await updateDuoMatched(currentRefId, { isMatched: true })
+        }
+
+        if (clickEvent === 'AGREE_LECTURE') {
+            await updateEnrollment(currentEnrollmentId, '수강 중');
+        }
+
+        if (clickEvent === 'COMPLETE_LECTURE') {
+            await updateEnrollment(currentEnrollmentId, '수강 완료');
+        }
+
+        if (clickEvent === 'CANCEL_LECTURE') {
+            await deleteEnrollment(currentEnrollmentId);
+            const userLectures = userData.lectures
+            const userLecturesFilter = userLectures.filter((l) =>
+                currentRefId !== l
+            )
+            await updateUser(userData.uid, { lectures: userLecturesFilter })
+        }
+
+        if (clickEvent === 'CANCEL_DUO') {
+            console.log('1111111111', currentEnrollmentId)
+            await deleteDuoApplication(currentEnrollmentId)
+            console.log('44444444444', currentEnrollmentId)
         }
 
         dispatch({

@@ -98,8 +98,8 @@ function LectureDetail() {
 
         console.log(chatData)
         setPageMode('student_on');
-        await createChat(chatData);
-        await createEnrollment(id, lecture.title, lecture.instructorUid, userData.uid, userData.userName);
+        const enrollmentId = await createEnrollment(id, lecture.title, lecture.instructorUid, userData.uid, userData.userName);
+        await createChat(chatData, enrollmentId);
         setRenderKey(prev => prev + 1); // 리렌더 트리거
     }
 

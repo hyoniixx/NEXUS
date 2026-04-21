@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./InstructorMyStudents.css";
 import StudentItem from "../../components/mypage/StudentItem";
-import { getEnrollmentsByInstructorId } from "../../service/EnrollmentService";
+import { getEnrollment, getEnrollmentsByInstructorId } from "../../service/EnrollmentService";
 import { userContext } from "../../App";
 
 function InstructorMyStudents() {
@@ -64,25 +64,9 @@ function InstructorMyStudents() {
         // 🔥 나중에 로그인한 강사 uid로 교체
         const instructorId = userData.uid;
 
-        const data = await getEnrollmentsByInstructorId(instructorId);
-
-        const formatted = data.map((item) => ({
-          enrollmentId: item.enrollmentId,
-          lectureId: item.lectureId ?? null,
-          lectureTitle: item.lectureTitle || "강의명 없음",
-          instructorId: item.instructorId ?? null,
-          instructorName: item.instructorName || "강사",
-          studentId: item.studentId ?? null,
-          studentName: item.studentName || "수강생",
-          paymentStatus: item.paymentStatus || "",
-          enrolledAt: item.enrolledAt || "",
-          refundedAt: item.refundedAt || null,
-          hasReview: item.hasReview ?? false,
-
-          status: getLectureStatus(item),
-        }));
-
-        setEnrollments(formatted);
+        const enrollData = await getEnrollment(instructorId)
+        console.log(enrollData)
+        setEnrollments(enrollData);
       } catch (error) {
         console.error("수강생 목록 불러오기 실패", error);
       } finally {
@@ -222,12 +206,12 @@ function InstructorMyStudents() {
       <div className="instructor-my-students-list">
         {filteredStudents.map((item) => (
           <StudentItem
-            key={item.enrollmentId}
+            key={item.id}
             student={{
               name: item.studentName,
               lecture: item.lectureTitle,
-              status: item.status,
-              date: item.enrolledAt,
+              status: item.chatStatus,
+              date: item.createdAt?.toDate().toLocaleString(),
             }}
           />
         ))}

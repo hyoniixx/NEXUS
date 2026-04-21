@@ -28,6 +28,7 @@ function ChatList() {
             currentParticipants: chats[0]?.participants || [],
             currentUnreadCount: chats[0]?.unreadCount || {},
             currentRefId: chats[0]?.refId || {},
+            currentEnrollmentId: chats[0]?.enrollmentId || ''
         })
     }, [])
 

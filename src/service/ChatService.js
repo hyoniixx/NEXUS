@@ -4,13 +4,14 @@ import { addDoc, collection, deleteDoc, doc, serverTimestamp, updateDoc } from '
 
 const COLLECTION_NAME = 'chats';
 
-export const createChat = async (chatData) => {
+export const createChat = async (chatData, enrollmentId = '') => {
     try {
         const chatRef = await addDoc(collection(db, COLLECTION_NAME), {
             ...chatData,
             createdAt: serverTimestamp(),
             lastMessage: null,
             lastMessageAt: null,
+            enrollmentId: enrollmentId
         })
         console.log('채팅 생성되었습니다. ID:', chatRef.id)
 

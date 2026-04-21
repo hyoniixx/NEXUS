@@ -4,7 +4,7 @@ import { chatContext } from '../../pages/chat/Chat';
 import { userContext } from '../../App';
 import { useLocation } from 'react-router-dom';
 //채팅방 왼쪽에있는 방 하나하나
-function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants }) {
+function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants, enrollmentId }) {
     const { setCurrentChatInfo } = useContext(chatContext);
     const { userData } = useContext(userContext);
     const myuid = userData.uid;
@@ -27,6 +27,7 @@ function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessa
                 currentParticipants: participants,
                 currentUnreadCount: unreadCount,
                 currentRefId: refId,
+                currentEnrollmentId: enrollmentId
             })
         }
     }, [])
@@ -42,7 +43,7 @@ function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessa
             currentParticipants: participants,
             currentUnreadCount: unreadCount,
             currentRefId: refId,
-
+            currentEnrollmentId: enrollmentId
         })}>
 
             {!!unreadCount[myuid] && (<div className='c-chatroom-unread'>{unreadCount[myuid]}</div>)}

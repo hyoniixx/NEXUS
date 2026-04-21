@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import Modal from './Modal'
 import { updateUser } from '../../service/UserService'
 
-function ReviewLectureModal({ isModal, onClose, review, currentUserId, type, triggerRefresh }) {
+function ReviewLectureModal({ isModal, onClose, review, type, triggerRefresh }) {
     const { id: lectureId } = useParams();
     if (!isModal) return null;
     //type : view | create | edit

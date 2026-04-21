@@ -9,7 +9,7 @@ import { getLectures } from "../../service/LectureService";
 import { useNavigate } from 'react-router-dom'
 import { getUserList } from '../../service/MemberViewService.js';
 import { getMoneyList } from '../../service/MoneyManagement.js'
-import { getReviewTotal } from '../../service/ReviewService.js'
+import { getReviewStatic, getReviewTotal } from '../../service/ReviewService.js'
 
 function NexusMainAdmin() {
     const { userData } = useContext(userContext);
@@ -25,11 +25,14 @@ function NexusMainAdmin() {
             const tempUser = await getUserList(); //유저정보
             const tempMoney = await getMoneyList(); //매출정보
             const tempReview = await getReviewTotal(); //후기정보
-            console.log('t', tempReview)
+            const tempReviewStatic = await getReviewStatic(); //후기통계량 [총리뷰수, 총별개수]
+
             //유저정보, 리뷰정보, 
             setTotal({
                 ...total,
-                member: tempUser.length
+                member: tempUser.length,
+                review: tempReviewStatic[0],
+                star: (tempReviewStatic[1] / tempReviewStatic[0]).toFixed(2)
             })
             //총 매출 계산
             var tempTotalMoney = 0;
@@ -114,7 +117,7 @@ function NexusMainAdmin() {
             <div className='main-lectureRecommend'>
                 <h2>최근 개설된 강의</h2>
                 <div className='main-lectureItems'>
-                    {lectureList.filter(item => item).map((item, index) => {
+                    {lectureList.filter(item => item).slice(0, 3).map((item, index) => {
                         return (
                             <LectureItem key={index} lecture={{
                                 id: item.id = 1,
@@ -142,7 +145,7 @@ function NexusMainAdmin() {
                         price: 38000,
                         isLiked: false
                     }} /> */}
-                    <LectureItem key='2' lecture={{
+                    {/* <LectureItem key='2' lecture={{
                         id: 9,
                         instructorName: "Peanut",
                         badgeType: "STREAMER",
@@ -167,7 +170,7 @@ function NexusMainAdmin() {
                         reviewCount: 68,
                         price: 38000,
                         isLiked: false
-                    }} />
+                    }} /> */}
                 </div>
             </div>
         </div>

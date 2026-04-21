@@ -24,6 +24,8 @@ function NexusMainAdmin() {
             const tempLectures = await getLectures(); //강의정보
             const tempUser = await getUserList(); //유저정보
             const tempMoney = await getMoneyList(); //매출정보
+            const tempReview = await getReviewTotal(); //후기정보
+            console.log('t', tempReview)
             //유저정보, 리뷰정보, 
             setTotal({
                 ...total,
@@ -54,10 +56,6 @@ function NexusMainAdmin() {
 
     return (
         <div className='main-admin-dashboard'>
-            <button
-                onClick={() => getReviewTotal}>
-                asdf
-            </button>
             <div className='main-hello'>
                 <h1>관리자 {userData.userName}님, </h1>
                 <h1>환영합니다🎯</h1>

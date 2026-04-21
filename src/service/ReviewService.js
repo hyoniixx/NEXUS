@@ -318,14 +318,22 @@ export const createReviewField = async (lectureId, title, instructor, instructor
 
 export const getReviewTotal = async () => {
     try {
-        const all = await getDocs(db, COLLECTION_NAME);
-        console.log(all);
-        return all;
+        const querySnapshot = await getDocs(
+            collection(db, COLLECTION_NAME)
+        );
+
+        const result = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data().reviews
+        }));
+
+        return result;
+
     } catch (error) {
         console.log('리뷰 필드 불러오기 오류');
         throw error;
     }
-}
+};
 
 /**
  * 관리자용 함수

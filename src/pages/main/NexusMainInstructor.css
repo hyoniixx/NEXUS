@@ -340,6 +340,20 @@
     line-height: 1.5;
 }
 
+.main-instructor-noreview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-instructor-noreview>h1 {
+    color: white;
+    font-size: 25px;
+    /* margin-top: 40px; */
+    font-weight: 600;
+}
+
 /*students*/
 
 .students-card-list {
@@ -401,6 +415,19 @@
     line-height: 24px;
 }
 
+.main-bottom-nostudents {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.main-bottom-nostudents>h1 {
+    margin-top: 40px;
+    font-weight: 400;
+    font-size: 33px;
+    color: white;
+}
 
 
 .toLink {

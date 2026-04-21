@@ -1,5 +1,6 @@
 import React from 'react'
 import emptyStar from '../../assets/emptyStar.svg'
+import profile from '../../assets/defaultProfile.svg'
 
 function MainReviewCard({ image, reviewer, date, star, content }) {
     const stars = [false, false, false, false, false];
@@ -9,7 +10,7 @@ function MainReviewCard({ image, reviewer, date, star, content }) {
     return (
         <div className='reviewCard'>{/*컴포넌트*/}
             <div className='reviewCard-top'>
-                <img src={image} alt='' className='review-profile' />
+                <img src={profile} className='review-profile' />
                 <div className='reviewer'>
                     <p>{reviewer}</p>
                     <h6>{date}</h6>

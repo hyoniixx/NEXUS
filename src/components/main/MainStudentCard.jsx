@@ -1,4 +1,5 @@
 import React from 'react'
+import profile from '../../assets/defaultProfile.svg'
 
 function MainStudentCard({ image, name, date, status }) {
     var color = { background: "rgba(240, 177, 0, 0.10)", color: "#D08700" };
@@ -27,7 +28,7 @@ function MainStudentCard({ image, name, date, status }) {
     }
     return (
         <div className='studentCard'>
-            <img src={image} alt="" className='studentProfile' />
+            <img src={profile} alt="" className='studentProfile' />
             <div className='studentContent'>
                 <h3>{name}</h3>
                 <p>{date}</p>

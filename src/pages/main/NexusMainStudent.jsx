@@ -18,6 +18,7 @@ import { userContext } from '../../App'
 import { getLectureById, getLectures } from "../../service/LectureService";
 import { getDuos } from "../../service/DuoService";
 import { useNavigate } from 'react-router-dom'
+import profile from '../../assets/defaultProfile.svg'
 
 function NexusMainStudent() {
     const { userData } = useContext(userContext);
@@ -59,7 +60,7 @@ function NexusMainStudent() {
             <div className='main-myInfo'>
                 <div className='main-myInfo-profile'>
                     <div className='main-myInfo-profile-top'>
-                        <div className='profileImg'>profileImg</div>
+                        <img src={profile} className='profileImg' />
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <p style={{ color: 'white', fontSize: "22px" }}>{userData.userName}님</p>
                             <p style={{ color: '#3B82F6' }}>현재티어 : {csGradeMap[userData.csGrade - 1]}</p>

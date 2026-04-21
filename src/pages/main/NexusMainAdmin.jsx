@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { getUserList } from '../../service/MemberViewService.js';
 import { getMoneyList } from '../../service/MoneyManagement.js'
 import { getReviewStatic, getReviewTotal } from '../../service/ReviewService.js'
+import profile from '../../assets/defaultProfile.svg'
 
 function NexusMainAdmin() {
     const { userData } = useContext(userContext);
@@ -67,7 +68,7 @@ function NexusMainAdmin() {
             <div className='main-myInfo'>
                 <div className='main-myInfo-profile'>
                     <div className='main-myInfo-profile-top'>
-                        <div className='profileImg'>profileImg</div>
+                        <img src={profile} className='profileImg' />
                         <div >
                             <p style={{ color: 'white', fontSize: "22px" }}>{userData.userName}님</p>
                         </div>

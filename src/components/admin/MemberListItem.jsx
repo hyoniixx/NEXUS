@@ -8,6 +8,7 @@ import whiteBadge from '../../assets/memberWhite.svg'
 import { toggleBlackList, instructorApproval } from '../../service/MemberViewService'
 import useModal from '../../hooks/useModal'
 import Modal from '../common/Modal'
+import TwoButtonModal from '../common/TwoButtonModal'
 
 function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'false', email, date, score, isblack, isApproval }) {
     const [blackNow, setBlackNow] = useState(isblack)
@@ -22,7 +23,6 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
     const modalText = `${name}님이 블랙리스트에${isblack === true ? "서 제거" : " 추가"}되었습니다.`
 
     const approvalModal = useModal(); // ✅ 추가: 승인 모달
-    const approvalText = `${name}님이 강사로 승인되었습니다.` // ✅ 추가: 승인 메시지
 
     const handleBlackList = async () => {
         await toggleBlackList(id, want);
@@ -34,6 +34,14 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
         await instructorApproval(id);
         setApprovalNow(true);
         approvalModal.openModal('approval');
+    }
+
+    //승인모달
+    const [modalOn, setModalOn] = useState(false);
+    const [oneButtonModal, setOneButtonModal] = useState(false);
+    const approveComplete = () => {
+        modal.closeModal();
+        setOneButtonModal(false)
     }
 
     return (
@@ -48,15 +56,17 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
                 color='red'
             />
 
-            <Modal // ✅ 추가: 승인 모달
-                isModal={approvalModal.isModal}
-                closeModal={approvalModal.closeModal}
-                activeModal={approvalModal.activeModal}
+            <Modal
+                isModal={oneButtonModal}
+                closeModal={approveComplete}
+                activeModal={modal.activeModal}
                 title='강사 승인'
-                content={approvalText}
+                content='강사 승인이 완료되었습니다.'
                 type='one'
-                color='blue'
+                color='red'
             />
+
+            <TwoButtonModal isModal={modalOn} setIsModal={setModalOn} handleApproval={handleApproval} setOneButtonModal={setOneButtonModal} />
 
             <div className='member-list-item'>
                 <div className='member-list-item-profile'>
@@ -111,7 +121,7 @@ function MemberListItem({ id, name, birth, role, isPro = 'false', isStrm = 'fals
                                 <button
                                     className='member-list-approval-button' // ✅ 추가: 클래스 네이밍
                                     style={{ display: 'inline', background: 'rgba(59, 130, 246, 0.10)' }} // ✅ inline
-                                    onClick={handleApproval}
+                                    onClick={() => setModalOn(true)}
                                 >
                                     <p>승인</p>
                                 </button>

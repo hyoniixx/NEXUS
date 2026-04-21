@@ -263,7 +263,7 @@ function NexusMainInstructor() {
                                 <h6>{star[1] ?? 0} 개</h6>
                             </div>
                         </div>
-                        {myReviews ? (
+                        {myReviews.length !== 0 ? (
                             <MainReviewCard
                                 image=''
                                 reviewer={myReviews[0]?.reviews[0].userName}

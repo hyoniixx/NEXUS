@@ -26,6 +26,7 @@ import { getUser, updateUser } from '../../service/UserService.js'
 import lectureDefault from '../../assets/lectureDefaultImage.png'
 import LecturePayment from '../../components/lecture-detail/LecturePayment.jsx'
 import { createChat } from '../../service/ChatService.js'
+import { createEnrollment } from '../../service/EnrollmentService.js'
 
 function LectureDetail() {
     const { id } = useParams();
@@ -97,7 +98,8 @@ function LectureDetail() {
 
         console.log(chatData)
         setPageMode('student_on');
-        await createChat(chatData)
+        await createChat(chatData);
+        await createEnrollment(id, lecture.title, lecture.instructorUid, userData.uid, userData.userName);
         setRenderKey(prev => prev + 1); // 리렌더 트리거
     }
 

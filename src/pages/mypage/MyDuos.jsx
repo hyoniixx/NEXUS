@@ -257,13 +257,7 @@ function MyDuos() {
               신청 중인 듀오
             </button>
 
-            <button
-              type="button"
-              className={`myduos-tab ${activeTab === "done" ? "active" : ""}`}
-              onClick={() => setActiveTab("done")}
-            >
-              완료된 듀오
-            </button>
+
           </div>
 
           <div className="myduos-count">전체 {currentList.length}개</div>

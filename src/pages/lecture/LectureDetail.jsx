@@ -19,7 +19,7 @@ import tier6 from '../../assets/tier6.png'
 import tier7 from '../../assets/tier7.png'
 import tier8 from '../../assets/tier8.png'
 import tier9 from '../../assets/tier9.png'
-import { getLectureById } from '../../service/LectureService.js'
+import { deleteLecture, getLectureById } from '../../service/LectureService.js'
 import { getReviews } from '../../service/ReviewService.js'
 import { userContext } from '../../App.jsx'
 import { getUser, updateUser } from '../../service/UserService.js'
@@ -27,6 +27,8 @@ import lectureDefault from '../../assets/lectureDefaultImage.png'
 import LecturePayment from '../../components/lecture-detail/LecturePayment.jsx'
 import { createChat } from '../../service/ChatService.js'
 import { createEnrollment } from '../../service/EnrollmentService.js'
+import Modal from '../../components/common/Modal.jsx'
+import useModal from '../../hooks/useModal.jsx'
 
 function LectureDetail() {
     const { id } = useParams();
@@ -62,6 +64,13 @@ function LectureDetail() {
     const csMap = { 1: tier1, 2: tier2, 3: tier3, 4: tier4, 5: tier5, 6: tier6, 7: tier7, 8: tier8, 9: tier9 }
     const csTextMap = { 1: '미니언', 2: '대포미니언', 3: '바위게', 4: '칼날부리', 5: '블루', 6: '드래곤', 7: '전령', 8: '바론', 9: '장로드래곤' }
     const diffMap = { BEGINNER: "초급", INTERMEDIATE: "중급", ADVANCED: "심화" }
+
+    const [isDeleteModal, setIsDeleteModal] = useState(false);
+    const deleteLectureDetail = async () => {
+        await deleteLecture(id);
+        navigate('/lecture-list')
+    }
+    const modal = useModal(deleteLectureDetail);
 
     const handleEnroll = () => {
         setIsPaymentModal(true);
@@ -118,6 +127,8 @@ function LectureDetail() {
         dispatch({ type: 'SET_USER_DATA', payload: { ...userData, wish: updatedWish } });
         setIsWished(!isWished);
     }
+
+
 
     useEffect(() => {
         if (!userData || !lectureData) return;
@@ -185,6 +196,9 @@ function LectureDetail() {
     if (!lectureData || !lecture.title) return <div>로딩 중...</div>
     if (!userData) return;
 
+
+
+
     return (
         <>
             <LecturePayment
@@ -196,6 +210,15 @@ function LectureDetail() {
                 instructorEmail={lecture.instructorId}
                 lectureId={id}
                 onPaymentSuccess={handlePaymentSuccess}
+            />
+            <Modal
+                isModal={modal.isModal}
+                closeModal={modal.closeModal}
+                activeModal={modal.activeModal}
+                title='강의 삭제'
+                content={`강의를 삭제하시겠습니까?`}
+                type='two'
+                color='red'
             />
             <div className='detail-layout'>
                 <p className='toLectureList' onClick={() => navigate('/lecture-list')}>← 강의 목록으로</p>
@@ -315,7 +338,7 @@ function LectureDetail() {
                                 <button className='detail-box-top-button' onClick={() => navigate(`/edit-lecture/${id}`)}>
                                     수정하기
                                 </button>
-                                <button className='detail-box-bottom-button' onClick={() => setIsDeleteModal(true)}>
+                                <button className='detail-box-bottom-button' onClick={() => modal.openModal()}>
                                     삭제하기
                                 </button>
                             </>
@@ -328,7 +351,7 @@ function LectureDetail() {
                         )}
 
                         {pageMode === 'admin' && (
-                            <button className='detail-box-bottom-button' onClick={() => setIsDeleteModal(true)}>
+                            <button className='detail-box-bottom-button' onClick={() => modal.openModal()}>
                                 삭제하기
                             </button>
                         )}

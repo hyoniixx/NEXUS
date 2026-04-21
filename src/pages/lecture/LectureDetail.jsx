@@ -159,6 +159,8 @@ function LectureDetail() {
             setLectureData(temp);
             setReview(tempReview);
         }
+        const wished = userData.wish?.includes(id) ?? false;
+        setIsWished(wished);
         render();
     }, [])
 

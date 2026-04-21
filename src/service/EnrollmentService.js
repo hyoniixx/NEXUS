@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { db } from "../firebase/config.js";
 
 const COLLECTION_NAME = "enrollments";
@@ -59,13 +59,61 @@ export const createEnrollment = async (lectureId, lectureTitle, instructorId, st
       studentName: studentName,
       lectureId: lectureId,
       lectureTitle: lectureTitle,
-      chatStatus: "전",
+      chatStatus: "수강 전",
       createdAt: serverTimestamp()
     });
     console.log('수강 등록 완료:', docRef.id);
-    // return docRef.id;
+    return docRef.id;
   } catch (error) {
     console.log('수강 등록 오류');
     throw error;
+  }
+}
+
+
+export const getEnrollment = async (uid) => {
+
+  const q = query(
+    collection(db, COLLECTION_NAME),
+    where('instructorId', '==', uid)
+  )
+
+  try {
+    const enrollSnapShot = await getDocs(q)
+
+    const enrolls = enrollSnapShot.docs.map((doc) => (
+      {
+        id: doc.id,
+        ...doc.data()
+      }
+    ))
+    return enrolls
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const updateEnrollment = async (id, status) => {
+  try {
+    await updateDoc(doc(db, COLLECTION_NAME, id), {
+      chatStatus: status
+    })
+    console.log('게시글이 수정되었습니다.')
+  } catch (e) {
+    console.log('게시글 수정 오류');
+    throw e;
+  }
+}
+
+
+export const deleteEnrollment = async (id) => {
+  try {
+    console.log('22222222222', id)
+
+    await deleteDoc(doc(db, COLLECTION_NAME, id));
+    console.log('333333333', id)
+
+  } catch (error) {
+    console.log(error)
   }
 }

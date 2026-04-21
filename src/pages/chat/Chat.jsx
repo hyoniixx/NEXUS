@@ -21,7 +21,8 @@ function Chat() {
         currentChatI: '',
         currentParticipants: [],
         currentUnreadCount: {},
-        currentRefId: ''
+        currentRefId: '',
+        currentEnrollmentId: '',
     });
 
     const myuid = userData.uid;

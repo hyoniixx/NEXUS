@@ -184,6 +184,7 @@ function Duo() {
       };
 
       const result = await applyToDuo(selectedDuo, applicant);
+
       const chatData = {
         type: "duo",
         refId: selectedDuo.docId,
@@ -212,9 +213,8 @@ function Duo() {
       }
 
       if (result.isNew) {
-        console.log('ssssss', selectedDuo)
         setResultModalMessage("듀오 신청이 완료되었습니다.");
-        await createChat(chatData)
+        await createChat(chatData, result.applicationId)
       } else {
         setResultModalMessage("이미 신청한 듀오입니다.");
       }

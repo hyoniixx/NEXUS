@@ -271,3 +271,12 @@ export const updateDuoApplicationStatus = async (applicationDocId, status) => {
     throw error;
   }
 };
+
+
+export const deleteDuoApplication = async (id) => {
+  try {
+    await deleteDoc(doc(db, APPLICATION_COLLECTION, id));
+  } catch (error) {
+    console.log(error)
+  }
+}

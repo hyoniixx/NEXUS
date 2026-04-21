@@ -314,7 +314,10 @@ export const createReviewField = async (lectureId, title, instructor, instructor
     }
 }
 
-/** */
+/**
+ * 모든 review 배열을 반환하는 함수
+ * @returns {[]} - 각 review 배열이 들어있는 배열
+ */
 
 export const getReviewTotal = async () => {
     try {
@@ -323,11 +326,39 @@ export const getReviewTotal = async () => {
         );
 
         const result = querySnapshot.docs.map(doc => ({
-            id: doc.id,
             ...doc.data().reviews
         }));
 
         return result;
+
+    } catch (error) {
+        console.log('리뷰 필드 불러오기 오류');
+        throw error;
+    }
+};
+
+/**
+ * 리뷰 통계량을 반환하는 함수
+ * @returns {[]} - 각 review 배열이 들어있는 배열
+ */
+
+export const getReviewStatic = async () => {
+    try {
+        const querySnapshot = await getDocs(
+            collection(db, COLLECTION_NAME)
+        );
+
+        const result = querySnapshot.docs.map(doc => ([
+            ...doc.data().reviews
+        ]));
+        var total = 0;
+        var stars = 0;
+        var a = [];
+        result.map((item) => item.map((value) => {
+            total++;
+            stars += value.star
+        }))
+        return [total, stars]
 
     } catch (error) {
         console.log('리뷰 필드 불러오기 오류');

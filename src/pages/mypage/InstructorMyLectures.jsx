@@ -46,7 +46,7 @@ function InstructorMyLectures() {
           docId: lecture.docId,
           lectureId: lecture.lectureId ?? null,
           instructorId: lecture.uid ?? null,
-          instructorName: lecture.instructorName || "강사",
+          instructorName: lecture.instructor || "강사",
           badgeType: lecture.badgeType || "PRO",
           title: lecture.title || "",
           line: lecture.line || "",

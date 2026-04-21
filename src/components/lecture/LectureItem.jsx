@@ -103,7 +103,7 @@ function LectureItem({
 
           <div className="lecture-item-instructor-info">
             <span className="lecture-item-instructor-name">
-              {lecture.instructor}
+              {lecture.instructor || lecture.instructorName}
             </span>
 
             <img

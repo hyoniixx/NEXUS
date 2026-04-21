@@ -7,8 +7,9 @@ import { userContext } from '../../App'
 import { createReview, updateReview, deleteReview } from '../../service/ReviewService';
 import { useParams } from 'react-router-dom';
 import Modal from './Modal'
+import { updateUser } from '../../service/UserService'
 
-function ReviewLectureModal({ isModal, onClose, review, currentUserId, type, triggerRefresh }) {
+function ReviewLectureModal({ isModal, onClose, review, type, triggerRefresh }) {
     const { id: lectureId } = useParams();
     if (!isModal) return null;
     //type : view | create | edit
@@ -74,7 +75,7 @@ function ReviewLectureModal({ isModal, onClose, review, currentUserId, type, tri
             });
 
             userData.lectures = userData.lectures.filter(l => l !== lectureId);
-
+            updateUser(userData.uid, { ...userData });
             triggerRefresh();
             onClose();
         } catch (e) {

@@ -5,6 +5,7 @@ import { createContext, useContext, useState } from "react"
 import leftArrow from '../../assets/leftArrow.svg';
 import { userContext } from '../../App';
 import { useLocation } from 'react-router-dom';
+import TiersModal from '../../components/common/TiersModal';
 
 export const chatContext = createContext();
 

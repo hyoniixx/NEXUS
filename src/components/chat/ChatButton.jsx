@@ -6,6 +6,7 @@ import { createMessage, deleteMessage } from '../../service/MessageService'
 import setUpdataData from '../../reducer/chatButtonReducer'
 import ReviewDuo from '../common/ReviewDuoModal'
 import { userContext } from '../../App'
+import { updateDuoApplicationStatus, updateDuoMatched } from '../../service/DuoService'
 
 
 
@@ -18,7 +19,8 @@ function ChatButton() {
         currentChatStatus,
         currentChatI,
         currentParticipants,
-        currentChatOpponent
+        currentChatOpponent,
+        currentRefId
     } = currentChatInfo
 
 
@@ -144,7 +146,7 @@ function ChatButton() {
     }, [copyCurrentChatStatus])
 
     //채팅 정보를 수정하는 함수
-    const handleUpdateChat = (clickEvent) => {
+    const handleUpdateChat = async (clickEvent) => {
         if (clickEvent === 'none') {
             return;
         }
@@ -159,6 +161,11 @@ function ChatButton() {
             console.log('듀오 모달')
             setIsModal(true);
             return;
+        }
+
+        if (clickEvent === 'AGREE_DUO') {
+            console.log(currentRefId)
+            await updateDuoMatched(currentRefId, { isMatched: true })
         }
 
         dispatch({

@@ -4,6 +4,7 @@ import './Chat.css'
 import { createContext, useContext, useState } from "react"
 import leftArrow from '../../assets/leftArrow.svg';
 import { userContext } from '../../App';
+import { useLocation } from 'react-router-dom';
 
 export const chatContext = createContext();
 
@@ -18,11 +19,12 @@ function Chat() {
         currentChatStatus: '',
         currentChatI: '',
         currentParticipants: [],
-        currentUnreadCount: {}
+        currentUnreadCount: {},
+        currentRefId: ''
     });
 
     const myuid = userData.uid;
-
+    console.log(currentChatInfo)
     return (
         <div className='c-chat'>
             <main className='c-chat-main'>

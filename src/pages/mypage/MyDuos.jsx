@@ -166,9 +166,7 @@ function MyDuos() {
 
     navigate("/chat", {
       state: {
-        duoId: duo.docId,
-        nickname: duo.writer.userName,
-        gameTag: `${duo.writer.gameName}${duo.writer.gameTag}`,
+        id: duo.docId
       },
     });
   };
@@ -252,9 +250,8 @@ function MyDuos() {
 
             <button
               type="button"
-              className={`myduos-tab ${
-                activeTab === "pending" ? "active" : ""
-              }`}
+              className={`myduos-tab ${activeTab === "pending" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("pending")}
             >
               신청 중인 듀오

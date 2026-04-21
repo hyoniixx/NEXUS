@@ -22,15 +22,25 @@ function Chating() {
     const [copyCurrentChatUnReadOpponent, setCopyCurrentChatUnReadOpponent] = useState(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId])
 
     const messageRef = useRef();
+    const chatContainer = useRef();
+
+    const scrollToTop = () => {
+        const { scrollHeight, clientHeight } = chatContainer.current;
+        chatContainer.current.scrollTo({
+            top: scrollHeight - clientHeight,
+            behavior: 'auto'
+        })
+    }
 
     useEffect(() => {
         //현재 보고 있는 채팅 읽음 처리
+        scrollToTop()
         if (currentChatInfo.currentChatId) {
             updateChat(currentChatInfo.currentChatId, {
                 [`unreadCount.${myuid}`]: 0
             })
         }
-    })
+    }, [messages])
 
     //전체 메시지 중 roomId가 일치하는 메시지만 받아오는 함수
     useEffect(() => {
@@ -59,7 +69,6 @@ function Chating() {
 
         return () => unsub();
     }, [currentChatInfo.currentChatId]);
-
 
 
 
@@ -96,13 +105,15 @@ function Chating() {
         }
     }
 
+
+
     return (
         <section className='c-chat-chating-ct'>
             <article className='c-chat-chating-top'>
                 <h2>{currentChatInfo.currentChatOpponent.nickname}</h2>
                 <ChatButton />
             </article>
-            <article className='c-chat-chatItem-ct'>
+            <article className='c-chat-chatItem-ct' ref={chatContainer}>
                 {messages.map((message) => {
                     return <ChatItem key={message.messageId}{...message} />
                 })}

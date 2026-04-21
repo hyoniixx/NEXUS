@@ -1,14 +1,35 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import './ChatRoom.css'
 import { chatContext } from '../../pages/chat/Chat';
 import { userContext } from '../../App';
+import { useLocation } from 'react-router-dom';
 //채팅방 왼쪽에있는 방 하나하나
-function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants }) {
+function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants }) {
     const { setCurrentChatInfo } = useContext(chatContext);
     const { userData } = useContext(userContext);
     const myuid = userData.uid;
     const keys = Object.keys(participantInfo);
     const opponent = keys.find(k => k !== myuid)
+
+    const location = useLocation();
+
+    const { id } = location.state || {};
+
+    useEffect(() => {
+        if (id === refId) {
+            setCurrentChatInfo({
+                currentChatType: type,
+                currentChatId: roomId,
+                currentChatOpponent: participantInfo[opponent],
+                currentChatOpponentId: opponent,
+                currentChatStatus: status,
+                currentChatI: participantInfo[myuid],
+                currentParticipants: participants,
+                currentUnreadCount: unreadCount,
+                currentRefId: refId,
+            })
+        }
+    }, [])
 
     return (
         <div className='c-chatroom-ct' onClick={() => setCurrentChatInfo({
@@ -19,7 +40,9 @@ function ChatRoom({ type, roomId, participantInfo, lastMessage, lastMessageAt, u
             currentChatStatus: status,
             currentChatI: participantInfo[myuid],
             currentParticipants: participants,
-            currentUnreadCount: unreadCount
+            currentUnreadCount: unreadCount,
+            currentRefId: refId,
+
         })}>
 
             {!!unreadCount[myuid] && (<div className='c-chatroom-unread'>{unreadCount[myuid]}</div>)}

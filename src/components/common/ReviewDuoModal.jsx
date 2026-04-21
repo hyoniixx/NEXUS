@@ -19,7 +19,10 @@ function ReviewDuo({ handleUpdateChat, clickEvent, setIsModal }) {
         const fetchOpponentData = async () => {
             const data = await getUser(currentChatOpponentId)
             setOpponentData(data);
+            console.log(data)
         }
+
+        fetchOpponentData()
     }, [])
 
     const handleClickReview = (e) => {
@@ -51,8 +54,9 @@ function ReviewDuo({ handleUpdateChat, clickEvent, setIsModal }) {
         return result ? result.grade : 9;
     };
 
+
     const handleEditBtn = async () => {
-        let score = opponentData.csScore;
+        let score = Number(opponentData.csScore);
         switch (duoReview) {
             case 'very good':
                 score += 10;
@@ -79,6 +83,7 @@ function ReviewDuo({ handleUpdateChat, clickEvent, setIsModal }) {
                 isBlacklist: score <= 0 ? true : false
             }
             const resultUser = await updateUser(currentChatOpponentId, updateData)
+            console.log(resultUser)
         } catch (error) {
             console.log('회원점수 수정 실패', error)
         }
@@ -94,30 +99,30 @@ function ReviewDuo({ handleUpdateChat, clickEvent, setIsModal }) {
                     <p>{currentChatOpponent.nickname}님과의 듀오 경험을 평가해주세요.</p>
                 </article>
                 <article className='c-review-duo-modal-select-ct'>
-                    <div id='very bad' onClick={(e) => handleClickReview(e)} className={duoReview === 'very bad' && 'c-modal-btn-select'}>
+                    <div id='very bad' onClick={(e) => handleClickReview(e)} className={duoReview === 'very bad' ? 'c-modal-btn-select' : ''}>
                         <p>😞</p>
                         <p>정말 별로예요</p>
                     </div>
-                    <div id='bad' onClick={(e) => handleClickReview(e)} className={duoReview === 'bad' && 'c-modal-btn-select'}>
+                    <div id='bad' onClick={(e) => handleClickReview(e)} className={duoReview === 'bad' ? 'c-modal-btn-select' : ''}>
                         <p>🙁</p>
                         <p>별로예요</p>
                     </div>
-                    <div id='soso' onClick={(e) => handleClickReview(e)} className={duoReview === 'soso' && 'c-modal-btn-select'}>
+                    <div id='soso' onClick={(e) => handleClickReview(e)} className={duoReview === 'soso' ? 'c-modal-btn-select' : ''}>
                         <p>😐</p>
                         <p>보통이에요</p>
                     </div>
-                    <div id='good' onClick={(e) => handleClickReview(e)} className={duoReview === 'good' && 'c-modal-btn-select'}>
+                    <div id='good' onClick={(e) => handleClickReview(e)} className={duoReview === 'good' ? 'c-modal-btn-select' : ''}>
                         <p>😊</p>
                         <p>좋아요</p>
                     </div>
-                    <div id='very good' onClick={(e) => handleClickReview(e)} className={duoReview === 'very good' && 'c-modal-btn-select'}>
+                    <div id='very good' onClick={(e) => handleClickReview(e)} className={duoReview === 'very good' ? 'c-modal-btn-select' : ''}>
                         <p>🥰</p>
                         <p>정말 좋아요</p>
                     </div>
                 </article>
                 <article className='c-modal-btn-ct'>
                     <button onClick={closeModal} className='c-modal-btn-no'>취소</button>
-                    <button disabled={!duoReview} onClick={() => { closeModal(); handleUpdateChat(clickEvent); }} className={duoReview ? 'c-modal-btn-yes-blue' : 'c-modal-btn-disable'}>평가완료</button>
+                    <button disabled={!duoReview} onClick={() => { closeModal(); handleEditBtn(); handleUpdateChat(clickEvent); }} className={duoReview ? 'c-modal-btn-yes-blue' : 'c-modal-btn-disable'}>평가완료</button>
                 </article>
             </div>
         </section>

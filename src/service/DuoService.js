@@ -20,6 +20,7 @@ export const getDuos = async () => {
   try {
     const q = query(
       collection(db, DUO_COLLECTION),
+      where('isMatched', '==', false),
       orderBy("createdAt", "desc"),
     );
 
@@ -133,6 +134,18 @@ export const updateDuo = async (docId, updateData) => {
     throw error;
   }
 };
+
+export const updateDuoMatched = async (docId, updateData) => {
+  try {
+    await updateDoc(doc(db, DUO_COLLECTION, docId), updateData);
+    console.log("듀오 수정 완료");
+  } catch (error) {
+    console.log("듀오 수정 실패");
+    console.log(error);
+    throw error;
+  }
+
+}
 
 export const deleteDuo = async (docId) => {
   try {

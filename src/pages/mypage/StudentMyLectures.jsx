@@ -189,7 +189,11 @@ function StudentMyLectures() {
                   reviewCount: lecture.total || 0,
                 }}
                 cardType="myLecture"
-                onChatClick={() => navigate('/chat')}
+                onChatClick={() => navigate("/chat", {
+                  state: {
+                    id: lecture.docId
+                  },
+                })}
               />
             </div>
           ))}

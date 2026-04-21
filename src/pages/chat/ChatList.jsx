@@ -4,6 +4,7 @@ import './ChatList.css'
 import { collection, doc, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { userContext } from "../../App";
+import { chatContext } from "./Chat";
 
 
 function ChatList() {
@@ -13,6 +14,22 @@ function ChatList() {
     const { userData } = useContext(userContext);
 
     const myuid = userData.uid || '';
+
+    const { setCurrentChatInfo } = useContext(chatContext);
+
+    useEffect(() => {
+        setCurrentChatInfo({
+            currentChatType: chats[0]?.type || '',
+            currentChatId: chats[0]?.roomId || '',
+            currentChatOpponent: chats[0]?.participantInfo[opponent] || '',
+            currentChatOpponentId: chats[0]?.opponent || '',
+            currentChatStatus: chats[0]?.status || '',
+            currentChatI: chats[0]?.participantInfo[myuid] || '',
+            currentParticipants: chats[0]?.participants || [],
+            currentUnreadCount: chats[0]?.unreadCount || {},
+            currentRefId: chats[0]?.refId || {},
+        })
+    }, [])
 
     useEffect(() => {
         let q;

@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "../firebase/config.js";
 
 const COLLECTION_NAME = "enrollments";
@@ -98,9 +98,9 @@ export const updateEnrollment = async (id, status) => {
     await updateDoc(doc(db, COLLECTION_NAME, id), {
       chatStatus: status
     })
-    console.log('게시글이 수정되었습니다.')
+    console.log('등록 수정 완료')
   } catch (e) {
-    console.log('게시글 수정 오류');
+    console.log('등록 오류');
     throw e;
   }
 }

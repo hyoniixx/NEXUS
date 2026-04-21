@@ -13,10 +13,10 @@ function ChatRoom({ type, roomId, refId, participantInfo, lastMessage, lastMessa
 
     const location = useLocation();
 
-    const { id } = location.state || {};
+    const { id, studentId = '' } = location.state || {};
 
     useEffect(() => {
-        if (id === refId) {
+        if ((studentId === opponent || !studentId) && id === refId) {
             setCurrentChatInfo({
                 currentChatType: type,
                 currentChatId: roomId,

@@ -33,6 +33,8 @@ function Wish() {
   const getLevelLabel = (value) => levelLabelMap[value] || value;
   const getLineLabel = (value) => lineLabelMap[value] || value;
 
+
+
   useEffect(() => {
     const fetchWishLectures = async () => {
       try {
@@ -96,6 +98,10 @@ function Wish() {
     }
   };
 
+  const handleMoveLectureDetail = (docId) => {
+    navigate(`/lecture/${docId}`);
+  };
+
   if (isLoading) {
     return (
       <section className="wish-page">
@@ -148,18 +154,24 @@ function Wish() {
           <>
             <div className="wish-grid">
               {lectures.map((lecture) => (
-                <LectureItem
+                <div
                   key={lecture.docId}
-                  lecture={{
-                    ...lecture,
-                    line: getLineLabel(lecture.line),
-                    level: getLevelLabel(lecture.level),
-                    rating: lecture.star?.average || 0,
-                    reviewCount: lecture.total || 0,
-                  }}
-                  cardType="wish"
-                  onRemoveWish={handleRemoveWish}
-                />
+                  onClick={() => handleMoveLectureDetail(lecture.docId)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <LectureItem
+                    key={lecture.docId}
+                    lecture={{
+                      ...lecture,
+                      line: getLineLabel(lecture.line),
+                      level: getLevelLabel(lecture.level),
+                      rating: lecture.star?.average || 0,
+                      reviewCount: lecture.total || 0,
+                    }}
+                    cardType="wish"
+                    onRemoveWish={handleRemoveWish}
+                  />
+                </div>
               ))}
             </div>
 

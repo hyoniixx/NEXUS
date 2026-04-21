@@ -293,6 +293,11 @@ function LectureDetail() {
                             <>
                                 <button
                                     className='detail-box-top-on'
+                                    onClick={() => navigate("/chat", {
+                                        state: {
+                                            id: id
+                                        },
+                                    })}
                                 >
                                     <p>수강 중</p>
                                 </button>
@@ -343,7 +348,7 @@ function LectureDetail() {
                         )}
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

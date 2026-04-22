@@ -140,7 +140,7 @@ function LectureItem({
       <div className="lecture-item-footer">
         <div className="lecture-item-rating-box">
           <span className="lecture-item-rating-star">☆</span>
-          <span className="lecture-item-rating-score">{ratingValue}</span>
+          <span className="lecture-item-rating-score">{lecture.average}</span>
           <span className="lecture-item-rating-count">
             ({reviewCountValue})
           </span>

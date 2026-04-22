@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './LecturePayment.css'
+import './LecturePaymentModal.css'
 import close from '../../assets/reviewModalClose.svg'
 import { userContext } from '../../App';
 import { createMoney } from '../../service/MoneyManagement';
@@ -73,12 +74,10 @@ function LecturePayment({ isModal, onClose, price, title, instructorId, instruct
 
                 {step === 'cancelConfirm' && (
                     <>
-                        <div className='payment-modal-header'>
-                            <h1>수강 신청 취소</h1>
-                        </div>
-                        <div className='payment-modal-body'>
-                            <p className='payment-modal-confirm-text'>수강 신청을 취소하시겠습니까?</p>
-                        </div>
+                        <article className='c-modal-ct-custom '>
+                            <h3>수강 신청 취소</h3>
+                            <p>수강 신청을 취소하시겠습니까?</p>
+                        </article>
                         <div className='payment-modal-footer'>
                             <button className='payment-btn-cancel' onClick={() => setStep('main')}>아니오</button>
                             <button className='payment-btn-primary' onClick={onClose}>예</button>
@@ -88,14 +87,10 @@ function LecturePayment({ isModal, onClose, price, title, instructorId, instruct
 
                 {step === 'payConfirm' && (
                     <>
-                        <div className='payment-modal-header'>
-                            <h1>결제 확인</h1>
-                        </div>
-                        <div className='payment-modal-body'>
-                            <p className='payment-modal-confirm-text'>
-                                <span className='payment-modal-price-inline'>{Number(price).toLocaleString()}원</span>이 결제됩니다.<br />진행하시겠습니까?
-                            </p>
-                        </div>
+                        <article className='c-modal-ct-custom '>
+                            <h3>결제 확인</h3>
+                            <p><span className='payment-modal-price-inline'>{Number(price).toLocaleString()}원</span>이 결제됩니다.<br />진행하시겠습니까?</p>
+                        </article>
                         <div className='payment-modal-footer'>
                             <button className='payment-btn-cancel' onClick={() => setStep('main')}>취소</button>
                             <button className='payment-btn-primary' onClick={handlePayment}>확인</button>

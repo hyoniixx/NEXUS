@@ -3,7 +3,7 @@ import "./StudentMyLectures.css";
 import LectureItem from "../../components/lecture/LectureItem";
 import { getEnrollmentsByStudentId } from "../../service/EnrollmentService";
 import { getLectureById } from "../../service/LectureService";
-import { getMyReviewsStudent } from "../../service/ReviewService";
+import { getMyReviewsStudent, getReviewAverageById } from "../../service/ReviewService";
 import { userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 
@@ -91,7 +91,8 @@ function StudentMyLectures() {
         const lectureList = await Promise.all(
           enrollments.map(async (enrollment) => {
             const lecture = await getLectureById(enrollment.lectureId);
-
+            const lectureReview = await getReviewAverageById(enrollment.lectureId)
+            console.log(lectureReview)
             if (!lecture) return null;
 
             const lectureId = String(lecture.docId);
@@ -99,6 +100,8 @@ function StudentMyLectures() {
 
             return {
               ...lecture,
+              average: lectureReview[0].average,
+              total: lectureReview[0].total || 0,
               enrollmentId: enrollment.docId,
               enrollmentCreatedAt: enrollment.createdAt ?? null,
               chatStatus: enrollment.chatStatus ?? "수강 전",
@@ -214,6 +217,7 @@ function StudentMyLectures() {
                 onClick={() => handleMoveLectureDetail(lecture.docId)}
                 style={{ cursor: "pointer" }}
               >
+                {console.log(lecture)}
                 <LectureItem
                   lecture={{
                     ...lecture,
@@ -223,15 +227,14 @@ function StudentMyLectures() {
                     reviewCount: lecture.total || 0,
                   }}
                   cardType="myLecture"
-                  onChatClick={(e) => {
-                    e.stopPropagation();
+                  onChatClick={() =>
                     navigate("/chat", {
                       state: {
                         id: lecture.docId,
                         enrollmentId: lecture.enrollmentId,
                       },
-                    });
-                  }}
+                    })
+                  }
                 />
               </div>
             ))

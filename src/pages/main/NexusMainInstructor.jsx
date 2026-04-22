@@ -202,45 +202,7 @@ function NexusMainInstructor() {
                             </article>
                         )}
 
-                        {/* <LectureItem key='1' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
-                        {/* <LectureItem key='2' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
-                        {/* <LectureItem key='3' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
+
                     </div>
                 </div>
                 <div className='main-bottom'>

@@ -12,9 +12,6 @@ import { logout } from '../service/AuthService'
 function Header() {
     const { userData, dispatch } = useContext(userContext);
 
-    useEffect(() => {
-        console.log(userData)
-    })
     const navigate = useNavigate();
 
     const handleLogout = async () => {

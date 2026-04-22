@@ -4,6 +4,7 @@ import "./InstructorMyLectures.css";
 import { getLecturesByInstructorId } from "../../service/LectureService";
 import { userContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { getReviewAverage } from "../../service/ReviewService";
 
 function InstructorMyLectures() {
   const [lectures, setLectures] = useState([]);
@@ -41,26 +42,32 @@ function InstructorMyLectures() {
         const uid = userData.uid;
 
         const data = await getLecturesByInstructorId(uid);
+        const average = await getReviewAverage();
 
-        const formatted = data.map((lecture) => ({
-          docId: lecture.docId,
-          lectureId: lecture.lectureId ?? null,
-          instructorId: lecture.uid ?? null,
-          instructorName: lecture.instructor || "강사",
-          badgeType: lecture.badgeType || "PRO",
-          title: lecture.title || "",
-          line: lecture.line || "",
-          level: lecture.level || "",
-          champion: Array.isArray(lecture.champion)
-            ? lecture.champion
-            : lecture.champion
-              ? [lecture.champion]
-              : [],
-          star: lecture.star || { average: 0 },
-          total: lecture.total || 0,
-          price: lecture.price || 0,
-          isLiked: false,
-        }));
+        const formatted = data.map((lecture) => {
+          const currentAverage = average.find((a) => a.lectureId === lecture.docId);
+
+          return {
+            docId: lecture.docId,
+            lectureId: lecture.lectureId ?? null,
+            instructorId: lecture.uid ?? null,
+            instructorName: lecture.instructor || "강사",
+            badgeType: lecture.badgeType || "PRO",
+            title: lecture.title || "",
+            line: lecture.line || "",
+            level: lecture.level || "",
+            champion: Array.isArray(lecture.champion)
+              ? lecture.champion
+              : lecture.champion
+                ? [lecture.champion]
+                : [],
+            star: lecture.star || { average: 0 },
+            total: currentAverage.total || 0,
+            price: lecture.price || 0,
+            isLiked: false,
+            average: currentAverage.average
+          }
+        });
 
         setLectures(formatted);
       } catch (error) {

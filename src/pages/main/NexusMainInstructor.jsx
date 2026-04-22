@@ -263,11 +263,11 @@ function NexusMainInstructor() {
                                 <h6>{star[1] ?? 0} 개</h6>
                             </div>
                         </div>
-                        {myReviews.length !== 0 ? (
+                        {myReviews[0]?.userName ? (
                             <MainReviewCard
                                 image=''
-                                reviewer={myReviews[0]?.reviews[0].userName}
-                                date={new Date(myReviews[0]?.reviews[0].createdAt).toLocaleString('ko-KR', {
+                                reviewer={myReviews[0]?.reviews[0]?.userName}
+                                date={new Date(myReviews[0]?.reviews[0]?.createdAt).toLocaleString('ko-KR', {
                                     year: 'numeric',
                                     month: '2-digit',
                                     day: '2-digit',
@@ -275,8 +275,8 @@ function NexusMainInstructor() {
                                     minute: '2-digit',
                                     hour12: false
                                 })}
-                                star={myReviews[0]?.reviews[0].star}
-                                content={myReviews[0]?.reviews[0].content}
+                                star={myReviews[0]?.reviews[0]?.star}
+                                content={myReviews[0]?.reviews[0]?.content}
                             />
                         ) : (
                             <div className='main-instructor-noreview'>
@@ -296,8 +296,8 @@ function NexusMainInstructor() {
                             {myStudents.length !== 0 ? (
                                 myStudents.slice(0, 3).map((item, index) => (
                                     <MainStudentCard
-                                        key={item.id || index}
-                                        name={item.userName}
+                                        key={item?.id || index}
+                                        name={item?.userName}
                                         date='2026.03.12'
                                         status={index % 3}
                                     />

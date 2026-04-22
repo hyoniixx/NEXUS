@@ -175,9 +175,9 @@ function NexusMainStudent() {
                         <h2>최근 내 강의</h2>
                         <p className='toLink' onClick={() => navigate('/lecture-list')}>강의 목록 보기</p>
                     </div>
-                    {userData.lectures ? (
+                    {userData?.lectures[0]?.title ? (
                         <MainLectureCard
-                            key={userData.lectures[0]}
+                            key={userData?.lectures[0]}
                             title={lectureForCard?.title}
                             status='진행중'
                             instructor={lectureForCard?.instructor}

@@ -27,7 +27,7 @@ function FileInput({ mode, message }) {
     }
     return (
         <>
-            <label className='a-user-form-file-label'>{mode}</label>
+            <label className='a-user-form-file-label'>{mode}{name === 'tierImage' && <span className='a-signup-required'>*</span>}</label>
             <p className={`a-user-form-file-p a-signup-${feedback.status}-p`}>{feedback.message}</p>
             <input
                 hidden

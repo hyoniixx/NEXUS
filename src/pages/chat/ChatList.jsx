@@ -10,6 +10,7 @@ import { chatContext } from "./Chat";
 function ChatList() {
     const [chats, setChats] = useState([]);
     const [chatCategory, setChatCategory] = useState('all');
+    const [currentChatId, setCurrentChatId] = useState('')
 
     const { userData } = useContext(userContext);
 
@@ -17,20 +18,6 @@ function ChatList() {
 
     const { setCurrentChatInfo } = useContext(chatContext);
 
-    useEffect(() => {
-        setCurrentChatInfo({
-            currentChatType: chats[0]?.type || '',
-            currentChatId: chats[0]?.roomId || '',
-            currentChatOpponent: chats[0]?.participantInfo[opponent] || '',
-            currentChatOpponentId: chats[0]?.opponent || '',
-            currentChatStatus: chats[0]?.status || '',
-            currentChatI: chats[0]?.participantInfo[myuid] || '',
-            currentParticipants: chats[0]?.participants || [],
-            currentUnreadCount: chats[0]?.unreadCount || {},
-            currentRefId: chats[0]?.refId || {},
-            currentEnrollmentId: chats[0]?.enrollmentId || ''
-        })
-    }, [])
 
     useEffect(() => {
         let q;
@@ -50,18 +37,41 @@ function ChatList() {
             );
         }
 
-
+        //채팅 상태 바뀔 때도 정보를 가져옴
         const unsub = onSnapshot(q, (snapshot) => {
-            const chatData = snapshot.docs.map((doc) => ({
-                roomId: doc.id,
-                ...doc.data()
-            }));
+            const chatData = snapshot.docs.map((doc) => {
+                if (doc.id === currentChatId) {
+                    const keys = Object.keys(doc.data().participantInfo);
+                    const opponent = keys.find(k => k !== myuid)
+
+                    setCurrentChatInfo({
+                        currentChatType: doc.data().type,
+                        currentChatId: doc.id,
+                        currentChatOpponent: doc.data().participantInfo[opponent],
+                        currentChatOpponentId: opponent,
+                        currentChatStatus: doc.data().status,
+                        currentChatI: doc.data().participantInfo[myuid],
+                        currentParticipants: doc.data().participants,
+                        currentUnreadCount: doc.data().unreadCount,
+                        currentRefId: doc.data().refId,
+                        currentEnrollmentId: doc.data().enrollmentId
+                    })
+                }
+
+                return {
+                    roomId: doc.id,
+                    ...doc.data()
+                }
+            });
 
             setChats(chatData)
         })
 
+
         return () => unsub();
-    }, [chatCategory])
+    }, [chatCategory, currentChatId])
+
+
 
     return (
         <section className='c-chat-list-ct'>
@@ -74,7 +84,9 @@ function ChatList() {
                 </select>
             </article>
             <article className="c-chat-room-ct">
-                {chats.map((chat) => <ChatRoom key={chat.roomId}{...chat} />)}
+                {chats.map((chat) => {
+                    return <ChatRoom key={chat.roomId} chat={chat} setCurrentChatId={setCurrentChatId} />
+                })}
             </article>
         </section>
     )

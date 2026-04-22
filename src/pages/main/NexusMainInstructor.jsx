@@ -202,45 +202,7 @@ function NexusMainInstructor() {
                             </article>
                         )}
 
-                        {/* <LectureItem key='1' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
-                        {/* <LectureItem key='2' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
-                        {/* <LectureItem key='3' lecture={{
-                            id: 9,
-                            instructorName: "Peanut",
-                            badgeType: "STREAMER",
-                            title: "정글 동선 완벽 이해",
-                            line: "정글",
-                            level: "중급",
-                            champion: "세주아니",
-                            rating: 4.7,
-                            reviewCount: 68,
-                            price: 38000,
-                            isLiked: false
-                        }} /> */}
+
                     </div>
                 </div>
                 <div className='main-bottom'>
@@ -266,8 +228,8 @@ function NexusMainInstructor() {
                         {myReviews.length !== 0 ? (
                             <MainReviewCard
                                 image=''
-                                reviewer={myReviews[0]?.reviews[0].userName}
-                                date={new Date(myReviews[0]?.reviews[0].createdAt).toLocaleString('ko-KR', {
+                                reviewer={myReviews[0]?.reviews[0]?.userName}
+                                date={new Date(myReviews[0]?.reviews[0]?.createdAt).toLocaleString('ko-KR', {
                                     year: 'numeric',
                                     month: '2-digit',
                                     day: '2-digit',
@@ -275,8 +237,8 @@ function NexusMainInstructor() {
                                     minute: '2-digit',
                                     hour12: false
                                 })}
-                                star={myReviews[0]?.reviews[0].star}
-                                content={myReviews[0]?.reviews[0].content}
+                                star={myReviews[0]?.reviews[0]?.star}
+                                content={myReviews[0]?.reviews[0]?.content}
                             />
                         ) : (
                             <div className='main-instructor-noreview'>

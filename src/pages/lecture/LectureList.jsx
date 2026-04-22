@@ -11,6 +11,7 @@ import {
   toggleWishByUid,
 } from "../../service/WishService";
 import { userContext } from "../../App";
+import { getReviewAverage } from "../../service/ReviewService";
 
 function LectureList() {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ function LectureList() {
 
         // 강의는 항상 불러오고, wish는 로그인한 경우에만
         const data = await getLectures();
+        const average = await getReviewAverage();
         const wishLectures = uid ? await getWishLecturesByUid(uid) : [];
 
         const wishDocIds = new Set(
@@ -110,6 +112,7 @@ function LectureList() {
 
         const formatted = data.map((lecture) => {
           const currentId = lecture.docId || lecture.id || lecture.lectureId || "";
+          const currentAverage = average.find((a) => a.lectureId === currentId);
           return {
             ...lecture,
             docId: currentId,
@@ -126,9 +129,10 @@ function LectureList() {
               ? lecture.champion
               : lecture.champion ? [lecture.champion] : [],
             star: lecture.star?.average || 0,
-            total: lecture.total || 0,
+            total: currentAverage.total || 0,
             time: lecture.time ?? null,
             isLiked: wishDocIds.has(currentId),
+            average: currentAverage.average
           };
         });
 

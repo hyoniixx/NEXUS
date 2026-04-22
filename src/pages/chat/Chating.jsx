@@ -19,7 +19,6 @@ function Chating() {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [loading, setLoading] = useState(false);
-    const [copyCurrentChatUnReadOpponent, setCopyCurrentChatUnReadOpponent] = useState(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId])
 
     const messageRef = useRef();
     const chatContainer = useRef();
@@ -44,7 +43,6 @@ function Chating() {
 
     //전체 메시지 중 roomId가 일치하는 메시지만 받아오는 함수
     useEffect(() => {
-        setCopyCurrentChatUnReadOpponent(currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId]);
 
         const q = query(
             collection(db, 'messages'),
@@ -88,12 +86,10 @@ function Chating() {
                 content: newMessage
             })
 
-            setCopyCurrentChatUnReadOpponent(copyCurrentChatUnReadOpponent + 1);
-            console.log('!!', copyCurrentChatUnReadOpponent);
             updateChat(currentChatInfo.currentChatId, {
                 lastMessage: newMessage,
                 lastMessageAt: serverTimestamp(),
-                [`unreadCount.${currentChatInfo.currentChatOpponentId}`]: copyCurrentChatUnReadOpponent
+                [`unreadCount.${currentChatInfo.currentChatOpponentId}`]: currentChatInfo.currentUnreadCount[currentChatInfo.currentChatOpponentId] + 1
             })
             setNewMessage('');
             messageRef.current.value = "";

@@ -389,3 +389,51 @@ export const makeDummyReviews = async (review) => {
         throw error;
     }
 };
+
+
+/**
+ * 모든 review 배열을 반환하는 함수
+ * @returns {[]} - 각 review 배열이 들어있는 배열
+ */
+
+export const getReviewAverage = async () => {
+    try {
+        const querySnapshot = await getDocs(
+            collection(db, COLLECTION_NAME)
+        );
+
+        const result = querySnapshot.docs.map(doc => ({
+            lectureId: doc.data().lectureId,
+            average: doc.data().star.average,
+            total: doc.data().total
+        }));
+        return result;
+
+    } catch (error) {
+        console.log('리뷰 필드 불러오기 오류');
+        throw error;
+    }
+};
+
+
+export const getReviewAverageById = async (id) => {
+    try {
+        const q = query(
+            collection(db, COLLECTION_NAME),
+            where('lectureId', '==', id)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        const result = querySnapshot.docs.map(doc => ({
+            lectureId: doc.data().lectureId,
+            average: doc.data().star.average,
+            total: doc.data().total
+        }));
+        return result;
+
+    } catch (error) {
+        console.log('리뷰 필드 불러오기 오류');
+        throw error;
+    }
+};

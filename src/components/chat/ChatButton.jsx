@@ -26,9 +26,8 @@ function ChatButton() {
         currentEnrollmentId
     } = currentChatInfo
 
-
+    console.log('button', currentChatStatus)
     const [copyCurrentParticipants, setCopyCurrentParticipants] = useState(currentParticipants)
-    const [copyCurrentChatStatus, setCopyCurrentChatStatus] = useState(currentChatStatus)
     const [update, dispatch] = useReducer(setUpdataData, {
         updateData: {
             status: currentChatStatus,
@@ -51,7 +50,6 @@ function ChatButton() {
         }
         //수정된 채팅 정보 업데이트 
         updateChat(currentChatInfo.currentChatId, update.updateData);
-        setCopyCurrentChatStatus({ ...copyCurrentChatStatus, ...update.updateData.status });
 
         //안내 메세지 보내주는 함수
         createMessage({
@@ -67,7 +65,6 @@ function ChatButton() {
 
     useEffect(() => {
         setCopyCurrentParticipants(currentParticipants)
-        setCopyCurrentChatStatus(currentChatStatus)
         dispatch({
             type: 'INIT',
             payload: {
@@ -83,25 +80,25 @@ function ChatButton() {
     const chatStatus = () => {
         if (currentChatType === 'duo') {
             if (currentChatI.role === 'host') {
-                if (copyCurrentChatStatus[currentChatOpponentId] === '취소') {
+                if (currentChatStatus[currentChatOpponentId] === '취소') {
                     return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
-                } else if (copyCurrentChatStatus[myuid] === '전') {
+                } else if (currentChatStatus[myuid] === '전') {
                     return { text: ['듀오 거절', '듀오 승낙'], color: ['red', 'blue'], clickEvent: ['CANCEL_DUO', 'AGREE_DUO'] };
-                } else if (copyCurrentChatStatus[myuid] === '중') {
+                } else if (currentChatStatus[myuid] === '중') {
                     return { text: '듀오 완료', color: 'purple', clickEvent: 'MODAL_DUO' };
-                } else if (copyCurrentChatStatus[myuid] === '후') {
+                } else if (currentChatStatus[myuid] === '후') {
                     return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
                     return { text: '닫기', color: 'purple', clickEvent: 'LEAVE' };
                 }
             } else if (currentChatI.role === 'guest') {
-                if (copyCurrentChatStatus[currentChatOpponentId] === '취소') {
+                if (currentChatStatus[currentChatOpponentId] === '취소') {
                     return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
-                } else if (copyCurrentChatStatus[myuid] === '전') {
+                } else if (currentChatStatus[myuid] === '전') {
                     return { text: '듀오 취소', color: 'red', clickEvent: 'CANCEL_DUO' };
-                } else if (copyCurrentChatStatus[myuid] === '중') {
+                } else if (currentChatStatus[myuid] === '중') {
                     return { text: '듀오 완료', color: 'purple', clickEvent: 'MODAL_DUO' };
-                } else if (copyCurrentChatStatus[myuid] === '후') {
+                } else if (currentChatStatus[myuid] === '후') {
                     return { text: '나가기', color: 'black', clickEvent: 'LEAVE' };
                 } else {
                     return { text: '닫기', color: 'purple', clickEvent: 'LEAVE' };
@@ -111,7 +108,7 @@ function ChatButton() {
             }
         } else if (currentChatType === 'lecture') {
             if (currentChatI.role === 'instructor') {
-                switch (copyCurrentChatStatus[currentChatOpponentId]) {
+                switch (currentChatStatus[currentChatOpponentId]) {
                     case '취소':
                         return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
                     case '전':
@@ -124,7 +121,7 @@ function ChatButton() {
                         return { text: '오류', color: 'white', clickEvent: 'LEAVE' }
                 }
             } else if (currentChatI.role === 'student') {
-                switch (copyCurrentChatStatus[myuid]) {
+                switch (currentChatStatus[myuid]) {
                     case '취소':
                         return { text: '나가기', color: 'purple', clickEvent: 'LEAVE' };
                     case '전':
@@ -146,7 +143,7 @@ function ChatButton() {
 
     const btn = useMemo(() => {
         return chatStatus();
-    }, [copyCurrentChatStatus])
+    }, [currentChatStatus])
 
     //채팅 정보를 수정하는 함수
     const handleUpdateChat = async (clickEvent) => {
@@ -172,6 +169,7 @@ function ChatButton() {
         }
 
         if (clickEvent === 'AGREE_LECTURE') {
+
             await updateEnrollment(currentEnrollmentId, '수강 중');
         }
 

@@ -75,7 +75,7 @@ function ChatButton() {
                 chatStatus: currentChatStatus
             }
         })
-    }, [currentChatId])
+    }, [currentChatStatus, currentChatId])
 
     const chatStatus = () => {
         if (currentChatType === 'duo') {
@@ -158,7 +158,6 @@ function ChatButton() {
         }
 
         if (clickEvent === 'MODAL_DUO') {
-            console.log('듀오 모달')
             setIsModal(true);
             return;
         }
@@ -169,7 +168,6 @@ function ChatButton() {
         }
 
         if (clickEvent === 'AGREE_LECTURE') {
-
             await updateEnrollment(currentEnrollmentId, '수강 중');
         }
 
@@ -189,14 +187,14 @@ function ChatButton() {
         if (clickEvent === 'CANCEL_DUO') {
             await deleteDuoApplication(currentEnrollmentId)
         }
-
+        console.log(clickEvent);
         dispatch({
             type: `${clickEvent}`,
             payload: {
                 myuid: myuid,
                 myNickname: myNickname,
                 participants: currentParticipants,
-                opponentId: currentChatOpponentId
+                opponentId: currentChatOpponentId,
             }
         })
     }

@@ -10,8 +10,6 @@ function setUpdataData(state, action) {
                 sendMessage: ''
             }
         case 'CANCEL_DUO':
-            console.log('//////', action.payload.opponentId);
-            console.log('????????', state.updateData.status[action.payload.opponentId])
             return {
                 ...state,
                 updateData: {
@@ -62,7 +60,6 @@ function setUpdataData(state, action) {
                 sendMessage: '강의가 확정되었습니다.'
             }
         case 'COMPLETE_DUO':
-            console.log('comp')
             return {
                 ...state,
                 updateData: {

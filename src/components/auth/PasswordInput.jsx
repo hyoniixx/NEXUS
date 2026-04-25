@@ -22,7 +22,7 @@ function PasswordInput({ mode, message }) {
         setFormValidation({ ...formValidation, [name]: type === 'SUCCESS' ? true : false })
     }
 
-    const name = mode === '비밀번호' ? 'password' : mode === '비밀번호 확인' ? 'passwordCheck' : ''
+    let name = mode === '비밀번호' ? 'password' : mode === '비밀번호 확인' ? 'passwordCheck' : ''
 
     useEffect(() => {
         if (!userInfo[name]) {
@@ -44,6 +44,14 @@ function PasswordInput({ mode, message }) {
             return;
         }
     }
+
+    useEffect(() => {
+        if (userInfo.passwordCheck) {
+            name = 'passwordCheck';
+            validate(userInfo.passwordCheck);
+        }
+        name = 'password';
+    }, [userInfo.password])
 
 
     const validate = (value) => {

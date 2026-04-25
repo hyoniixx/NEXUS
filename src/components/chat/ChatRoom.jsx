@@ -5,7 +5,6 @@ import { userContext } from '../../App';
 import { useLocation } from 'react-router-dom';
 //채팅방 왼쪽에있는 방 하나하나
 function ChatRoom({ chat, setCurrentChatId }) {
-    // { type, roomId, refId, participantInfo, lastMessage, lastMessageAt, unreadCount, createdAt, status, participants, enrollmentId }
     const { userData } = useContext(userContext);
     const myuid = userData.uid;
     const keys = Object.keys(chat.participantInfo);
@@ -15,6 +14,7 @@ function ChatRoom({ chat, setCurrentChatId }) {
 
     const { id, studentId = '' } = location.state || {};
 
+    //location으로 넘어온 값이 있다면 해당 채팅으로 옮겨주는 함수
     useEffect(() => {
         if ((studentId === opponent || !studentId) && id === chat.refId) {
             setCurrentChatId(chat.roomId);
